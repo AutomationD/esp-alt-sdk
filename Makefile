@@ -282,28 +282,21 @@ esp_iot_sdk_v0.9.2_14_10_24.zip:
 $(XTDLP)/$(GMP_TAR):
 	wget -c http://ftp.gnu.org/gnu/gmp/$(GMP_TAR) -O $(XTDLP)/$(GMP_TAR)	
 
-
-
 $(XTDLP)/$(MPC_TAR):
 	wget -c http://ftp.gnu.org/gnu/mpfr/$(MPC_TAR) -O $(XTDLP)/$(MPC_TAR)
-
-
-
 
 $(XTDLP)/$(MPFR_TAR):
 	wget -c http://ftp.gnu.org/gnu/mpfr/$(MPFR_TAR) -O $(XTDLP)/$(MPFR_TAR)
 
-
-$(XTDLP)/$(GCC_DIR):
-	git clone https://github.com/jcmvbkbc/gcc-xtensa.git $(XTDLP)/$(GCC_DIR)
-
-
+$(XTDLP)/$(BINUTILS_DIR):
+	git clone https://github.com/fpoussin/esp-binutils.git $(XTDLP)/$(BINUTILS_DIR)
 
 $(XTDLP)/$(NEWLIB_DIR):
 	git clone -b xtensa https://github.com/jcmvbkbc/newlib-xtensa.git $(XTDLP)/$(NEWLIB_DIR)
 
-$(XTDLP)/$(BINUTILS_DIR):
-	git clone https://github.com/fpoussin/esp-binutils.git $(XTDLP)/$(BINUTILS_DIR)
+$(XTDLP)/$(GCC_DIR):
+	git clone https://github.com/jcmvbkbc/gcc-xtensa.git $(XTDLP)/$(GCC_DIR)
+
 
 libhal: $(TOOLCHAIN)/xtensa-lx106-elf/sysroot/usr/lib/libhal.a
 
@@ -319,10 +312,13 @@ _libhal:
 
 toolchain: $(TOOLCHAIN)/bin/xtensa-lx106-elf-gcc
 
-$(TOOLCHAIN)/bin/xtensa-lx106-elf-gcc: $(XTDLP) build-gmp build-mpfr
+$(TOOLCHAIN)/bin/xtensa-lx106-elf-gcc: $(XTDLP) $(XTBP) build-gmp build-mpfr build-mpc
 
 $(XTDLP):
 	mkdir -p $(XTDLP)
+
+$(XTBP):
+	mkdir -p $(XTBP)
 
 $(XTDLP)/$(GMP_DIR): $(XTDLP)/$(GMP_TAR)
 	mkdir -p $(XTDLP)/$(GMP_DIR)
@@ -333,6 +329,7 @@ $(XTDLP)/$(GMP_DIR)/build: $(XTDLP)/$(GMP_DIR)
 	mkdir -p $(XTDLP)/$(GMP_DIR)/build/
 	cd $(XTDLP)/$(GMP_DIR)/build/; ../configure --prefix=$(XTBP)/gmp --disable-shared --enable-static
 	make -C $(XTDLP)/$(GMP_DIR)/build/
+	make install -C $(XTDLP)/$(GMP_DIR)/build/
 	
 $(XTDLP)/$(MPFR_DIR): $(XTDLP)/$(MPFR_TAR)
 	mkdir -p $(XTDLP)/$(MPFR_DIR)
@@ -343,6 +340,7 @@ $(XTDLP)/$(MPFR_DIR)/build: $(XTDLP)/$(MPFR_DIR)
 	mkdir -p $(XTDLP)/$(MPFR_DIR)/build
 	cd $(XTDLP)/$(MPFR_DIR)/build/; ../configure --prefix=$(XTBP)/mpfr --with-gmp=$(XTBP)/gmp --disable-shared --enable-static
 	make -C $(XTDLP)/$(MPFR_DIR)/build/
+	make install -C $(XTDLP)/$(MPFR_DIR)/build/
 	
 	
 $(XTDLP)/$(MPC_DIR): $(XTDLP)/$(MPC_TAR)
@@ -350,9 +348,17 @@ $(XTDLP)/$(MPC_DIR): $(XTDLP)/$(MPC_TAR)
 	$(UNTAR) $(XTDLP)/$(MPC_DIR) -C $(XTDLP)/$(MPC_DIR)
 	mv $(XTDLP)/$(MPC_DIR)/mpc-*/* $(XTDLP)/$(MPC_DIR)
 
+$(XTDLP)/$(MPC_DIR)/build: $(XTDLP)/$(MPC_DIR)
+	mkdir -p $(XTDLP)/$(MPC_DIR)/build
+	$(UNTAR) $(XTDLP)/$(MPC_DIR) -C $(XTDLP)/$(MPC_DIR)
+	mv $(XTDLP)/$(MPC_DIR)/mpc-*/* $(XTDLP)/$(MPC_DIR)
+	cd $(XTDLP)/$(MPC_DIR)/build/; ../configure --prefix=$XTBP/mpc --with-mpfr=$(XTBP)/mpfr --with-gmp=$(XTBP)/gmp --disable-shared --enable-static
+
 
 build-gmp: $(XTDLP)/$(GMP_DIR)/build
 build-mpfr: build-gmp $(XTDLP)/$(MPFR_DIR)/build
+build-mpc: build-gmp build-mpfr $(XTDLP)/$(MPC_DIR)/build
+build-binutils: build-gmp build-mpfr build-mpc $(XTDLP)/$(BINUTILS_DIR)/build
 
 
 
@@ -363,6 +369,10 @@ clean-sdk:
 	rm -rf $(VENDOR_SDK_DIR)
 	rm -f sdk
 	rm -f .sdk_patch_$(VENDOR_SDK)
+	rm -rf build
+
+
+purge: clean
 	rm -rf dl
 
 clean-sysroot:
