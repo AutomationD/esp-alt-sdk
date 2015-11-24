@@ -319,7 +319,7 @@ _libhal:
 
 toolchain: $(TOOLCHAIN)/bin/xtensa-lx106-elf-gcc
 
-$(TOOLCHAIN)/bin/xtensa-lx106-elf-gcc: $(XTDLP) build_gmp
+$(TOOLCHAIN)/bin/xtensa-lx106-elf-gcc: $(XTDLP) build-gmp build-mpfr
 
 $(XTDLP):
 	mkdir -p $(XTDLP)
@@ -331,17 +331,19 @@ $(XTDLP)/$(GMP_DIR): $(XTDLP)/$(GMP_TAR)
 
 $(XTDLP)/$(GMP_DIR)/build: $(XTDLP)/$(GMP_DIR)
 	mkdir -p $(XTDLP)/$(GMP_DIR)/build/
-	$(XTDLP)/$(GMP_DIR)/build/../configure --prefix=$(XTBP)/gmp --disable-shared --enable-static
+	cd $(XTDLP)/$(GMP_DIR)/build/; ../configure --prefix=$(XTBP)/gmp --disable-shared --enable-static
+	make -C $(XTDLP)/$(GMP_DIR)/build/
 	
 $(XTDLP)/$(MPFR_DIR): $(XTDLP)/$(MPFR_TAR)
 	mkdir -p $(XTDLP)/$(MPFR_DIR)
-	$(UNTAR) $(XTDLP)/$(MPFR_DIR) -C $(XTDLP)/$(MPFR_DIR)
+	$(UNTAR) $(XTDLP)/$(MPFR_TAR) -C $(XTDLP)/$(MPFR_DIR)
 	mv $(XTDLP)/$(MPFR_DIR)/mpfr-*/* $(XTDLP)/$(MPFR_DIR)
 
 $(XTDLP)/$(MPFR_DIR)/build: $(XTDLP)/$(MPFR_DIR)
-	mkdir -p $(XTDLP)/$(MPFR_DIR)
-	$(UNTAR) $(XTDLP)/$(MPFR_DIR) -C $(XTDLP)/$(MPFR_DIR)
-	mv $(XTDLP)/$(MPFR_DIR)/mpfr-*/* $(XTDLP)/$(MPFR_DIR)
+	mkdir -p $(XTDLP)/$(MPFR_DIR)/build
+	cd $(XTDLP)/$(MPFR_DIR)/build/; ../configure --prefix=$(XTBP)/mpfr --with-gmp=$(XTBP)/gmp --disable-shared --enable-static
+	make -C $(XTDLP)/$(MPFR_DIR)/build/
+	
 	
 $(XTDLP)/$(MPC_DIR): $(XTDLP)/$(MPC_TAR)
 	mkdir -p $(XTDLP)/$(MPC_DIR)
@@ -349,7 +351,8 @@ $(XTDLP)/$(MPC_DIR): $(XTDLP)/$(MPC_TAR)
 	mv $(XTDLP)/$(MPC_DIR)/mpc-*/* $(XTDLP)/$(MPC_DIR)
 
 
-build_gmp: $(XTDLP)/$(GMP_DIR)/build
+build-gmp: $(XTDLP)/$(GMP_DIR)/build
+build-mpfr: build-gmp $(XTDLP)/$(MPFR_DIR)/build
 
 
 
