@@ -28,7 +28,7 @@ BINUTILS_DIR = esp-binutils
 UNZIP = unzip -q -o
 UNTAR = tar -xf
 
-PATH = $(XTTC)/bin:$(PATH)
+PATH := $(XTTC)/bin:$(PATH)
 
 
 VENDOR_SDK_ZIP = $(VENDOR_SDK_ZIP_$(VENDOR_SDK_VERSION))
