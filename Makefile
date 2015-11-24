@@ -283,7 +283,7 @@ $(XTDLP)/$(GMP_TAR):
 	wget -c http://ftp.gnu.org/gnu/gmp/$(GMP_TAR) -O $(XTDLP)/$(GMP_TAR)	
 
 $(XTDLP)/$(MPC_TAR):
-	wget -c http://ftp.gnu.org/gnu/mpfr/$(MPC_TAR) -O $(XTDLP)/$(MPC_TAR)
+	wget -c http://ftp.gnu.org/gnu/mpc/$(MPC_TAR) -O $(XTDLP)/$(MPC_TAR)
 
 $(XTDLP)/$(MPFR_TAR):
 	wget -c http://ftp.gnu.org/gnu/mpfr/$(MPFR_TAR) -O $(XTDLP)/$(MPFR_TAR)
@@ -312,7 +312,7 @@ _libhal:
 
 toolchain: $(TOOLCHAIN)/bin/xtensa-lx106-elf-gcc
 
-$(TOOLCHAIN)/bin/xtensa-lx106-elf-gcc: $(XTDLP) $(XTBP) build-gmp build-mpfr build-mpc
+$(TOOLCHAIN)/bin/xtensa-lx106-elf-gcc: $(XTDLP) $(XTBP) build-gmp build-mpfr build-mpc build-binutils build-first-stage-gcc build-newlib build-second-stage-gcc 
 
 $(XTDLP):
 	mkdir -p $(XTDLP)
@@ -342,23 +342,58 @@ $(XTDLP)/$(MPFR_DIR)/build: $(XTDLP)/$(MPFR_DIR)
 	make -C $(XTDLP)/$(MPFR_DIR)/build/
 	make install -C $(XTDLP)/$(MPFR_DIR)/build/
 	
-	
 $(XTDLP)/$(MPC_DIR): $(XTDLP)/$(MPC_TAR)
 	mkdir -p $(XTDLP)/$(MPC_DIR)
-	$(UNTAR) $(XTDLP)/$(MPC_DIR) -C $(XTDLP)/$(MPC_DIR)
+	$(UNTAR) $(XTDLP)/$(MPC_TAR) -C $(XTDLP)/$(MPC_DIR)
 	mv $(XTDLP)/$(MPC_DIR)/mpc-*/* $(XTDLP)/$(MPC_DIR)
 
 $(XTDLP)/$(MPC_DIR)/build: $(XTDLP)/$(MPC_DIR)
-	mkdir -p $(XTDLP)/$(MPC_DIR)/build
-	$(UNTAR) $(XTDLP)/$(MPC_DIR) -C $(XTDLP)/$(MPC_DIR)
-	mv $(XTDLP)/$(MPC_DIR)/mpc-*/* $(XTDLP)/$(MPC_DIR)
-	cd $(XTDLP)/$(MPC_DIR)/build/; ../configure --prefix=$XTBP/mpc --with-mpfr=$(XTBP)/mpfr --with-gmp=$(XTBP)/gmp --disable-shared --enable-static
+	mkdir -p $(XTDLP)/$(MPC_DIR)/build	
+	cd $(XTDLP)/$(MPC_DIR)/build/; ../configure --prefix=$(XTBP)/mpc --with-mpfr=$(XTBP)/mpfr --with-gmp=$(XTBP)/gmp --disable-shared --enable-static
+	make -C $(XTDLP)/$(MPC_DIR)/build/
+	make install -C $(XTDLP)/$(MPC_DIR)/build/
 
+$(XTDLP)/$(BINUTILS_DIR):
+	git clone https://github.com/fpoussin/esp-binutils.git $(BINUTILS_DIR)
+
+$(XTDLP)/$(BINUTILS_DIR)/build:
+	mkdir -p $(XTDLP)/$(BINUTILS_DIR)/build
+	cd $(XTDLP)/$(BINUTILS_DIR)/build/; ../configure --prefix=$(XTTC) --target=$(TARGET) --enable-werror=no  --enable-multilib --disable-nls --disable-shared --disable-threads --with-gcc --with-gnu-as --with-gnu-ld
+	make -C $(XTDLP)/$(BINUTILS_DIR)/build/
+	make install -C $(XTDLP)/$(BINUTILS_DIR)/build/
+
+
+$(XTDLP)/$(GCC_DIR):
+	git clone https://github.com/fpoussin/esp-binutils.git $(BINUTILS_DIR)
+
+$(XTDLP)/$(GCC_DIR)/build-1: $(XTDLP)/$(GCC_DIR)
+	mkdir all-gcc -p $(XTDLP)/$(GCC_DIR)/build-1
+	cd $(XTDLP)/$(GCC_DIR)/build-1/; ../configure --prefix=$(XTTC) --target=$(TARGET) --enable-multilib --enable-languages=c --with-newlib --disable-nls --disable-shared --disable-threads --with-gnu-as --with-gnu-ld --with-gmp=$(XTBP)/gmp --with-mpfr=$(XTBP)/mpfr --with-mpc=$(XTBP)/mpc  --disable-libssp --without-headers --disable-__cxa_atexit
+	make all-gcc -C $(XTDLP)/$(GCC_DIR)/build-1/
+	make install-gcc -C $(XTDLP)/$(GCC_DIR)/build-1/
+
+$(XTDLP)/$(NEWLIB_DIR):
+	git clone -b xtensa https://github.com/jcmvbkbc/newlib-xtensa.git $(NEWLIB_DIR)
+
+$(XTDLP)/$(NEWLIB_DIR)/build:
+	mkdir -p $(XTDLP)/$(NEWLIB_DIR)/build
+	cd $(XTDLP)/$(NEWLIB_DIR)/build/; ../configure  --prefix=$(XTTC) --target=$(TARGET) --enable-multilib --with-gnu-as --with-gnu-ld --disable-nls
+	make -C $(XTDLP)/$(NEWLIB_DIR)/build/
+	make install -C $(XTDLP)/$(NEWLIB_DIR)/build/
+
+$(XTDLP)/$(GCC_DIR)/build-2: $(XTDLP)/$(GCC_DIR)
+	mkdir all-gcc -p $(XTDLP)/$(GCC_DIR)/build-2
+	cd $(XTDLP)/$(GCC_DIR)/build-2/; ../configure --prefix=$(XTTC) --target=$(TARGET) --enable-multilib --disable-nls --disable-shared --disable-threads --with-gnu-as --with-gnu-ld --with-gmp=$(XTBP)/gmp --with-mpfr=$(XTBP)/mpfr --with-mpc=$(XTBP)/mpc --enable-languages=c,c++ --with-newlib --disable-libssp --disable-__cxa_atexit
+	make all-gcc -C $(XTDLP)/$(GCC_DIR)/build-2/
+	make install-gcc -C $(XTDLP)/$(GCC_DIR)/build-2/
 
 build-gmp: $(XTDLP)/$(GMP_DIR)/build
 build-mpfr: build-gmp $(XTDLP)/$(MPFR_DIR)/build
 build-mpc: build-gmp build-mpfr $(XTDLP)/$(MPC_DIR)/build
 build-binutils: build-gmp build-mpfr build-mpc $(XTDLP)/$(BINUTILS_DIR)/build
+build-first-stage-gcc: build-gmp build-mpfr build-mpc build-binutils
+build-newlib: build-gmp build-mpfr build-mpc build-binutils build-newlib
+build-second-stage-gcc: build-gmp build-mpfr build-mpc build-binutils
 
 
 
