@@ -312,7 +312,8 @@ _libhal:
 
 toolchain: $(TOOLCHAIN)/bin/xtensa-lx106-elf-gcc
 
-$(TOOLCHAIN)/bin/xtensa-lx106-elf-gcc: $(XTDLP) $(XTBP) build-gmp build-mpfr build-mpc build-binutils build-first-stage-gcc build-newlib build-second-stage-gcc 
+# $(TOOLCHAIN)/bin/xtensa-lx106-elf-gcc: $(XTDLP) $(XTBP) build-gmp build-mpfr build-mpc build-binutils build-first-stage-gcc build-newlib build-second-stage-gcc 
+$(TOOLCHAIN)/bin/xtensa-lx106-elf-gcc: $(XTDLP) $(XTBP) build-gmp build-mpfr build-mpc build-binutils build-first-stage-gcc
 
 $(XTDLP):
 	mkdir -p $(XTDLP)
@@ -354,17 +355,17 @@ $(XTDLP)/$(MPC_DIR)/build: $(XTDLP)/$(MPC_DIR)
 	make install -C $(XTDLP)/$(MPC_DIR)/build/
 
 $(XTDLP)/$(BINUTILS_DIR):
-	git clone https://github.com/fpoussin/esp-binutils.git $(BINUTILS_DIR)
+	git clone https://github.com/fpoussin/esp-binutils.git $(XTDLP)/$(BINUTILS_DIR)
 
-$(XTDLP)/$(BINUTILS_DIR)/build:
+$(XTDLP)/$(BINUTILS_DIR)/build: $(XTDLP)/$(BINUTILS_DIR)
 	mkdir -p $(XTDLP)/$(BINUTILS_DIR)/build
-	cd $(XTDLP)/$(BINUTILS_DIR)/build/; ../configure --prefix=$(XTTC) --target=$(TARGET) --enable-werror=no  --enable-multilib --disable-nls --disable-shared --disable-threads --with-gcc --with-gnu-as --with-gnu-ld
+	cd $(XTDLP)/$(BINUTILS_DIR)/build/; chmod +rx ../configure; ../configure --prefix=$(XTTC) --target=$(TARGET) --enable-werror=no  --enable-multilib --disable-nls --disable-shared --disable-threads --with-gcc --with-gnu-as --with-gnu-ld
 	make -C $(XTDLP)/$(BINUTILS_DIR)/build/
 	make install -C $(XTDLP)/$(BINUTILS_DIR)/build/
 
 
 $(XTDLP)/$(GCC_DIR):
-	git clone https://github.com/fpoussin/esp-binutils.git $(BINUTILS_DIR)
+	git clone https://github.com/jcmvbkbc/gcc-xtensa.git $(XTDLP)/$(GCC_DIR)
 
 $(XTDLP)/$(GCC_DIR)/build-1: $(XTDLP)/$(GCC_DIR)
 	mkdir all-gcc -p $(XTDLP)/$(GCC_DIR)/build-1
@@ -373,7 +374,8 @@ $(XTDLP)/$(GCC_DIR)/build-1: $(XTDLP)/$(GCC_DIR)
 	make install-gcc -C $(XTDLP)/$(GCC_DIR)/build-1/
 
 $(XTDLP)/$(NEWLIB_DIR):
-	git clone -b xtensa https://github.com/jcmvbkbc/newlib-xtensa.git $(NEWLIB_DIR)
+	git clone -b xtensa https://github.com/jcmvbkbc/newlib-xtensa.git $(XTDLP)/$(NEWLIB_DIR)
+
 
 $(XTDLP)/$(NEWLIB_DIR)/build:
 	mkdir -p $(XTDLP)/$(NEWLIB_DIR)/build
@@ -391,9 +393,9 @@ build-gmp: $(XTDLP)/$(GMP_DIR)/build
 build-mpfr: build-gmp $(XTDLP)/$(MPFR_DIR)/build
 build-mpc: build-gmp build-mpfr $(XTDLP)/$(MPC_DIR)/build
 build-binutils: build-gmp build-mpfr build-mpc $(XTDLP)/$(BINUTILS_DIR)/build
-build-first-stage-gcc: build-gmp build-mpfr build-mpc build-binutils
-build-newlib: build-gmp build-mpfr build-mpc build-binutils build-newlib
-build-second-stage-gcc: build-gmp build-mpfr build-mpc build-binutils
+build-first-stage-gcc: build-gmp build-mpfr build-mpc build-binutils $(XTDLP)/$(GCC_DIR)/build-1
+build-newlib: build-gmp build-mpfr build-mpc build-binutils $(XTDLP)/$(NEWLIB_DIR)/build
+build-second-stage-gcc: build-gmp build-mpfr build-mpc build-binutils $(XTDLP)/$(GCC_DIR)/build-2
 
 
 
