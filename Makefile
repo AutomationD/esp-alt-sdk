@@ -291,7 +291,7 @@ $(XTDLP)/$(MPFR_TAR):
 $(XTDLP)/$(BINUTILS_DIR):
 	git clone https://github.com/fpoussin/esp-binutils.git $(XTDLP)/$(BINUTILS_DIR)
 
-$(XTDLP)/$(NEWLIB_DIR):
+$(XTDLP)/$(NEWLIB_DIR):	
 	git clone -b xtensa https://github.com/jcmvbkbc/newlib-xtensa.git $(XTDLP)/$(NEWLIB_DIR)
 
 $(XTDLP)/$(GCC_DIR):
@@ -354,8 +354,6 @@ $(XTDLP)/$(MPC_DIR)/build: $(XTDLP)/$(MPC_DIR)
 	make -C $(XTDLP)/$(MPC_DIR)/build/
 	make install -C $(XTDLP)/$(MPC_DIR)/build/
 
-$(XTDLP)/$(BINUTILS_DIR):
-	git clone https://github.com/fpoussin/esp-binutils.git $(XTDLP)/$(BINUTILS_DIR)
 
 $(XTDLP)/$(BINUTILS_DIR)/build: $(XTDLP)/$(BINUTILS_DIR)
 	mkdir -p $(XTDLP)/$(BINUTILS_DIR)/build
@@ -364,18 +362,12 @@ $(XTDLP)/$(BINUTILS_DIR)/build: $(XTDLP)/$(BINUTILS_DIR)
 	make install -C $(XTDLP)/$(BINUTILS_DIR)/build/
 
 
-$(XTDLP)/$(GCC_DIR):
-	git clone https://github.com/jcmvbkbc/gcc-xtensa.git $(XTDLP)/$(GCC_DIR)
 
 $(XTDLP)/$(GCC_DIR)/build-1: $(XTDLP)/$(GCC_DIR)
 	mkdir all-gcc -p $(XTDLP)/$(GCC_DIR)/build-1
 	cd $(XTDLP)/$(GCC_DIR)/build-1/; ../configure --prefix=$(XTTC) --target=$(TARGET) --enable-multilib --enable-languages=c --with-newlib --disable-nls --disable-shared --disable-threads --with-gnu-as --with-gnu-ld --with-gmp=$(XTBP)/gmp --with-mpfr=$(XTBP)/mpfr --with-mpc=$(XTBP)/mpc  --disable-libssp --without-headers --disable-__cxa_atexit
 	make all-gcc -C $(XTDLP)/$(GCC_DIR)/build-1/
 	make install-gcc -C $(XTDLP)/$(GCC_DIR)/build-1/
-
-$(XTDLP)/$(NEWLIB_DIR):
-	git clone -b xtensa https://github.com/jcmvbkbc/newlib-xtensa.git $(XTDLP)/$(NEWLIB_DIR)
-
 
 $(XTDLP)/$(NEWLIB_DIR)/build:
 	mkdir -p $(XTDLP)/$(NEWLIB_DIR)/build
