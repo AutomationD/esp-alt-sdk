@@ -1,11 +1,16 @@
+VENDOR_SDK_VERSION = 1.4.0
+GMP_VERSION = 6.0.0a
+MPFR_VERSION = 3.1.2
+MPC_VERSION = 1.0.2
+
+
 TOP = $(PWD)
 TARGET = xtensa-lx106-elf
 TOOLCHAIN = $(TOP)/$(TARGET)
 
-VENDOR_SDK_VERSION = 1.4.0
-GMP_VERSION = "6.0.0a"
-MPFR_VERSION = "3.1.2"
-MPC_VERSION = "1.0.2"
+XTTC = $(TOOLCHAIN)
+XTBP = $(TOP)/build
+XTDLP = $(TOP)/dl
 
 GMP_TAR = gmp-$(GMP_VERSION).tar.bz2
 MPFR_TAR = mpfr-$(MPFR_VERSION).tar.bz2
@@ -14,11 +19,6 @@ MPC_TAR = mpc-$(MPC_VERSION).tar.gz
 GMP_DIR = gmp-$(GMP_VERSION)
 MPFR_DIR = mpfr-$(MPFR_VERSION)
 MPC_DIR = mpc-$(MPC_VERSION)
-
-
-XTTC = $(TOOLCHAIN)
-XTBP = $(TOP)/build
-XTDLP = $(TOP)/dl
 
 GCC_DIR = gcc-xtensa
 NEWLIB_DIR = esp-newlib
@@ -69,25 +69,27 @@ STANDALONE = y
 
 .PHONY: toolchain libhal libcirom sdk
 
-all: esptool libcirom standalone sdk sdk_patch $(TOOLCHAIN)/xtensa-lx106-elf/sysroot/usr/lib/libhal.a $(TOOLCHAIN)/bin/xtensa-lx106-elf-gcc
-	@echo
-	@echo "Xtensa toolchain is built, to use it:"
-	@echo
-	@echo 'export PATH=$(TOOLCHAIN)/bin:$$PATH'
-	@echo
-ifneq ($(STANDALONE),y)
-	@echo "Espressif ESP8266 SDK is installed. Toolchain contains only Open Source components"
-	@echo "To link external proprietary libraries add:"
-	@echo
-	@echo "xtensa-lx106-elf-gcc -I$(TOP)/sdk/include -L$(TOP)/sdk/lib"
-	@echo
-else
-	@echo "Espressif ESP8266 SDK is installed, its libraries and headers are merged with the toolchain"
-	@echo
-endif
+# all: esptool libcirom standalone sdk sdk_patch $(TOOLCHAIN)/xtensa-lx106-elf/sysroot/usr/lib/libhal.a $(TOOLCHAIN)/bin/xtensa-lx106-elf-gcc
+all: $(TOOLCHAIN)/bin/xtensa-lx106-elf-gcc
+	@echo ok
+# 	@echo
+# 	@echo "Xtensa toolchain is built, to use it:"
+# 	@echo
+# 	@echo 'export PATH=$(TOOLCHAIN)/bin:$$PATH'
+# 	@echo
+# ifneq ($(STANDALONE),y)
+# 	@echo "Espressif ESP8266 SDK is installed. Toolchain contains only Open Source components"
+# 	@echo "To link external proprietary libraries add:"
+# 	@echo
+# 	@echo "xtensa-lx106-elf-gcc -I$(TOP)/sdk/include -L$(TOP)/sdk/lib"
+# 	@echo
+# else
+# 	@echo "Espressif ESP8266 SDK is installed, its libraries and headers are merged with the toolchain"
+# 	@echo
+# endif
 
 esptool: toolchain
-	cp esptool/esptool.py $(TOOLCHAIN)/bin/
+	@echo "esptool copied"
 
 $(TOOLCHAIN)/xtensa-lx106-elf/sysroot/lib/libcirom.a: $(TOOLCHAIN)/xtensa-lx106-elf/sysroot/lib/libc.a $(TOOLCHAIN)/bin/xtensa-lx106-elf-gcc
 	@echo "Creating irom version of libc..."
@@ -278,16 +280,24 @@ esp_iot_sdk_v0.9.2_14_10_24.zip:
 	wget --content-disposition "http://bbs.espressif.com/download/file.php?id=9"
 
 $(XTDLP)/$(GMP_TAR):
-	wget -c http://ftp.gnu.org/gnu/gmp/$(GMP_TAR).tar.bz2 -O $(XTDLP)/$(GMP_TAR)
+	wget -c http://ftp.gnu.org/gnu/gmp/$(GMP_TAR) -O $(XTDLP)/$(GMP_TAR)	
 
-$(XTDLP)/$(MPFR_TAR):
-	wget -c http://ftp.gnu.org/gnu/mpfr/$(MPFR_TAR).tar.bz2 -O $(XTDLP)/$(MPFR_TAR)
+
 
 $(XTDLP)/$(MPC_TAR):
-	wget -c http://ftp.gnu.org/gnu/mpfr/$(MPC_TAR).tar.bz2 -O $(XTDLP)/$(MPC_TAR)
+	wget -c http://ftp.gnu.org/gnu/mpfr/$(MPC_TAR) -O $(XTDLP)/$(MPC_TAR)
+
+
+
+
+$(XTDLP)/$(MPFR_TAR):
+	wget -c http://ftp.gnu.org/gnu/mpfr/$(MPFR_TAR) -O $(XTDLP)/$(MPFR_TAR)
+
 
 $(XTDLP)/$(GCC_DIR):
 	git clone https://github.com/jcmvbkbc/gcc-xtensa.git $(XTDLP)/$(GCC_DIR)
+
+
 
 $(XTDLP)/$(NEWLIB_DIR):
 	git clone -b xtensa https://github.com/jcmvbkbc/newlib-xtensa.git $(XTDLP)/$(NEWLIB_DIR)
@@ -309,15 +319,48 @@ _libhal:
 
 toolchain: $(TOOLCHAIN)/bin/xtensa-lx106-elf-gcc
 
-$(TOOLCHAIN)/bin/xtensa-lx106-elf-gcc: 
+$(TOOLCHAIN)/bin/xtensa-lx106-elf-gcc: $(XTDLP) build_gmp
+
+$(XTDLP):
+	mkdir -p $(XTDLP)
+
+$(XTDLP)/$(GMP_DIR): $(XTDLP)/$(GMP_TAR)
+	mkdir -p $(XTDLP)/$(GMP_DIR)
+	$(UNTAR) $(XTDLP)/$(GMP_TAR) -C $(XTDLP)/$(GMP_DIR)
+	mv $(XTDLP)/$(GMP_DIR)/gmp-*/* $(XTDLP)/$(GMP_DIR)
+
+$(XTDLP)/$(GMP_DIR)/build: $(XTDLP)/$(GMP_DIR)
+	mkdir -p $(XTDLP)/$(GMP_DIR)/build/
+	$(XTDLP)/$(GMP_DIR)/build/../configure --prefix=$(XTBP)/gmp --disable-shared --enable-static
+	
+$(XTDLP)/$(MPFR_DIR): $(XTDLP)/$(MPFR_TAR)
+	mkdir -p $(XTDLP)/$(MPFR_DIR)
+	$(UNTAR) $(XTDLP)/$(MPFR_DIR) -C $(XTDLP)/$(MPFR_DIR)
+	mv $(XTDLP)/$(MPFR_DIR)/mpfr-*/* $(XTDLP)/$(MPFR_DIR)
+
+$(XTDLP)/$(MPFR_DIR)/build: $(XTDLP)/$(MPFR_DIR)
+	mkdir -p $(XTDLP)/$(MPFR_DIR)
+	$(UNTAR) $(XTDLP)/$(MPFR_DIR) -C $(XTDLP)/$(MPFR_DIR)
+	mv $(XTDLP)/$(MPFR_DIR)/mpfr-*/* $(XTDLP)/$(MPFR_DIR)
+	
+$(XTDLP)/$(MPC_DIR): $(XTDLP)/$(MPC_TAR)
+	mkdir -p $(XTDLP)/$(MPC_DIR)
+	$(UNTAR) $(XTDLP)/$(MPC_DIR) -C $(XTDLP)/$(MPC_DIR)
+	mv $(XTDLP)/$(MPC_DIR)/mpc-*/* $(XTDLP)/$(MPC_DIR)
+
+
+build_gmp: $(XTDLP)/$(GMP_DIR)/build
+
+
 
 clean: clean-sdk
-	-rm -rf $(TOOLCHAIN)
+	-rm -rf $(TOOLCHAIN)	
 
 clean-sdk:
 	rm -rf $(VENDOR_SDK_DIR)
 	rm -f sdk
 	rm -f .sdk_patch_$(VENDOR_SDK)
+	rm -rf dl
 
 clean-sysroot:
 	rm -rf $(TOOLCHAIN)/xtensa-lx106-elf/sysroot/usr/lib/*
