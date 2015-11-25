@@ -192,12 +192,12 @@ empty_user_rf_pre_init.o: empty_user_rf_pre_init.c $(TOOLCHAIN)/bin/xtensa-lx106
 standalone: sdk sdk_patch toolchain
 ifeq ($(STANDALONE),y)
 	@echo "Installing vendor SDK headers into toolchain sysroot"
-	@cp -Rf sdk/include/* $(TOOLCHAIN)/xtensa-lx106-elf/sysroot/usr/include/
+	@cp -R -f sdk/include/* $(TOOLCHAIN)/xtensa-lx106-elf/include/
 	@echo "Installing vendor SDK libs into toolchain sysroot"
-	@cp -Rf sdk/lib/* $(TOOLCHAIN)/xtensa-lx106-elf/sysroot/usr/lib/
+	@cp -R -f sdk/lib/* $(TOOLCHAIN)/xtensa-lx106-elf/lib/
 	@echo "Installing vendor SDK linker scripts into toolchain sysroot"
-	@sed -e 's/\r//' sdk/ld/eagle.app.v6.ld | sed -e s@../ld/@@ >$(TOOLCHAIN)/xtensa-lx106-elf/sysroot/usr/lib/eagle.app.v6.ld
-	@sed -e 's/\r//' sdk/ld/eagle.rom.addr.v6.ld >$(TOOLCHAIN)/xtensa-lx106-elf/sysroot/usr/lib/eagle.rom.addr.v6.ld
+	@sed -e 's/\r//' sdk/ld/eagle.app.v6.ld | sed -e s@../ld/@@ >$(TOOLCHAIN)/xtensa-lx106-elf/lib/eagle.app.v6.ld
+	@sed -e 's/\r//' sdk/ld/eagle.rom.addr.v6.ld >$(TOOLCHAIN)/xtensa-lx106-elf/lib/eagle.rom.addr.v6.ld
 endif
 
 FRM_ERR_PATCH.rar:
@@ -302,12 +302,12 @@ $(XTDLP)/$(GCC_DIR):
 
 libhal: $(TOOLCHAIN)/xtensa-lx106-elf/sysroot/usr/lib/libhal.a
 
-$(TOOLCHAIN)/xtensa-lx106-elf/sysroot/usr/lib/libhal.a: $(TOOLCHAIN)/bin/xtensa-lx106-elf-gcc
+$(TOOLCHAIN)/xtensa-lx106-elf/sysroot/usr/lib/libhal.a: $(TOOLCHAIN)/bin/xtensa-lx106-elf-gcc lx106-hal/src
 	make -C lx106-hal -f ../Makefile _libhal
 
-_libhal:
+_libhal: lx106-hal/src
 	autoreconf -i
-	PATH=$(TOOLCHAIN)/bin:$(PATH) ./configure --host=xtensa-lx106-elf --prefix=$(TOOLCHAIN)/xtensa-lx106-elf/sysroot/usr
+	PATH=$(TOOLCHAIN)/bin:$(PATH) ./configure --host=$(TARGET) --prefix=$(TOOLCHAIN)/xtensa-lx106-elf/
 	PATH=$(TOOLCHAIN)/bin:$(PATH) make
 	PATH=$(TOOLCHAIN)/bin:$(PATH) make install
 
@@ -412,6 +412,11 @@ build-first-stage-gcc: build-gmp build-mpfr build-mpc build-binutils $(XTDLP)/$(
 build-second-stage-gcc: build-gmp build-mpfr build-mpc build-binutils build-first-stage-gcc $(XTDLP)/$(GCC_DIR)/build-2 $(XTBP)/$(GCC_DIR)
 build-newlib: build-gmp build-mpfr build-mpc build-binutils $(XTDLP)/$(NEWLIB_DIR)/build $(XTBP)/$(NEWLIB_DIR) 
 
+
+lx106-hal/src:
+	@echo "You cloned without --recursive, fetching submodules for you."
+	git submodule update --init --recursive
+
 clean: clean-sdk
 	-rm -rf $(TOOLCHAIN)	
 
@@ -421,6 +426,7 @@ clean-sdk:
 	rm -rf release_note.txt
 	rm -f sdk
 	rm -f .sdk_patch_$(VENDOR_SDK_VERSION)
+	rm -rf lx106-hal
 	rm -rf build
 
 

@@ -1,0 +1,3 @@
+[submodule "lx106-hal"]
+	path = lx106-hal
+	url = https://github.com/tommie/lx106-hal
