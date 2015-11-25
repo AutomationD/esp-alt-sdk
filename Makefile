@@ -208,29 +208,29 @@ ifeq ($(STANDALONE),y)
 endif
 
 FRM_ERR_PATCH.rar:
-	wget --content-disposition "http://bbs.espressif.com/download/file.php?id=10"
+	wget --content-disposition "http://bbs.espressif.com/download/file.php?id=10" --output-document $@
 esp_iot_sdk_v0.9.3_14_11_21_patch1.zip:
-	wget --content-disposition "http://bbs.espressif.com/download/file.php?id=73"
+	wget --content-disposition "http://bbs.espressif.com/download/file.php?id=73" --output-document $@
 sdk095_patch1.zip:
-	wget --content-disposition "http://bbs.espressif.com/download/file.php?id=190"
+	wget --content-disposition "http://bbs.espressif.com/download/file.php?id=190" --output-document $@
 libssl.zip:
-	wget --content-disposition "http://bbs.espressif.com/download/file.php?id=316"
+	wget --content-disposition "http://bbs.espressif.com/download/file.php?id=316" --output-document $@
 libnet80211.zip:
-	wget --content-disposition "http://bbs.espressif.com/download/file.php?id=361"
+	wget --content-disposition "http://bbs.espressif.com/download/file.php?id=361" --output-document $@
 lib_patch_on_sdk_v1.1.0.zip:
-	wget --content-disposition "http://bbs.espressif.com/download/file.php?id=432"
+	wget --content-disposition "http://bbs.espressif.com/download/file.php?id=432" --output-document $@
 scan_issue_test.zip:
-	wget --content-disposition "http://bbs.espressif.com/download/file.php?id=525"
+	wget --content-disposition "http://bbs.espressif.com/download/file.php?id=525" --output-document $@
 1.1.2_patch_02.zip:
-	wget --content-disposition "http://bbs.espressif.com/download/file.php?id=546"
+	wget --content-disposition "http://bbs.espressif.com/download/file.php?id=546" --output-document $@
 libssl_patch_1.2.0-1.zip:
-	wget --content-disposition "http://bbs.espressif.com/download/file.php?id=583" -O $@
+	wget --content-disposition "http://bbs.espressif.com/download/file.php?id=583" --output-document $@
 libssl_patch_1.2.0-2.zip:
-	wget --content-disposition "http://bbs.espressif.com/download/file.php?id=586" -O $@
+	wget --content-disposition "http://bbs.espressif.com/download/file.php?id=586" --output-document $@
 libsmartconfig_2.4.2.zip:
-	wget --content-disposition "http://bbs.espressif.com/download/file.php?id=585"
+	wget --content-disposition "http://bbs.espressif.com/download/file.php?id=585" --output-document $@
 lib_mem_optimize_150714.zip:
-	wget --content-disposition "http://bbs.espressif.com/download/file.php?id=594"
+	wget --content-disposition "http://bbs.espressif.com/download/file.php?id=594" --output-document $@
 
 sdk: $(VENDOR_SDK_DIR)/.dir
 	ln -snf $(VENDOR_SDK_DIR) sdk
@@ -241,61 +241,61 @@ $(VENDOR_SDK_DIR)/.dir: $(VENDOR_SDK_ZIP)
 	touch $@
 
 esp_iot_sdk_v1.4.0_15_09_18.zip:
-	wget --content-disposition "http://bbs.espressif.com/download/file.php?id=838"
+	wget --content-disposition "http://bbs.espressif.com/download/file.php?id=838" --output-document $@
 
 esp_iot_sdk_v1.3.0_15_08_08.zip:
-	wget --content-disposition "http://bbs.espressif.com/download/file.php?id=664"
+	wget --content-disposition "http://bbs.espressif.com/download/file.php?id=664" --output-document $@
 
 esp_iot_sdk_v1.2.0_15_07_03.zip:
-	wget --content-disposition "http://bbs.espressif.com/download/file.php?id=564"
+	wget --content-disposition "http://bbs.espressif.com/download/file.php?id=564" --output-document $@
 
 esp_iot_sdk_v1.1.2_15_06_12.zip:
-	wget --content-disposition "http://bbs.espressif.com/download/file.php?id=521"
+	wget --content-disposition "http://bbs.espressif.com/download/file.php?id=521" --output-document $@
 
 esp_iot_sdk_v1.1.1_15_06_05.zip:
-	wget --content-disposition "http://bbs.espressif.com/download/file.php?id=484"
+	wget --content-disposition "http://bbs.espressif.com/download/file.php?id=484" --output-document $@
 
 esp_iot_sdk_v1.1.0_15_05_26.zip:
-	wget --content-disposition "http://bbs.espressif.com/download/file.php?id=425"
+	wget --content-disposition "http://bbs.espressif.com/download/file.php?id=425" --output-document $@
 
 esp_iot_sdk_v1.1.0_15_05_22.zip:
-	wget --content-disposition "http://bbs.espressif.com/download/file.php?id=423"
+	wget --content-disposition "http://bbs.espressif.com/download/file.php?id=423" --output-document $@
 
 esp_iot_sdk_v1.0.1_15_04_24.zip:
-	wget --content-disposition "http://bbs.espressif.com/download/file.php?id=325"
+	wget --content-disposition "http://bbs.espressif.com/download/file.php?id=325" --output-document $@
 
 esp_iot_sdk_v1.0.1_b2_15_04_10.zip:
-	wget --content-disposition "http://bbs.espressif.com/download/file.php?id=293"
+	wget --content-disposition "http://bbs.espressif.com/download/file.php?id=293" --output-document $@
 
 esp_iot_sdk_v1.0.1_b1_15_04_02.zip:
-	wget --content-disposition "http://bbs.espressif.com/download/file.php?id=276"
+	wget --content-disposition "http://bbs.espressif.com/download/file.php?id=276" --output-document $@
 
 esp_iot_sdk_v1.0.0_15_03_20.zip:
-	wget --content-disposition "http://bbs.espressif.com/download/file.php?id=250"
+	wget --content-disposition "http://bbs.espressif.com/download/file.php?id=250" --output-document $@
 
 esp_iot_sdk_v0.9.6_b1_15_02_15.zip:
-	wget --content-disposition "http://bbs.espressif.com/download/file.php?id=220"
+	wget --content-disposition "http://bbs.espressif.com/download/file.php?id=220" --output-document $@
 
 esp_iot_sdk_v0.9.5_15_01_23.zip:
-	wget --content-disposition "http://bbs.espressif.com/download/file.php?id=189"
+	wget --content-disposition "http://bbs.espressif.com/download/file.php?id=189" --output-document $@
 
 esp_iot_sdk_v0.9.4_14_12_19.zip:
-	wget --content-disposition "http://bbs.espressif.com/download/file.php?id=111"
+	wget --content-disposition "http://bbs.espressif.com/download/file.php?id=111" --output-document $@
 
 esp_iot_sdk_v0.9.3_14_11_21.zip:
-	wget --content-disposition "http://bbs.espressif.com/download/file.php?id=72"
+	wget --content-disposition "http://bbs.espressif.com/download/file.php?id=72" --output-document $@
 
 esp_iot_sdk_v0.9.2_14_10_24.zip:
-	wget --content-disposition "http://bbs.espressif.com/download/file.php?id=9"
+	wget --content-disposition "http://bbs.espressif.com/download/file.php?id=9" --output-document $@
 
 $(XTDLP)/$(GMP_TAR):
-	wget -c http://ftp.gnu.org/gnu/gmp/$(GMP_TAR) -O $(XTDLP)/$(GMP_TAR)	
+	wget -c http://ftp.gnu.org/gnu/gmp/$(GMP_TAR) --output-document $(XTDLP)/$(GMP_TAR)	
 
 $(XTDLP)/$(MPC_TAR):
-	wget -c http://ftp.gnu.org/gnu/mpc/$(MPC_TAR) -O $(XTDLP)/$(MPC_TAR)
+	wget -c http://ftp.gnu.org/gnu/mpc/$(MPC_TAR) --output-document $(XTDLP)/$(MPC_TAR)
 
 $(XTDLP)/$(MPFR_TAR):
-	wget -c http://ftp.gnu.org/gnu/mpfr/$(MPFR_TAR) -O $(XTDLP)/$(MPFR_TAR)
+	wget -c http://ftp.gnu.org/gnu/mpfr/$(MPFR_TAR) --output-document $(XTDLP)/$(MPFR_TAR)
 
 $(XTDLP)/$(BINUTILS_DIR):
 	git clone https://github.com/fpoussin/esp-binutils.git $(XTDLP)/$(BINUTILS_DIR)
