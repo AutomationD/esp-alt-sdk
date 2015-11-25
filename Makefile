@@ -16,7 +16,7 @@ TARGET = xtensa-lx106-elf
 TOOLCHAIN = $(TOP)/$(TARGET)
 
 XTTC = $(TOOLCHAIN)
-XTBP = $(TOP)/build
+XTBP = $(TOP)/bin
 XTDLP = $(TOP)/src
 
 GMP_TAR = gmp-$(GMP_VERSION).tar.bz2
@@ -110,11 +110,11 @@ libcirom: $(TOOLCHAIN)/xtensa-lx106-elf/sysroot/lib/libcirom.a
 sdk_patch: .sdk_patch_$(VENDOR_SDK_VERSION)
 
 .sdk_patch_1.4.0:
-	patch -N -d $(VENDOR_SDK_DIR_1.4.0) -p1 < c_types-c99.patch
+	patch -N -d $(VENDOR_SDK_DIR_1.4.0) -p1 < $(XTDLP)/c_types-c99.patch
 	@touch $@
 
 .sdk_patch_1.3.0:
-	patch -N -d $(VENDOR_SDK_DIR_1.3.0) -p1 < c_types-c99.patch
+	patch -N -d $(VENDOR_SDK_DIR_1.3.0) -p1 < $(XTDLP)/c_types-c99.patch
 	@touch $@
 
 .sdk_patch_1.2.0: lib_mem_optimize_150714.zip libssl_patch_1.2.0-2.zip empty_user_rf_pre_init.o
@@ -123,7 +123,7 @@ sdk_patch: .sdk_patch_$(VENDOR_SDK_VERSION)
 	$(UNZIP) lib_mem_optimize_150714.zip
 	#mv libsmartconfig_2.4.2.a $(VENDOR_SDK_DIR_1.2.0)/lib/libsmartconfig.a
 	mv libssl.a libnet80211.a libpp.a libsmartconfig.a $(VENDOR_SDK_DIR_1.2.0)/lib/
-	patch -N -f -d $(VENDOR_SDK_DIR_1.2.0) -p1 < c_types-c99.patch
+	patch -N -f -d $(VENDOR_SDK_DIR_1.2.0) -p1 < $(XTDLP)/c_types-c99.patch
 	$(TOOLCHAIN)/bin/xtensa-lx106-elf-ar r $(VENDOR_SDK_DIR_1.2.0)/lib/libmain.a empty_user_rf_pre_init.o
 	@touch $@
 
@@ -131,12 +131,12 @@ sdk_patch: .sdk_patch_$(VENDOR_SDK_VERSION)
 	$(UNZIP) scan_issue_test.zip
 	$(UNZIP) 1.1.2_patch_02.zip
 	mv libmain.a libnet80211.a libpp.a $(VENDOR_SDK_DIR_1.1.2)/lib/
-	patch -N -f -d $(VENDOR_SDK_DIR_1.1.2) -p1 < c_types-c99.patch
+	patch -N -f -d $(VENDOR_SDK_DIR_1.1.2) -p1 < $(XTDLP)/c_types-c99.patch
 	$(TOOLCHAIN)/bin/xtensa-lx106-elf-ar r $(VENDOR_SDK_DIR_1.1.2)/lib/libmain.a empty_user_rf_pre_init.o
 	@touch $@
 
 .sdk_patch_1.1.1: empty_user_rf_pre_init.o
-	patch -N -f -d $(VENDOR_SDK_DIR_1.1.1) -p1 < c_types-c99.patch
+	patch -N -f -d $(VENDOR_SDK_DIR_1.1.1) -p1 < $(XTDLP)/c_types-c99.patch
 	$(TOOLCHAIN)/bin/xtensa-lx106-elf-ar r $(VENDOR_SDK_DIR_1.1.1)/lib/libmain.a empty_user_rf_pre_init.o
 	@touch $@
 
@@ -145,7 +145,7 @@ sdk_patch: .sdk_patch_$(VENDOR_SDK_VERSION)
 	mv libsmartconfig_patch_01.a $(VENDOR_SDK_DIR_1.1.0)/lib/libsmartconfig.a
 	mv libmain_patch_01.a $(VENDOR_SDK_DIR_1.1.0)/lib/libmain.a
 	mv libssl_patch_01.a $(VENDOR_SDK_DIR_1.1.0)/lib/libssl.a
-	patch -N -f -d $(VENDOR_SDK_DIR_1.1.0) -p1 < c_types-c99.patch
+	patch -N -f -d $(VENDOR_SDK_DIR_1.1.0) -p1 < $(XTDLP)/c_types-c99.patch
 	$(TOOLCHAIN)/bin/xtensa-lx106-elf-ar r $(VENDOR_SDK_DIR_1.1.0)/lib/libmain.a empty_user_rf_pre_init.o
 	@touch $@
 
@@ -155,36 +155,36 @@ empty_user_rf_pre_init.o: empty_user_rf_pre_init.c $(TOOLCHAIN)/bin/xtensa-lx106
 .sdk_patch_1.0.1: libnet80211.zip esp_iot_sdk_v1.0.1/.dir
 	$(UNZIP) $<
 	mv libnet80211.a $(VENDOR_SDK_DIR_1.0.1)/lib/
-	patch -N -f -d $(VENDOR_SDK_DIR_1.0.1) -p1 < c_types-c99.patch
+	patch -N -f -d $(VENDOR_SDK_DIR_1.0.1) -p1 < $(XTDLP)/c_types-c99.patch
 	@touch $@
 
 .sdk_patch_1.0.1b2: libssl.zip esp_iot_sdk_v1.0.1_b2/.dir
 	$(UNZIP) $<
 	mv libssl/libssl.a $(VENDOR_SDK_DIR_1.0.1b2)/lib/
-	patch -N -d $(VENDOR_SDK_DIR_1.0.1b2) -p1 < c_types-c99.patch
+	patch -N -d $(VENDOR_SDK_DIR_1.0.1b2) -p1 < $(XTDLP)/c_types-c99.patch
 	@touch $@
 
 .sdk_patch_1.0.1b1:
-	patch -N -d $(VENDOR_SDK_DIR_1.0.1b1) -p1 < c_types-c99.patch
+	patch -N -d $(VENDOR_SDK_DIR_1.0.1b1) -p1 < $(XTDLP)/c_types-c99.patch
 	@touch $@
 
 .sdk_patch_1.0.0:
-	patch -N -d $(VENDOR_SDK_DIR_1.0.0) -p1 < c_types-c99.patch
+	patch -N -d $(VENDOR_SDK_DIR_1.0.0) -p1 < $(XTDLP)/c_types-c99.patch
 	@touch $@
 
 .sdk_patch_0.9.6b1:
-	patch -N -d $(VENDOR_SDK_DIR_0.9.6b1) -p1 < c_types-c99.patch
+	patch -N -d $(VENDOR_SDK_DIR_0.9.6b1) -p1 < $(XTDLP)/c_types-c99.patch
 	@touch $@
 
 .sdk_patch_0.9.5: sdk095_patch1.zip esp_iot_sdk_v0.9.5/.dir
 	$(UNZIP) $<
 	mv libmain_fix_0.9.5.a $(VENDOR_SDK_DIR)/lib/libmain.a
 	mv user_interface.h $(VENDOR_SDK_DIR)/include/
-	patch -N -d $(VENDOR_SDK_DIR_0.9.5) -p1 < c_types-c99.patch
+	patch -N -d $(VENDOR_SDK_DIR_0.9.5) -p1 < $(XTDLP)/c_types-c99.patch
 	@touch $@
 
 .sdk_patch_0.9.4:
-	patch -N -d $(VENDOR_SDK_DIR_0.9.4) -p1 < c_types-c99.patch
+	patch -N -d $(VENDOR_SDK_DIR_0.9.4) -p1 < $(XTDLP)/c_types-c99.patch
 	@touch $@
 
 .sdk_patch_0.9.3: esp_iot_sdk_v0.9.3_14_11_21_patch1.zip esp_iot_sdk_v0.9.3/.dir
