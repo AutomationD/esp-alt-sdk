@@ -17,7 +17,7 @@ TOOLCHAIN = $(TOP)/$(TARGET)
 
 XTTC = $(TOOLCHAIN)
 XTBP = $(TOP)/build
-XTDLP = $(TOP)/dl
+XTDLP = $(TOP)/src
 
 GMP_TAR = gmp-$(GMP_VERSION).tar.bz2
 MPFR_TAR = mpfr-$(MPFR_VERSION).tar.bz2
@@ -30,7 +30,7 @@ MPC_DIR = mpc-$(MPC_VERSION)
 GCC_DIR = gcc-xtensa
 NEWLIB_DIR = esp-newlib
 BINUTILS_DIR = esp-binutils
-
+LIBHAL_DIR = lx106-hal
 
 UNZIP = unzip -q -o
 UNTAR = tar -xf
@@ -79,7 +79,7 @@ STANDALONE = y
 .PHONY: toolchain libhal libcirom sdk
 
 # all: esptool libcirom standalone sdk sdk_patch $(TOOLCHAIN)/xtensa-lx106-elf/sysroot/usr/lib/libhal.a $(TOOLCHAIN)/bin/xtensa-lx106-elf-gcc
-all: standalone sdk sdk_patch $(TOOLCHAIN)/xtensa-lx106-elf/sysroot/usr/lib/libhal.a $(TOOLCHAIN)/bin/xtensa-lx106-elf-gcc
+all: standalone sdk sdk_patch $(TOOLCHAIN)/xtensa-lx106-elf/lib/libhal.a $(TOOLCHAIN)/bin/xtensa-lx106-elf-gcc
 	@echo ok
 # 	@echo
 # 	@echo "Xtensa toolchain is built, to use it:"
@@ -298,21 +298,33 @@ $(XTDLP)/$(MPFR_TAR):
 	wget -c http://ftp.gnu.org/gnu/mpfr/$(MPFR_TAR) --output-document $(XTDLP)/$(MPFR_TAR)
 
 $(XTDLP)/$(BINUTILS_DIR):
-	git clone https://github.com/fpoussin/esp-binutils.git $(XTDLP)/$(BINUTILS_DIR)
+#	git clone https://github.com/fpoussin/esp-binutils.git $(XTDLP)/$(BINUTILS_DIR)
+	@echo "You cloned without --recursive, fetching fpoussin/esp-binutils for you."
+	git submodule update --init --recursive
+
+
 
 $(XTDLP)/$(NEWLIB_DIR):
-	git clone -b xtensa https://github.com/jcmvbkbc/newlib-xtensa.git $(XTDLP)/$(NEWLIB_DIR)
+#	git clone -b xtensa https://github.com/jcmvbkbc/newlib-xtensa.git $(XTDLP)/$(NEWLIB_DIR)
+	@echo "You cloned without --recursive, fetching jcmvbkbc/newlib-xtensa for you."
+	git submodule update --init --recursive
 
 $(XTDLP)/$(GCC_DIR):
-	git clone https://github.com/jcmvbkbc/gcc-xtensa.git $(XTDLP)/$(GCC_DIR)
+#	git clone https://github.com/jcmvbkbc/gcc-xtensa.git $(XTDLP)/$(GCC_DIR)
+	@echo "You cloned without --recursive, fetching jcmvbkbc/gcc-xtensa for you."
+	git submodule update --init --recursive
+
+$(XTDLP)/$(LIBHAL_DIR):
+	@echo "You cloned without --recursive, fetching submodules for you."
+	git submodule update --init --recursive
 
 
-libhal: $(TOOLCHAIN)/xtensa-lx106-elf/sysroot/usr/lib/libhal.a
+libhal: $(TOOLCHAIN)/xtensa-lx106-elf/lib/libhal.a
 
-$(TOOLCHAIN)/xtensa-lx106-elf/sysroot/usr/lib/libhal.a: $(TOOLCHAIN)/bin/xtensa-lx106-elf-gcc lx106-hal/src
-	make -C lx106-hal -f ../Makefile _libhal
+$(TOOLCHAIN)/xtensa-lx106-elf/lib/libhal.a: $(TOOLCHAIN)/bin/xtensa-lx106-elf-gcc $(XTDLP)/$(LIBHAL_DIR)
+	make -C $(XTDLP)/$(LIBHAL_DIR) -f ../Makefile _libhal
 
-_libhal: lx106-hal/src
+_libhal: $(XTDLP)/$(LIBHAL_DIR)
 	autoreconf -i
 	PATH=$(TOOLCHAIN)/bin:$(PATH) ./configure --host=$(TARGET) --prefix=$(TOOLCHAIN)/xtensa-lx106-elf/
 	PATH=$(TOOLCHAIN)/bin:$(PATH) make
@@ -419,10 +431,6 @@ build-first-stage-gcc: build-gmp build-mpfr build-mpc build-binutils $(XTDLP)/$(
 build-second-stage-gcc: build-gmp build-mpfr build-mpc build-binutils build-first-stage-gcc $(XTDLP)/$(GCC_DIR)/build-2 $(XTBP)/$(GCC_DIR)
 build-newlib: build-gmp build-mpfr build-mpc build-binutils $(XTDLP)/$(NEWLIB_DIR)/build $(XTBP)/$(NEWLIB_DIR) 
 
-
-lx106-hal/src:
-	@echo "You cloned without --recursive, fetching submodules for you."
-	git submodule update --init --recursive
 
 clean: clean-sdk
 	-rm -rf $(TOOLCHAIN)	
