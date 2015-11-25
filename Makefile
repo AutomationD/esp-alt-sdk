@@ -1,3 +1,10 @@
+# Author: Dmitry Kireev (@kireevco)
+# 
+# Credits to Paul Sokolovsky (@pfalcon) for esp-open-sdk
+# Credits to Fabien Poussin (@fpoussin) for xtensa-lx106-elf build script
+#
+
+
 VENDOR_SDK_VERSION = 1.4.0
 GMP_VERSION = 6.0.0a
 MPFR_VERSION = 3.1.2
