@@ -16,7 +16,7 @@ TARGET = xtensa-lx106-elf
 TOOLCHAIN = $(TOP)/$(TARGET)
 
 XTTC = $(TOOLCHAIN)
-XTBP = $(TOP)/bin
+XTBP = $(TOP)/build
 XTDLP = $(TOP)/src
 
 GMP_TAR = gmp-$(GMP_VERSION).tar.bz2
@@ -28,7 +28,7 @@ MPFR_DIR = mpfr-$(MPFR_VERSION)
 MPC_DIR = mpc-$(MPC_VERSION)
 
 GCC_DIR = gcc-xtensa
-NEWLIB_DIR = esp-newlib
+NEWLIB_DIR = newlib-xtensa
 BINUTILS_DIR = esp-binutils
 LIBHAL_DIR = lx106-hal
 
@@ -322,7 +322,7 @@ $(XTDLP)/$(LIBHAL_DIR):
 libhal: $(TOOLCHAIN)/xtensa-lx106-elf/lib/libhal.a
 
 $(TOOLCHAIN)/xtensa-lx106-elf/lib/libhal.a: $(TOOLCHAIN)/bin/xtensa-lx106-elf-gcc $(XTDLP)/$(LIBHAL_DIR)
-	make -C $(XTDLP)/$(LIBHAL_DIR) -f ../Makefile _libhal
+	make -C $(XTDLP)/$(LIBHAL_DIR) -f ../../Makefile _libhal
 
 _libhal: $(XTDLP)/$(LIBHAL_DIR)
 	autoreconf -i
@@ -433,7 +433,14 @@ build-newlib: build-gmp build-mpfr build-mpc build-binutils $(XTDLP)/$(NEWLIB_DI
 
 
 clean: clean-sdk
-	-rm -rf $(TOOLCHAIN)	
+	-rm -rf $(TOOLCHAIN)
+	rm -rf $(XTDLP)/$(GMP_DIR)/build
+	rm -rf $(XTDLP)/$(MPFR_DIR)/build
+	rm -rf $(XTDLP)/$(MPC_DIR)/build
+	rm -rf $(XTDLP)/$(BINUTILS_DIR)/build
+	rm -rf $(XTDLP)/$(GCC_DIR)/build-1
+	rm -rf $(XTDLP)/$(GCC_DIR)/build-2
+	rm -rf $(XTDLP)/$(NEWLIB_DIR)/build
 
 clean-sdk:
 	rm -rf $(VENDOR_SDK_DIR)
@@ -443,10 +450,11 @@ clean-sdk:
 	rm -f .sdk_patch_$(VENDOR_SDK_VERSION)
 	rm -rf lx106-hal
 	rm -rf build
+	rm -rf bin
 
 
 purge: clean
-	rm -rf dl
+	rm -rf src
 
 clean-sysroot:
 	rm -rf $(TOOLCHAIN)/xtensa-lx106-elf/sysroot/usr/lib/*
