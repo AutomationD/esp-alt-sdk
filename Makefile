@@ -333,7 +333,7 @@ _libhal: $(XTDLP)/$(LIBHAL_DIR)
 
 toolchain: $(TOOLCHAIN)/bin/xtensa-lx106-elf-gcc
 
-$(TOOLCHAIN)/bin/xtensa-lx106-elf-gcc: $(XTDLP) $(XTBP) build-gmp build-mpfr build-mpc build-binutils build-first-stage-gcc build-second-stage-gcc build-newlib
+$(TOOLCHAIN)/bin/xtensa-lx106-elf-gcc: $(XTDLP) $(XTBP) get-src build-gmp build-mpfr build-mpc build-binutils build-first-stage-gcc build-second-stage-gcc build-newlib
 # $(TOOLCHAIN)/bin/xtensa-lx106-elf-gcc: $(XTDLP) $(XTBP) build-gmp build-mpfr build-mpc build-binutils build-first-stage-gcc 
 
 $(XTDLP):
@@ -423,6 +423,7 @@ $(XTDLP)/$(NEWLIB_DIR)/build: $(XTDLP)/$(NEWLIB_DIR)/configure.ac
 $(XTBP)/$(NEWLIB_DIR):
 	make install -C $(XTDLP)/$(NEWLIB_DIR)/build/
 
+get-src: $(XTDLP)/$(GMP_DIR) $(XTDLP)/$(MPFR_DIR) $(XTDLP)/$(MPC_DIR) $(XTDLP)/$(BINUTILS_DIR)/configure.ac $(XTDLP)/$(GCC_DIR)/configure.ac $(XTDLP)/$(NEWLIB_DIR)/configure.ac
 build-gmp: $(XTDLP)/$(GMP_DIR)/build $(XTBP)/gmp
 build-mpfr: build-gmp $(XTDLP)/$(MPFR_DIR)/build $(XTBP)/mpfr
 build-mpc: build-gmp build-mpfr $(XTDLP)/$(MPC_DIR)/build $(XTBP)/mpc
