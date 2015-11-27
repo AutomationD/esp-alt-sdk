@@ -356,7 +356,6 @@ $(XTDLP)/$(GMP_DIR)/build: $(XTDLP)/$(GMP_DIR)
 $(XTBP)/gmp: $(XTDLP)/$(GMP_DIR)/build
 	make install -C $(XTDLP)/$(GMP_DIR)/build/
 
-
 # MPFR	
 $(XTDLP)/$(MPFR_DIR): $(XTDLP)/$(MPFR_TAR)
 	mkdir -p $(XTDLP)/$(MPFR_DIR)
@@ -410,8 +409,8 @@ $(XTDLP)/$(GCC_DIR)/build-2: $(XTDLP)/$(GCC_DIR)/configure.ac
 	make all-gcc -C $(XTDLP)/$(GCC_DIR)/build-2/
 
 $(XTBP)/$(GCC_DIR): $(XTDLP)/$(GCC_DIR)/build-1 $(XTDLP)/$(GCC_DIR)/build-2
-	make install-gcc -C $(XTDLP)/$(GCC_DIR)/build-2/
 	make install-gcc -C $(XTDLP)/$(GCC_DIR)/build-1/
+	make install -C $(XTDLP)/$(GCC_DIR)/build-2/
 	cd $(XTTC)/bin/; ln -sf xtensa-lx106-elf-gcc xtensa-lx106-elf-cc
 
 # Newlib
