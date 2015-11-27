@@ -390,7 +390,7 @@ $(XTBP)/mpc: $(XTDLP)/$(MPC_DIR)/build
 
 # Binutils
 $(XTDLP)/$(BINUTILS_DIR)/build: $(XTDLP)/$(BINUTILS_DIR)
-	mkdir -p $(XTDLP)/$(BINUTILS_DIR)/build
+	mkdir $(XTDLP)/$(BINUTILS_DIR)/build
 	cd $(XTDLP)/$(BINUTILS_DIR)/build/; chmod +rx ../configure; ../configure --prefix=$(XTTC) --target=$(TARGET) --enable-werror=no  --enable-multilib --disable-nls --disable-shared --disable-threads --with-gcc --with-gnu-as --with-gnu-ld
 	make -C $(XTDLP)/$(BINUTILS_DIR)/build/
 
@@ -416,7 +416,7 @@ $(XTBP)/$(GCC_DIR): $(XTDLP)/$(GCC_DIR)/build-1 $(XTDLP)/$(GCC_DIR)/build-2
 
 # Newlib
 $(XTDLP)/$(NEWLIB_DIR)/build: $(XTDLP)/$(NEWLIB_DIR)
-	mkdir -p $(XTDLP)/$(NEWLIB_DIR)/build
+	mkdir $(XTDLP)/$(NEWLIB_DIR)/build
 	cd $(XTDLP)/$(NEWLIB_DIR)/build/; ../configure  --prefix=$(XTTC) --target=$(TARGET) --enable-multilib --with-gnu-as --with-gnu-ld --disable-nls
 	make -C $(XTDLP)/$(NEWLIB_DIR)/build/
 	
