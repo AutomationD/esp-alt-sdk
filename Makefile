@@ -297,24 +297,24 @@ $(XTDLP)/$(MPC_TAR):
 $(XTDLP)/$(MPFR_TAR):
 	wget -c http://ftp.gnu.org/gnu/mpfr/$(MPFR_TAR) --output-document $(XTDLP)/$(MPFR_TAR)
 
-$(XTDLP)/$(BINUTILS_DIR):
+$(XTDLP)/$(BINUTILS_DIR)/configure.ac:
 #	git clone https://github.com/fpoussin/esp-binutils.git $(XTDLP)/$(BINUTILS_DIR)
 	@echo "You cloned without --recursive, fetching fpoussin/esp-binutils for you."
 	git submodule update --init --recursive
 
 
 
-$(XTDLP)/$(NEWLIB_DIR):
+$(XTDLP)/$(NEWLIB_DIR)/configure.ac:
 #	git clone -b xtensa https://github.com/jcmvbkbc/newlib-xtensa.git $(XTDLP)/$(NEWLIB_DIR)
 	@echo "You cloned without --recursive, fetching jcmvbkbc/newlib-xtensa for you."
 	git submodule update --init --recursive
 
-$(XTDLP)/$(GCC_DIR):
+$(XTDLP)/$(GCC_DIR)/configure.ac:
 #	git clone https://github.com/jcmvbkbc/gcc-xtensa.git $(XTDLP)/$(GCC_DIR)
 	@echo "You cloned without --recursive, fetching jcmvbkbc/gcc-xtensa for you."
 	git submodule update --init --recursive
 
-$(XTDLP)/$(LIBHAL_DIR):
+$(XTDLP)/$(LIBHAL_DIR)/configure.ac:
 	@echo "You cloned without --recursive, fetching submodules for you."
 	git submodule update --init --recursive
 
@@ -389,7 +389,7 @@ $(XTBP)/mpc: $(XTDLP)/$(MPC_DIR)/build
 
 
 # Binutils
-$(XTDLP)/$(BINUTILS_DIR)/build: $(XTDLP)/$(BINUTILS_DIR)
+$(XTDLP)/$(BINUTILS_DIR)/build: $(XTDLP)/$(BINUTILS_DIR)/configure.ac
 	mkdir $(XTDLP)/$(BINUTILS_DIR)/build
 	cd $(XTDLP)/$(BINUTILS_DIR)/build/; chmod +rx ../configure; ../configure --prefix=$(XTTC) --target=$(TARGET) --enable-werror=no  --enable-multilib --disable-nls --disable-shared --disable-threads --with-gcc --with-gnu-as --with-gnu-ld
 	make -C $(XTDLP)/$(BINUTILS_DIR)/build/
@@ -398,13 +398,13 @@ $(XTBP)/$(BINUTILS_DIR): $(XTDLP)/$(BINUTILS_DIR)/build
 	make install -C $(XTDLP)/$(BINUTILS_DIR)/build/
 
 # GCC Step 1
-$(XTDLP)/$(GCC_DIR)/build-1: $(XTDLP)/$(GCC_DIR)
+$(XTDLP)/$(GCC_DIR)/build-1: $(XTDLP)/$(GCC_DIR)/configure.ac
 	mkdir $(XTDLP)/$(GCC_DIR)/build-1
 	cd $(XTDLP)/$(GCC_DIR)/build-1/; ../configure --prefix=$(XTTC) --target=$(TARGET) --enable-multilib --enable-languages=c --with-newlib --disable-nls --disable-shared --disable-threads --with-gnu-as --with-gnu-ld --with-gmp=$(XTBP)/gmp --with-mpfr=$(XTBP)/mpfr --with-mpc=$(XTBP)/mpc  --disable-libssp --without-headers --disable-__cxa_atexit
 	make all-gcc -C $(XTDLP)/$(GCC_DIR)/build-1/
 	
 # GCC Step 2
-$(XTDLP)/$(GCC_DIR)/build-2: $(XTDLP)/$(GCC_DIR)
+$(XTDLP)/$(GCC_DIR)/build-2: $(XTDLP)/$(GCC_DIR)/configure.ac
 	mkdir $(XTDLP)/$(GCC_DIR)/build-2
 	cd $(XTDLP)/$(GCC_DIR)/build-2/; ../configure --prefix=$(XTTC) --target=$(TARGET) --enable-multilib --disable-nls --disable-shared --disable-threads --with-gnu-as --with-gnu-ld --with-gmp=$(XTBP)/gmp --with-mpfr=$(XTBP)/mpfr --with-mpc=$(XTBP)/mpc --enable-languages=c,c++ --with-newlib --disable-libssp --disable-__cxa_atexit
 	make all-gcc -C $(XTDLP)/$(GCC_DIR)/build-2/
@@ -415,7 +415,7 @@ $(XTBP)/$(GCC_DIR): $(XTDLP)/$(GCC_DIR)/build-1 $(XTDLP)/$(GCC_DIR)/build-2
 	cd $(XTTC)/bin/; ln -sf xtensa-lx106-elf-gcc xtensa-lx106-elf-cc
 
 # Newlib
-$(XTDLP)/$(NEWLIB_DIR)/build: $(XTDLP)/$(NEWLIB_DIR)
+$(XTDLP)/$(NEWLIB_DIR)/build: $(XTDLP)/$(NEWLIB_DIR)/configure.ac
 	mkdir $(XTDLP)/$(NEWLIB_DIR)/build
 	cd $(XTDLP)/$(NEWLIB_DIR)/build/; ../configure  --prefix=$(XTTC) --target=$(TARGET) --enable-multilib --with-gnu-as --with-gnu-ld --disable-nls
 	make -C $(XTDLP)/$(NEWLIB_DIR)/build/
