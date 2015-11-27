@@ -392,7 +392,7 @@ $(XTBP)/mpc: $(XTDLP)/$(MPC_DIR)/build
 
 # Binutils
 $(XTDLP)/$(BINUTILS_DIR)/build: $(XTDLP)/$(BINUTILS_DIR)/configure.ac
-	mkdir $(XTDLP)/$(BINUTILS_DIR)/build
+	mkdir -p $(XTDLP)/$(BINUTILS_DIR)/build
 	cd $(XTDLP)/$(BINUTILS_DIR)/build/; chmod +rx ../configure; ../configure --prefix=$(XTTC) --target=$(TARGET) --enable-werror=no  --enable-multilib --disable-nls --disable-shared --disable-threads --with-gcc --with-gnu-as --with-gnu-ld
 	make -C $(XTDLP)/$(BINUTILS_DIR)/build/
 
@@ -401,13 +401,13 @@ $(XTBP)/$(BINUTILS_DIR): $(XTDLP)/$(BINUTILS_DIR)/build
 
 # GCC Step 1
 $(XTDLP)/$(GCC_DIR)/build-1: $(XTDLP)/$(GCC_DIR)/configure.ac
-	mkdir $(XTDLP)/$(GCC_DIR)/build-1
+	mkdir -p $(XTDLP)/$(GCC_DIR)/build-1
 	cd $(XTDLP)/$(GCC_DIR)/build-1/; ../configure --prefix=$(XTTC) --target=$(TARGET) --enable-multilib --enable-languages=c --with-newlib --disable-nls --disable-shared --disable-threads --with-gnu-as --with-gnu-ld --with-gmp=$(XTBP)/gmp --with-mpfr=$(XTBP)/mpfr --with-mpc=$(XTBP)/mpc  --disable-libssp --without-headers --disable-__cxa_atexit
 	make all-gcc -C $(XTDLP)/$(GCC_DIR)/build-1/
 	
 # GCC Step 2
 $(XTDLP)/$(GCC_DIR)/build-2: $(XTDLP)/$(GCC_DIR)/configure.ac
-	mkdir $(XTDLP)/$(GCC_DIR)/build-2
+	mkdir -p $(XTDLP)/$(GCC_DIR)/build-2
 	cd $(XTDLP)/$(GCC_DIR)/build-2/; ../configure --prefix=$(XTTC) --target=$(TARGET) --enable-multilib --disable-nls --disable-shared --disable-threads --with-gnu-as --with-gnu-ld --with-gmp=$(XTBP)/gmp --with-mpfr=$(XTBP)/mpfr --with-mpc=$(XTBP)/mpc --enable-languages=c,c++ --with-newlib --disable-libssp --disable-__cxa_atexit
 	make all-gcc -C $(XTDLP)/$(GCC_DIR)/build-2/
 
