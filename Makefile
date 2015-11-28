@@ -406,7 +406,7 @@ $(XTDLP)/$(GCC_DIR)/build-1: $(XTDLP)/$(GCC_DIR)/configure.ac
 	make all-gcc -C $(XTDLP)/$(GCC_DIR)/build-1/
 	
 # GCC Step 2
-$(XTDLP)/$(GCC_DIR)/build-2: $(XTDLP)/$(GCC_DIR)/configure.ac
+$(XTDLP)/$(GCC_DIR)/build-2: $(XTDLP)/$(GCC_DIR)/configure.ac $(XTBP)/$(NEWLIB_DIR)
 	mkdir -p $(XTDLP)/$(GCC_DIR)/build-2
 	cd $(XTDLP)/$(GCC_DIR)/build-2/; ../configure --prefix=$(XTTC) --target=$(TARGET) --enable-multilib --disable-nls --disable-shared --disable-threads --with-gnu-as --with-gnu-ld --with-gmp=$(XTBP)/gmp --with-mpfr=$(XTBP)/mpfr --with-mpc=$(XTBP)/mpc --enable-languages=c,c++ --with-newlib --disable-libssp --disable-__cxa_atexit
 	make -C $(XTDLP)/$(GCC_DIR)/build-2/
@@ -422,7 +422,7 @@ $(XTDLP)/$(NEWLIB_DIR)/build: $(XTDLP)/$(NEWLIB_DIR)/configure.ac
 	cd $(XTDLP)/$(NEWLIB_DIR)/build/; ../configure  --prefix=$(XTTC) --target=$(TARGET) --enable-multilib --with-gnu-as --with-gnu-ld --disable-nls
 	make -C $(XTDLP)/$(NEWLIB_DIR)/build/
 	
-$(XTBP)/$(NEWLIB_DIR):
+$(XTBP)/$(NEWLIB_DIR): $(XTDLP)/$(NEWLIB_DIR)/build
 	make install -C $(XTDLP)/$(NEWLIB_DIR)/build/
 
 get-src: $(XTDLP)/$(GMP_DIR) $(XTDLP)/$(MPFR_DIR) $(XTDLP)/$(MPC_DIR) $(XTDLP)/$(BINUTILS_DIR)/configure.ac $(XTDLP)/$(GCC_DIR)/configure.ac $(XTDLP)/$(NEWLIB_DIR)/configure.ac
