@@ -333,7 +333,7 @@ _libhal: $(XTDLP)/$(LIBHAL_DIR)
 
 toolchain: $(TOOLCHAIN)/bin/xtensa-lx106-elf-gcc
 
-$(TOOLCHAIN)/bin/xtensa-lx106-elf-gcc: $(XTTC) $(XTDLP) $(XTBP) get-src build-gmp build-mpfr build-mpc build-binutils build-first-stage-gcc build-second-stage-gcc build-newlib
+$(TOOLCHAIN)/bin/xtensa-lx106-elf-gcc: $(XTTC) $(XTDLP) $(XTBP) get-src build-gmp build-mpfr build-mpc build-binutils build-first-stage-gcc build-newlib build-second-stage-gcc
 # $(TOOLCHAIN)/bin/xtensa-lx106-elf-gcc: $(XTDLP) $(XTBP) build-gmp build-mpfr build-mpc build-binutils build-first-stage-gcc 
 
 $(XTDLP):
