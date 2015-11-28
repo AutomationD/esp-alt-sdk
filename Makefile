@@ -449,7 +449,7 @@ clean-sdk:
 	rm -rf $(VENDOR_SDK_DIR)
 	rm -rf $(VENDOR_SDK_ZIP)
 	rm -rf release_note.txt
-	rm -f sdk
+	rm -rf sdk
 	rm -f .sdk_patch_$(VENDOR_SDK_VERSION)
 	rm -rf lx106-hal
 	rm -rf build
