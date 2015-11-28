@@ -35,7 +35,7 @@ LIBHAL_DIR = lx106-hal
 UNZIP = unzip -q -o
 UNTAR = tar -xf
 
-PATH := $(XTTC)/bin:$(PATH)
+PATH := $(TOOLCHAIN)/bin:$(PATH)
 
 
 VENDOR_SDK_ZIP = $(VENDOR_SDK_ZIP_$(VENDOR_SDK_VERSION))
@@ -333,8 +333,12 @@ _libhal: $(XTDLP)/$(LIBHAL_DIR)
 
 toolchain: $(TOOLCHAIN)/bin/xtensa-lx106-elf-gcc
 
-$(TOOLCHAIN)/bin/xtensa-lx106-elf-gcc: $(XTTC) $(XTDLP) $(XTBP) get-src build-gmp build-mpfr build-mpc build-binutils build-first-stage-gcc build-newlib build-second-stage-gcc
+$(TOOLCHAIN)/bin/xtensa-lx106-elf-gcc: $(TOOLCHAIN) $(XTDLP) $(XTBP) get-src build-gmp build-mpfr build-mpc build-binutils build-first-stage-gcc build-newlib build-second-stage-gcc
 # $(TOOLCHAIN)/bin/xtensa-lx106-elf-gcc: $(XTDLP) $(XTBP) build-gmp build-mpfr build-mpc build-binutils build-first-stage-gcc 
+	make install-gcc -C $(XTDLP)/$(GCC_DIR)/build-1/
+	make install -C $(XTDLP)/$(GCC_DIR)/build-2/
+	cd $(TOOLCHAIN)/bin/; ln -sf xtensa-lx106-elf-gcc xtensa-lx106-elf-cc
+
 
 $(XTDLP):
 	mkdir -p $(XTDLP)
@@ -342,8 +346,8 @@ $(XTDLP):
 $(XTBP):
 	mkdir -p $(XTBP)
 
-$(XTTC):
-	mkdir -p $(XTTC)
+$(TOOLCHAIN):
+	mkdir -p $(TOOLCHAIN)
 
 # GMP
 $(XTDLP)/$(GMP_DIR): $(XTDLP)/$(GMP_TAR)
@@ -393,7 +397,7 @@ $(XTBP)/mpc: $(XTDLP)/$(MPC_DIR)/build
 # Binutils
 $(XTDLP)/$(BINUTILS_DIR)/build: $(XTDLP)/$(BINUTILS_DIR)/configure.ac
 	mkdir -p $(XTDLP)/$(BINUTILS_DIR)/build
-	cd $(XTDLP)/$(BINUTILS_DIR)/build/; chmod +rx ../configure; ../configure --prefix=$(XTTC) --target=$(TARGET) --enable-werror=no  --enable-multilib --disable-nls --disable-shared --disable-threads --with-gcc --with-gnu-as --with-gnu-ld
+	cd $(XTDLP)/$(BINUTILS_DIR)/build/; chmod +rx ../configure; ../configure --prefix=$(TOOLCHAIN) --target=$(TARGET) --enable-werror=no  --enable-multilib --disable-nls --disable-shared --disable-threads --with-gcc --with-gnu-as --with-gnu-ld
 	make -C $(XTDLP)/$(BINUTILS_DIR)/build/
 
 $(XTBP)/$(BINUTILS_DIR): $(XTDLP)/$(BINUTILS_DIR)/build
@@ -402,24 +406,21 @@ $(XTBP)/$(BINUTILS_DIR): $(XTDLP)/$(BINUTILS_DIR)/build
 # GCC Step 1
 $(XTDLP)/$(GCC_DIR)/build-1: $(XTDLP)/$(GCC_DIR)/configure.ac
 	mkdir -p $(XTDLP)/$(GCC_DIR)/build-1
-	cd $(XTDLP)/$(GCC_DIR)/build-1/; ../configure --prefix=$(XTTC) --target=$(TARGET) --enable-multilib --enable-languages=c --with-newlib --disable-nls --disable-shared --disable-threads --with-gnu-as --with-gnu-ld --with-gmp=$(XTBP)/gmp --with-mpfr=$(XTBP)/mpfr --with-mpc=$(XTBP)/mpc  --disable-libssp --without-headers --disable-__cxa_atexit
+	cd $(XTDLP)/$(GCC_DIR)/build-1/; ../configure --prefix=$(TOOLCHAIN) --target=$(TARGET) --enable-multilib --enable-languages=c --with-newlib --disable-nls --disable-shared --disable-threads --with-gnu-as --with-gnu-ld --with-gmp=$(XTBP)/gmp --with-mpfr=$(XTBP)/mpfr --with-mpc=$(XTBP)/mpc  --disable-libssp --without-headers --disable-__cxa_atexit
 	make -C $(XTDLP)/$(GCC_DIR)/build-1/
 	
 # GCC Step 2
 $(XTDLP)/$(GCC_DIR)/build-2: $(XTDLP)/$(GCC_DIR)/configure.ac $(XTBP)/$(NEWLIB_DIR)
 	mkdir -p $(XTDLP)/$(GCC_DIR)/build-2
-	cd $(XTDLP)/$(GCC_DIR)/build-2/; ../configure --prefix=$(XTTC) --target=$(TARGET) --enable-multilib --disable-nls --disable-shared --disable-threads --with-gnu-as --with-gnu-ld --with-gmp=$(XTBP)/gmp --with-mpfr=$(XTBP)/mpfr --with-mpc=$(XTBP)/mpc --enable-languages=c,c++ --with-newlib --disable-libssp --disable-__cxa_atexit --with-headers=$(XTDLP)/$(NEWLIB_DIR)/newlib/libc/include
+	cd $(XTDLP)/$(GCC_DIR)/build-2/; ../configure --prefix=$(TOOLCHAIN) --target=$(TARGET) --enable-multilib --disable-nls --disable-shared --disable-threads --with-gnu-as --with-gnu-ld --with-gmp=$(XTBP)/gmp --with-mpfr=$(XTBP)/mpfr --with-mpc=$(XTBP)/mpc --enable-languages=c,c++ --with-newlib --disable-libssp --disable-__cxa_atexit --with-headers=$(XTDLP)/$(NEWLIB_DIR)/newlib/libc/include
 	make -C $(XTDLP)/$(GCC_DIR)/build-2/
 
 $(XTBP)/$(GCC_DIR): $(XTDLP)/$(GCC_DIR)/build-1 $(XTDLP)/$(GCC_DIR)/build-2
-	make install-gcc -C $(XTDLP)/$(GCC_DIR)/build-1/
-	make install -C $(XTDLP)/$(GCC_DIR)/build-2/
-	cd $(XTTC)/bin/; ln -sf xtensa-lx106-elf-gcc xtensa-lx106-elf-cc
-
+	
 # Newlib
 $(XTDLP)/$(NEWLIB_DIR)/build: $(XTDLP)/$(NEWLIB_DIR)/configure.ac
 	mkdir $(XTDLP)/$(NEWLIB_DIR)/build
-	cd $(XTDLP)/$(NEWLIB_DIR)/build/; ../configure  --prefix=$(XTTC) --target=$(TARGET) --enable-multilib --with-gnu-as --with-gnu-ld --disable-nls
+	cd $(XTDLP)/$(NEWLIB_DIR)/build/; ../configure  --prefix=$(TOOLCHAIN) --target=$(TARGET) --enable-multilib --with-gnu-as --with-gnu-ld --disable-nls
 	make -C $(XTDLP)/$(NEWLIB_DIR)/build/
 	
 $(XTBP)/$(NEWLIB_DIR): $(XTDLP)/$(NEWLIB_DIR)/build
@@ -430,8 +431,8 @@ build-gmp: $(XTDLP)/$(GMP_DIR)/build $(XTBP)/gmp
 build-mpfr: build-gmp $(XTDLP)/$(MPFR_DIR)/build $(XTBP)/mpfr
 build-mpc: build-gmp build-mpfr $(XTDLP)/$(MPC_DIR)/build $(XTBP)/mpc
 build-binutils: build-gmp build-mpfr build-mpc $(XTDLP)/$(BINUTILS_DIR)/build $(XTBP)/$(BINUTILS_DIR)
-build-first-stage-gcc: build-gmp build-mpfr build-mpc build-binutils $(XTDLP)/$(GCC_DIR)/build-1 $(XTBP)/$(GCC_DIR)
-build-second-stage-gcc: build-gmp build-mpfr build-mpc build-binutils build-first-stage-gcc $(XTDLP)/$(GCC_DIR)/build-2 $(XTBP)/$(GCC_DIR)
+build-first-stage-gcc: build-gmp build-mpfr build-mpc build-binutils $(XTDLP)/$(GCC_DIR)/build-1
+build-second-stage-gcc: build-gmp build-mpfr build-mpc build-binutils build-first-stage-gcc $(XTDLP)/$(GCC_DIR)/build-2
 build-newlib: build-gmp build-mpfr build-mpc build-binutils $(XTDLP)/$(NEWLIB_DIR)/build $(XTBP)/$(NEWLIB_DIR) 
 
 
