@@ -352,6 +352,7 @@ $(XTBP):
 	mkdir -p $(XTBP)
 
 $(TOOLCHAIN):
+	git config --global core.autocrlf false
 	mkdir -p $(TOOLCHAIN)
 
 # GMP
@@ -412,7 +413,7 @@ $(XTBP)/$(BINUTILS_DIR): $(XTDLP)/$(BINUTILS_DIR)/build
 $(XTDLP)/$(GCC_DIR)/build-1: $(XTDLP)/$(GCC_DIR)/configure.ac
 	mkdir -p $(XTDLP)/$(GCC_DIR)/build-1
 	cd $(XTDLP)/$(GCC_DIR)/build-1/; ../configure --prefix=$(TOOLCHAIN) --target=$(TARGET) --enable-multilib --enable-languages=c --with-newlib --disable-nls --disable-shared --disable-threads --with-gnu-as --with-gnu-ld --with-gmp=$(XTBP)/gmp --with-mpfr=$(XTBP)/mpfr --with-mpc=$(XTBP)/mpc  --disable-libssp --without-headers --disable-__cxa_atexit
-	make -C $(XTDLP)/$(GCC_DIR)/build-1/
+	make all-gcc -C $(XTDLP)/$(GCC_DIR)/build-1/
 	
 # GCC Step 2
 $(XTDLP)/$(GCC_DIR)/build-2: $(XTDLP)/$(GCC_DIR)/configure.ac $(XTBP)/$(NEWLIB_DIR)
