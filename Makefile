@@ -339,9 +339,6 @@ toolchain: $(TOOLCHAIN)/bin/xtensa-lx106-elf-gcc
 
 $(TOOLCHAIN)/bin/xtensa-lx106-elf-gcc: $(TOOLCHAIN) $(XTDLP) $(XTBP) get-src build-gmp build-mpfr build-mpc build-binutils build-first-stage-gcc build-newlib build-second-stage-gcc
 # $(TOOLCHAIN)/bin/xtensa-lx106-elf-gcc: $(XTDLP) $(XTBP) build-gmp build-mpfr build-mpc build-binutils build-first-stage-gcc 
-	make install-gcc -C $(XTDLP)/$(GCC_DIR)/build-1/
-	cd $(TOOLCHAIN)/bin/; ln -sf xtensa-lx106-elf-gcc xtensa-lx106-elf-cc
-	make install -C $(XTDLP)/$(GCC_DIR)/build-2/
 	
 
 
@@ -414,12 +411,16 @@ $(XTDLP)/$(GCC_DIR)/build-1: $(XTDLP)/$(GCC_DIR)/configure.ac
 	mkdir -p $(XTDLP)/$(GCC_DIR)/build-1
 	cd $(XTDLP)/$(GCC_DIR)/build-1/; ../configure --prefix=$(TOOLCHAIN) --target=$(TARGET) --enable-multilib --enable-languages=c --with-newlib --disable-nls --disable-shared --disable-threads --with-gnu-as --with-gnu-ld --with-gmp=$(XTBP)/gmp --with-mpfr=$(XTBP)/mpfr --with-mpc=$(XTBP)/mpc  --disable-libssp --without-headers --disable-__cxa_atexit
 	make all-gcc -C $(XTDLP)/$(GCC_DIR)/build-1/
+	make install-gcc -C $(XTDLP)/$(GCC_DIR)/build-1/
+	cd $(TOOLCHAIN)/bin/; ln -sf xtensa-lx106-elf-gcc xtensa-lx106-elf-cc	
+	
 	
 # GCC Step 2
 $(XTDLP)/$(GCC_DIR)/build-2: $(XTDLP)/$(GCC_DIR)/configure.ac $(XTBP)/$(NEWLIB_DIR)
 	mkdir -p $(XTDLP)/$(GCC_DIR)/build-2
 	cd $(XTDLP)/$(GCC_DIR)/build-2/; ../configure --prefix=$(TOOLCHAIN) --target=$(TARGET) --enable-multilib --disable-nls --disable-shared --disable-threads --with-gnu-as --with-gnu-ld --with-gmp=$(XTBP)/gmp --with-mpfr=$(XTBP)/mpfr --with-mpc=$(XTBP)/mpc --enable-languages=c,c++ --with-newlib --disable-libssp --disable-__cxa_atexit
 	make -C $(XTDLP)/$(GCC_DIR)/build-2/
+	make install -C $(XTDLP)/$(GCC_DIR)/build-2/
 
 $(XTBP)/$(GCC_DIR): $(XTDLP)/$(GCC_DIR)/build-1 $(XTDLP)/$(GCC_DIR)/build-2
 	
