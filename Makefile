@@ -38,10 +38,8 @@ UNTAR = tar -xf
 
 PLATFORM := $(shell uname -s)
 
-space :=
-space +=
-
-PATH := "$(TOOLCHAIN)/bin:$(subst $(space),\$(space),$(PATH))"
+PATH := $(TOOLCHAIN)/bin:$(PATH)
+SAFEPATH := $(TOOLCHAIN)/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/mingw/bin/:/c/tools/mingw64/bin
 
 
 VENDOR_SDK_ZIP = $(VENDOR_SDK_ZIP_$(VENDOR_SDK_VERSION))
@@ -338,9 +336,9 @@ $(TOOLCHAIN)/xtensa-lx106-elf/lib/libhal.a: $(TOOLCHAIN)/bin/xtensa-lx106-elf-gc
 
 _libhal: $(XTDLP)/$(LIBHAL_DIR)
 	autoreconf -i
-	PATH=$(TOOLCHAIN)/bin:$(PATH) ./configure --host=$(TARGET) --prefix=$(TOOLCHAIN)/xtensa-lx106-elf/
-	PATH=$(TOOLCHAIN)/bin:$(PATH) make
-	PATH=$(TOOLCHAIN)/bin:$(PATH) make install
+	PATH=$(SAFEPATH) ./configure --host=$(TARGET) --prefix=$(TOOLCHAIN)/xtensa-lx106-elf/
+	PATH=$(SAFEPATH) make
+	PATH=$(SAFEPATH) make install
 
 
 toolchain: $(TOOLCHAIN)/bin/xtensa-lx106-elf-gcc
