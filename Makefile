@@ -340,8 +340,9 @@ toolchain: $(TOOLCHAIN)/bin/xtensa-lx106-elf-gcc
 $(TOOLCHAIN)/bin/xtensa-lx106-elf-gcc: $(TOOLCHAIN) $(XTDLP) $(XTBP) get-src build-gmp build-mpfr build-mpc build-binutils build-first-stage-gcc build-newlib build-second-stage-gcc
 # $(TOOLCHAIN)/bin/xtensa-lx106-elf-gcc: $(XTDLP) $(XTBP) build-gmp build-mpfr build-mpc build-binutils build-first-stage-gcc 
 	make install-gcc -C $(XTDLP)/$(GCC_DIR)/build-1/
-	make install -C $(XTDLP)/$(GCC_DIR)/build-2/
 	cd $(TOOLCHAIN)/bin/; ln -sf xtensa-lx106-elf-gcc xtensa-lx106-elf-cc
+	make install -C $(XTDLP)/$(GCC_DIR)/build-2/
+	
 
 
 $(XTDLP):
