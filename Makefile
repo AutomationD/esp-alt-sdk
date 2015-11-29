@@ -352,8 +352,8 @@ platform-specific:
 ifeq ($(OS),Windows_NT)
 	@echo "Detected: MacOS"
   ifneq (,$(findstring MINGW32,$(PLATFORM)))    
-    @echo "Detected: MinGW32."
-    $(MAKE) /mingw
+		@echo "Detected: MinGW32."
+		$(MAKE) /mingw
   else
 	    ifneq (,$(findstring CYGWIN,$(PLATFORM)))
 				@echo "Detected: CYGWIN"
