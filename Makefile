@@ -39,7 +39,7 @@ UNTAR = tar -xf
 PLATFORM := $(shell uname -s)
 
 
-PATH := $(TOOLCHAIN)/bin:$(PATH)
+PATH := "$(TOOLCHAIN)/bin:$(PATH)"
 
 
 VENDOR_SDK_ZIP = $(VENDOR_SDK_ZIP_$(VENDOR_SDK_VERSION))
