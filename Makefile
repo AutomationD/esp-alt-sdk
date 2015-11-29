@@ -38,8 +38,10 @@ UNTAR = tar -xf
 
 PLATFORM := $(shell uname -s)
 
+space :=
+space +=
 
-PATH := "$(TOOLCHAIN)/bin:$(PATH)"
+PATH := "$(TOOLCHAIN)/bin:$(subst $(space),\$(space),$(PATH))"
 
 
 VENDOR_SDK_ZIP = $(VENDOR_SDK_ZIP_$(VENDOR_SDK_VERSION))
@@ -349,8 +351,8 @@ $(TOOLCHAIN)/bin/xtensa-lx106-elf-gcc: $(TOOLCHAIN) $(XTDLP) $(XTBP) get-src bui
 
 platform-specific:
 	@echo "Performing platform-specific actions"
+	@echo $(PATH)
 ifeq ($(OS),Windows_NT)
-	@echo "Detected: MacOS"
   ifneq (,$(findstring MINGW32,$(PLATFORM)))    
 		@echo "Detected: MinGW32."
 		$(MAKE) /mingw
