@@ -14,6 +14,7 @@ MPC_VERSION = 1.0.2
 TOP = $(PWD)
 TARGET = xtensa-lx106-elf
 TOOLCHAIN = $(TOP)/$(TARGET)
+MINGW_DIR = c:\tools\mingw64
 
 XTTC = $(TOOLCHAIN)
 XTBP = $(TOP)/build
@@ -34,6 +35,9 @@ LIBHAL_DIR = lx106-hal
 
 UNZIP = unzip -q -o
 UNTAR = tar -xf
+
+PLATFORM := $(shell uname -s)
+
 
 PATH := $(TOOLCHAIN)/bin:$(PATH)
 
@@ -79,7 +83,9 @@ STANDALONE = y
 .PHONY: toolchain libhal libcirom sdk
 
 # all: esptool libcirom standalone sdk sdk_patch $(TOOLCHAIN)/xtensa-lx106-elf/sysroot/usr/lib/libhal.a $(TOOLCHAIN)/bin/xtensa-lx106-elf-gcc
-all: standalone $(TOP)/sdk sdk_patch $(TOOLCHAIN)/xtensa-lx106-elf/lib/libhal.a $(TOOLCHAIN)/bin/xtensa-lx106-elf-gcc
+all: platform-specific standalone $(TOP)/sdk sdk_patch $(TOOLCHAIN)/xtensa-lx106-elf/lib/libhal.a $(TOOLCHAIN)/bin/xtensa-lx106-elf-gcc
+# all: platform-specific
+
 	@echo ok
 # 	@echo
 # 	@echo "Xtensa toolchain is built, to use it:"
@@ -339,8 +345,35 @@ toolchain: $(TOOLCHAIN)/bin/xtensa-lx106-elf-gcc
 
 $(TOOLCHAIN)/bin/xtensa-lx106-elf-gcc: $(TOOLCHAIN) $(XTDLP) $(XTBP) get-src build-gmp build-mpfr build-mpc build-binutils build-first-stage-gcc build-newlib build-second-stage-gcc
 # $(TOOLCHAIN)/bin/xtensa-lx106-elf-gcc: $(XTDLP) $(XTBP) build-gmp build-mpfr build-mpc build-binutils build-first-stage-gcc 
-	
 
+
+platform-specific:
+	@echo "Performing platform-specific actions"
+ifeq ($(OS),Windows_NT)
+	@echo "Detected: MacOS"
+  ifneq (,$(findstring MINGW32,$(PLATFORM)))    
+    @echo "Detected: MinGW32."
+    $(MAKE) /mingw
+  else
+	    ifneq (,$(findstring CYGWIN,$(PLATFORM)))
+				@echo "Detected: CYGWIN"
+	    endif
+  endif
+else  
+  ifeq ($(PLATFORM),Darwin)    
+			@echo "Detected: MacOS"      
+  endif
+  ifeq ($(PLATFORM),Linux)
+			@echo "Detected: Linux"
+  endif
+  ifeq ($(PLATFORM),FreeBSD)
+      @echo "Detected: FreeBSD"      
+  endif
+endif
+
+/mingw:
+	@echo "/mingw directory not found, mounting"
+	mount $(MINGW_DIR) /mingw	
 
 $(XTDLP):
 	mkdir -p $(XTDLP)
@@ -351,6 +384,8 @@ $(XTBP):
 $(TOOLCHAIN):
 	git config --global core.autocrlf false
 	mkdir -p $(TOOLCHAIN)
+
+
 
 # GMP
 $(XTDLP)/$(GMP_DIR): $(XTDLP)/$(GMP_TAR)
@@ -412,7 +447,7 @@ $(XTDLP)/$(GCC_DIR)/build-1: $(XTDLP)/$(GCC_DIR)/configure.ac
 	cd $(XTDLP)/$(GCC_DIR)/build-1/; ../configure --prefix=$(TOOLCHAIN) --target=$(TARGET) --enable-multilib --enable-languages=c --with-newlib --disable-nls --disable-shared --disable-threads --with-gnu-as --with-gnu-ld --with-gmp=$(XTBP)/gmp --with-mpfr=$(XTBP)/mpfr --with-mpc=$(XTBP)/mpc  --disable-libssp --without-headers --disable-__cxa_atexit
 	make all-gcc -C $(XTDLP)/$(GCC_DIR)/build-1/
 	make install-gcc -C $(XTDLP)/$(GCC_DIR)/build-1/
-	cd $(TOOLCHAIN)/bin/; ln -sf xtensa-lx106-elf-gcc xtensa-lx106-elf-cc	
+	cd $(TOOLCHAIN)/bin/; ln -sf xtensa-lx106-elf-gcc xtensa-lx106-elf-cc
 	
 	
 # GCC Step 2
