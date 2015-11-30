@@ -83,7 +83,7 @@ STANDALONE = y
 .PHONY: toolchain libhal libcirom sdk
 
 # all: esptool libcirom standalone sdk sdk_patch $(TOOLCHAIN)/xtensa-lx106-elf/sysroot/usr/lib/libhal.a $(TOOLCHAIN)/bin/xtensa-lx106-elf-gcc
-all: platform-specific standalone $(TOP)/sdk sdk_patch $(TOOLCHAIN)/xtensa-lx106-elf/lib/libhal.a $(TOOLCHAIN)/bin/xtensa-lx106-elf-gcc
+all: debug platform-specific standalone $(TOP)/sdk sdk_patch $(TOOLCHAIN)/xtensa-lx106-elf/lib/libhal.a $(TOOLCHAIN)/bin/xtensa-lx106-elf-gcc
 # all: platform-specific
 
 	@echo ok
@@ -346,10 +346,16 @@ toolchain: $(TOOLCHAIN)/bin/xtensa-lx106-elf-gcc
 $(TOOLCHAIN)/bin/xtensa-lx106-elf-gcc: $(TOOLCHAIN) $(XTDLP) $(XTBP) get-src build-gmp build-mpfr build-mpc build-binutils build-first-stage-gcc build-newlib build-second-stage-gcc
 # $(TOOLCHAIN)/bin/xtensa-lx106-elf-gcc: $(XTDLP) $(XTBP) build-gmp build-mpfr build-mpc build-binutils build-first-stage-gcc 
 
+debug:
+	@echo "----------------------------------------------------"
+	@echo "Outputting debug info. Makefiles are so Makefiles..."
+	echo ""
+	@echo "PATH: $(PATH)"
+	@echo "----------------------------------------------------"
 
 platform-specific:
 	@echo "Performing platform-specific actions"
-	@echo $(PATH)
+	
 ifeq ($(OS),Windows_NT)
   ifneq (,$(findstring MINGW32,$(PLATFORM)))    
 		@echo "Detected: MinGW32."
