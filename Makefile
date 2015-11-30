@@ -348,8 +348,7 @@ $(TOOLCHAIN)/bin/xtensa-lx106-elf-gcc: $(TOOLCHAIN) $(XTDLP) $(XTBP) get-src bui
 
 debug:
 	@echo "----------------------------------------------------"
-	@echo "Outputting debug info. Makefiles are so Makefiles..."
-	echo ""
+	@echo "Outputting debug info. Makefiles are so Makefiles..."	
 	@echo "PATH: $(PATH)"
 	@echo "----------------------------------------------------"
 
