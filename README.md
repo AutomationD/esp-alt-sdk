@@ -24,12 +24,13 @@ Clone repo, configure environment
 ```cmd
 git clone https://github.com/kireevco/esp-alt-sdk.git
 cd esp-alt-sdk
-env/mingw_10.cmd
+env\mingw_10.cmd
 ```
 
 Start build
 ```cmd
-bash.exe -c "make -C env/ && make"
+bash.exe -c "cd env; make"
+bash.exe -c "make"
 ```
 
 ## MacOS

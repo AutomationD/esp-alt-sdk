@@ -34,5 +34,3 @@ move /Y "c:\tools\mingw64\bin\xgettext.exe" "c:\tools\mingw64\bin\xgettext_.exe"
 ::msys-base msys-coreutils msys-coreutils-ext msys-gcc-bin msys-m4 msys-bison-bin msys-bison msys-flex msys-flex-bin msys-gawk msys-make msys-regex msys-libregex msys-sed msys-autoconf msys-automake msys-mktemp msys-patch msys-libtool
 ::msys-gperf 
 ::alias find="/usr/bin/find"
-
-bash -i -l 20_env_mingw.sh
