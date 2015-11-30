@@ -23,15 +23,15 @@ $(ENV_DIR)/automake-$(AUTOMAKE_VERSION).tar.xz:
 $(ENV_DIR)/autoconf-$(AUTOCONF_VERSION)/bin/autoconf: $(ENV_DIR)/autoconf-$(AUTOCONF_VERSION).tar.xz
 	echo Installing autoconf-$(AUTOCONF_VERSION)
 	tar -xf $(ENV_DIR)/autoconf-$(AUTOCONF_VERSION).tar.xz
-	PATH = $(SAFEPATH) cd $(ENV_DIR)/autoconf-$(AUTOCONF_VERSION); ./configure --prefix=/mingw
-	PATH = $(SAFEPATH) cd $(ENV_DIR)/autoconf-$(AUTOCONF_VERSION); make
-	PATH = $(SAFEPATH) cd $(ENV_DIR)/autoconf-$(AUTOCONF_VERSION); make install
+	PATH=$(SAFEPATH) cd $(ENV_DIR)/autoconf-$(AUTOCONF_VERSION); ./configure --prefix=/mingw
+	PATH=$(SAFEPATH) cd $(ENV_DIR)/autoconf-$(AUTOCONF_VERSION); make
+	PATH=$(SAFEPATH) cd $(ENV_DIR)/autoconf-$(AUTOCONF_VERSION); make install
 
 
 $(ENV_DIR)/automake-$(AUTOMAKE_VERSION)/: $(ENV_DIR)/autoconf-$(AUTOCONF_VERSION)/bin/autoconf $(ENV_DIR)/automake-$(AUTOMAKE_VERSION).tar.xz	
 	tar -xf $(ENV_DIR)/automake-$(AUTOMAKE_VERSION).tar.xz
-	PATH = $(SAFEPATH) cd $(ENV_DIR)/automake-$(AUTOMAKE_VERSION); ./configure --prefix=/mingw
-	PATH = $(SAFEPATH) cd $(ENV_DIR)/automake-$(AUTOMAKE_VERSION); make
-	PATH = $(SAFEPATH) cd $(ENV_DIR)/automake-$(AUTOMAKE_VERSION); make install
+	PATH=$(SAFEPATH) cd $(ENV_DIR)/automake-$(AUTOMAKE_VERSION); ./configure --prefix=/mingw
+	PATH=$(SAFEPATH) cd $(ENV_DIR)/automake-$(AUTOMAKE_VERSION); make
+	PATH=$(SAFEPATH) cd $(ENV_DIR)/automake-$(AUTOMAKE_VERSION); make install
 
 
