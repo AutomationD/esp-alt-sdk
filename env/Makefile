@@ -26,6 +26,8 @@ $(ENV_DIR)/autoconf-$(AUTOCONF_VERSION)/bin/autoconf: $(ENV_DIR)/autoconf-$(AUTO
 	PATH=$(SAFEPATH) cd $(ENV_DIR)/autoconf-$(AUTOCONF_VERSION); ./configure --prefix=/mingw
 	PATH=$(SAFEPATH) cd $(ENV_DIR)/autoconf-$(AUTOCONF_VERSION); make
 	PATH=$(SAFEPATH) cd $(ENV_DIR)/autoconf-$(AUTOCONF_VERSION); make install
+	PATH=$(SAFEPATH) cd /mingw/share/; ln -s aclocal-1.11 aclocal
+
 
 
 $(ENV_DIR)/automake-$(AUTOMAKE_VERSION)/: $(ENV_DIR)/autoconf-$(AUTOCONF_VERSION)/bin/autoconf $(ENV_DIR)/automake-$(AUTOMAKE_VERSION).tar.xz	
@@ -33,5 +35,6 @@ $(ENV_DIR)/automake-$(AUTOMAKE_VERSION)/: $(ENV_DIR)/autoconf-$(AUTOCONF_VERSION
 	PATH=$(SAFEPATH) cd $(ENV_DIR)/automake-$(AUTOMAKE_VERSION); ./configure --prefix=/mingw
 	PATH=$(SAFEPATH) cd $(ENV_DIR)/automake-$(AUTOMAKE_VERSION); make
 	PATH=$(SAFEPATH) cd $(ENV_DIR)/automake-$(AUTOMAKE_VERSION); make install
+	PATH=$(SAFEPATH) cd /mingw/share/; ln -s automake-1.11 automake
 
 

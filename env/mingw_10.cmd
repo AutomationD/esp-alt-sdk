@@ -24,6 +24,7 @@ echo Installing required mingw components
 
 mingw-get install mingw32-base mingw32-mgwport mingw32-pdcurses mingw32-make mingw-developer-toolkit mingw32-gdb gcc gcc-c++ libz bzip2
 mingw-get install coreutils msys-patch
+mingw-get remove autoconf
 :: mingw-get mingw32-autoconf mingw32-automake 
 
 

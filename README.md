@@ -27,7 +27,7 @@ cd esp-alt-sdk
 env\mingw_10.cmd
 ```
 
-Start build
+Restart cmd and run:
 ```cmd
 bash.exe -c "cd env; make"
 bash.exe -c "make"
