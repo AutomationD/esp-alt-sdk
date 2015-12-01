@@ -83,28 +83,29 @@ STANDALONE = y
 .PHONY: toolchain libhal libcirom sdk
 
 # all: esptool libcirom standalone sdk sdk_patch $(TOOLCHAIN)/xtensa-lx106-elf/sysroot/usr/lib/libhal.a $(TOOLCHAIN)/bin/xtensa-lx106-elf-gcc
-all: debug platform-specific standalone $(TOP)/sdk sdk_patch $(TOOLCHAIN)/xtensa-lx106-elf/lib/libhal.a $(TOOLCHAIN)/bin/xtensa-lx106-elf-gcc
+all: debug platform-specific esptool esptool2 libcirom standalone $(TOP)/sdk sdk_patch $(TOOLCHAIN)/xtensa-lx106-elf/lib/libhal.a $(TOOLCHAIN)/bin/xtensa-lx106-elf-gcc
 # all: platform-specific
-
-	@echo ok
-# 	@echo
-# 	@echo "Xtensa toolchain is built, to use it:"
-# 	@echo
-# 	@echo 'export PATH=$(TOOLCHAIN)/bin:$$PATH'
-# 	@echo
-# ifneq ($(STANDALONE),y)
-# 	@echo "Espressif ESP8266 SDK is installed. Toolchain contains only Open Source components"
-# 	@echo "To link external proprietary libraries add:"
-# 	@echo
-# 	@echo "xtensa-lx106-elf-gcc -I$(TOP)/sdk/include -L$(TOP)/sdk/lib"
-# 	@echo
-# else
-# 	@echo "Espressif ESP8266 SDK is installed, its libraries and headers are merged with the toolchain"
-# 	@echo
-# endif
+	@echo
+	@echo "Xtensa toolchain is built, to use it:"
+	@echo
+	@echo 'export PATH=$(TOOLCHAIN)/bin:$$PATH'
+	@echo
+ifneq ($(STANDALONE),y)
+	@echo "Espressif ESP8266 SDK is installed. Toolchain contains only Open Source components"
+	@echo "To link external proprietary libraries add:"
+	@echo
+	@echo "xtensa-lx106-elf-gcc -I$(TOP)/sdk/include -L$(TOP)/sdk/lib"
+	@echo
+else
+	@echo "Espressif ESP8266 SDK is installed, its libraries and headers are merged with the toolchain"
+	@echo
+endif
 
 esptool: toolchain
-	@echo "esptool copied"
+	@echo "esptool will be copied here"
+
+esptool2: toolchain
+	@echo "esptool2 will be copied here"
 
 $(TOOLCHAIN)/xtensa-lx106-elf/sysroot/lib/libcirom.a: $(TOOLCHAIN)/xtensa-lx106-elf/sysroot/lib/libc.a $(TOOLCHAIN)/bin/xtensa-lx106-elf-gcc
 	@echo "Creating irom version of libc..."
