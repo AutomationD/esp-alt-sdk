@@ -38,7 +38,7 @@ UNTAR = tar -xf
 
 PLATFORM := $(shell uname -s)
 
-PATH = $(TOOLCHAIN)/bin:$(PATH)
+# PATH := $(TOOLCHAIN)/bin:$(PATH)
 SAFEPATH := $(TOOLCHAIN)/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/mingw/bin/:/c/tools/mingw64/bin
 
 
