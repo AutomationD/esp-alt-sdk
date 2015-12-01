@@ -107,12 +107,12 @@ esptool: toolchain
 esptool2: toolchain
 	@echo "esptool2 will be copied here"
 
-$(TOOLCHAIN)/xtensa-lx106-elf/sysroot/lib/libcirom.a: $(TOOLCHAIN)/xtensa-lx106-elf/sysroot/lib/libc.a $(TOOLCHAIN)/bin/xtensa-lx106-elf-gcc
+$(TOOLCHAIN)/xtensa-lx106-elf/lib/libcirom.a: $(TOOLCHAIN)/xtensa-lx106-elf/lib/libc.a $(TOOLCHAIN)/bin/xtensa-lx106-elf-gcc
 	@echo "Creating irom version of libc..."
 	$(TOOLCHAIN)/bin/xtensa-lx106-elf-objcopy --rename-section .text=.irom0.text \
 		--rename-section .literal=.irom0.literal $(<) $(@);
 
-libcirom: $(TOOLCHAIN)/xtensa-lx106-elf/sysroot/lib/libcirom.a
+libcirom: $(TOOLCHAIN)/xtensa-lx106-elf/lib/libcirom.a
 
 sdk_patch: .sdk_patch_$(VENDOR_SDK_VERSION)
 
@@ -509,5 +509,5 @@ purge: clean
 	rm -rf src
 
 clean-sysroot:
-	rm -rf $(TOOLCHAIN)/xtensa-lx106-elf/sysroot/usr/lib/*
-	rm -rf $(TOOLCHAIN)/xtensa-lx106-elf/sysroot/usr/include/*
+	rm -rf $(TOOLCHAIN)/xtensa-lx106-elf/usr/lib/*
+	rm -rf $(TOOLCHAIN)/xtensa-lx106-elf/usr/include/*
