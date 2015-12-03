@@ -14,6 +14,17 @@ platform-specific: mingw
 
 mingw: /mingw/bin/autoconf /mingw/bin/automake
 
+cygwin:
+	@echo "CYGWIN ENV preps"
+
+macos:
+	@echo "Macos ENV preps"
+ubuntu:
+	@echo "Ubuntu ENV preps"
+
+rhel:
+	@echo "RHEL ENV preps"
+
 $(ENV_DIR)/autoconf-$(AUTOCONF_VERSION).tar.xz:
 	wget ftp://ftp.gnu.org/pub/gnu/autoconf/autoconf-$(AUTOCONF_VERSION).tar.xz --output-document $@
 
