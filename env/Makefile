@@ -12,7 +12,7 @@ all: platform-specific
 
 platform-specific: mingw
 
-mingw: $(ENV_DIR)/autoconf-$(AUTOCONF_VERSION)/bin/autoconf $(ENV_DIR)/automake-$(AUTOMAKE_VERSION)/
+mingw: /mingw/bin/autoconf /mingw/bin/automake
 
 $(ENV_DIR)/autoconf-$(AUTOCONF_VERSION).tar.xz:
 	wget ftp://ftp.gnu.org/pub/gnu/autoconf/autoconf-$(AUTOCONF_VERSION).tar.xz --output-document $@
@@ -20,7 +20,7 @@ $(ENV_DIR)/autoconf-$(AUTOCONF_VERSION).tar.xz:
 $(ENV_DIR)/automake-$(AUTOMAKE_VERSION).tar.xz:
 	wget ftp://ftp.gnu.org/pub/gnu/automake/automake-$(AUTOMAKE_VERSION).tar.xz --output-document $@
 
-$(ENV_DIR)/autoconf-$(AUTOCONF_VERSION)/bin/autoconf: $(ENV_DIR)/autoconf-$(AUTOCONF_VERSION).tar.xz
+/mingw/bin/autoconf: $(ENV_DIR)/autoconf-$(AUTOCONF_VERSION).tar.xz
 	echo Installing autoconf-$(AUTOCONF_VERSION)
 	tar -xf $(ENV_DIR)/autoconf-$(AUTOCONF_VERSION).tar.xz
 	PATH=$(SAFEPATH) cd $(ENV_DIR)/autoconf-$(AUTOCONF_VERSION); ./configure --prefix=/mingw
@@ -30,7 +30,7 @@ $(ENV_DIR)/autoconf-$(AUTOCONF_VERSION)/bin/autoconf: $(ENV_DIR)/autoconf-$(AUTO
 
 
 
-$(ENV_DIR)/automake-$(AUTOMAKE_VERSION)/: $(ENV_DIR)/autoconf-$(AUTOCONF_VERSION)/bin/autoconf $(ENV_DIR)/automake-$(AUTOMAKE_VERSION).tar.xz	
+/mingw/bin/automake: /mingw/bin/autoconf $(ENV_DIR)/automake-$(AUTOMAKE_VERSION).tar.xz	
 	tar -xf $(ENV_DIR)/automake-$(AUTOMAKE_VERSION).tar.xz
 	PATH=$(SAFEPATH) cd $(ENV_DIR)/automake-$(AUTOMAKE_VERSION); ./configure --prefix=/mingw
 	PATH=$(SAFEPATH) cd $(ENV_DIR)/automake-$(AUTOMAKE_VERSION); make
