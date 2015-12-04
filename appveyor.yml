@@ -1,7 +1,7 @@
 os: Windows Server 2012 R2
 init: 
   - git config --global core.autocrlf=false input
-environmentl:
+environment:
   matrix:
     - build_platform: "x86"
       build_compiler: "mingw"
