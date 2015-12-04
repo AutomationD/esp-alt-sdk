@@ -11,6 +11,8 @@ environment:
       build_compiler: "mingw"
       build_bindings: 1
 
+install:
+  - env\mingw_10.cmd
 
 build_script:
   - C:\MinGW\msys\1.0\bin\bash.exe -c "make"
