@@ -506,7 +506,12 @@ clean-sdk:
 
 
 purge: clean
-	rm -rf src
+	cd $(XTDLP)/$(GMP_DIR)/; git reset --hard
+	cd $(XTDLP)/$(MPFR_DIR)/; git reset --hard
+	cd $(XTDLP)/$(MPC_DIR)/; git reset --hard
+	cd $(XTDLP)/$(BINUTILS_DIR)/; git reset --hard
+	cd $(XTDLP)/$(GCC_DIR)/; git reset --hard
+	cd $(XTDLP)/$(NEWLIB_DIR)/; git reset --hard
 
 clean-sysroot:
 	rm -rf $(TOOLCHAIN)/xtensa-lx106-elf/usr/lib/*
