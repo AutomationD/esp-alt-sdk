@@ -15,7 +15,27 @@ addons:
     sources:
     - ubuntu-toolchain-r-test
     packages:
-      - texinfo    
+      - texinfo
+      - unrar
+      - unzip
+      - autoconf
+      - automake
+      - libtool
+      - gcc
+      - g++-
+      - gperf
+      - flex
+      - bison
+      - texinfo
+      - gawk
+      - ncurses-dev
+      - libexpat-dev
+      - python
+      - python-serial
+      - sed
+      - git
+      - gcc-multilib
+      - g++-multilib    
 script:
   - PLATFORM=$TRAVIS_OS_NAME
   - PROJECT_NAME="esp-alt-sdk"
