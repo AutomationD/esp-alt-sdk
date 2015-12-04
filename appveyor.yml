@@ -5,16 +5,11 @@ environment:
   matrix:
     - build_platform: "x86"
       build_compiler: "mingw"
-      build_bindings: 1
-      VERSION:
-      - 1.2.0
-      - 1.3.0
-      - 1.4.0
-
+      build_bindings: 1      
     - build_platform: "x64"
       build_compiler: "mingw"
       build_bindings: 1
-      VERSION:
+    - VERSION:
       - 1.2.0
       - 1.3.0
       - 1.4.0
