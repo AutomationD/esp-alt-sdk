@@ -1,8 +1,11 @@
 sudo: false
 os:
-  - linux
-  - osx
-language: cpp
+  linux:
+    language: cpp
+    - PLATFORM="linux"
+  osx:
+    language: cpp
+    - PLATFORM="mac"
 env:
   matrix:
     - VERSION:
@@ -11,8 +14,7 @@ env:
       - 1.4.0   
 script:
   - PROJECT_NAME="esp-alt-sdk"
-  - VENDOR_SDK_VERSION=$VERSION
-  - PLATFORM="linux"
+  - VENDOR_SDK_VERSION=$VERSION  
   - ARCH="x86_64"
   - FILENAME="${PROJECT_NAME}-${VERSION}-${PLATFORM}-${ARCH}.tar.gz"  
   - make VENDOR_SDK_VERSION=$VERSION
