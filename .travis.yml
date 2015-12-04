@@ -1,6 +1,6 @@
 sudo: false
 language: cpp
-environment:
+env:
   matrix:
     - VERSION:
       - 1.2.0
@@ -9,7 +9,7 @@ environment:
 script:
   - PROJECT_NAME="esp-alt-sdk"
   - VENDOR_SDK_VERSION=$VERSION
-  - PLATFORM="windows"
+  - PLATFORM="linux"
   - ARCH="x86_64"
   - FILENAME="${PROJECT_NAME}-${VERSION}-${PLATFORM}-${ARCH}.tar.gz"  
   - make VENDOR_SDK_VERSION=$VERSION
