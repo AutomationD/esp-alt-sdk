@@ -12,7 +12,7 @@ all: platform-specific
 
 platform-specific: mingw
 
-mingw: /mingw/bin/autoconf /mingw/bin/automake
+mingw: /mingw /mingw/bin/autoconf /mingw/bin/automake
 
 cygwin:
 	@echo "CYGWIN ENV preps"
@@ -48,4 +48,6 @@ $(ENV_DIR)/automake-$(AUTOMAKE_VERSION).tar.xz:
 	PATH=$(SAFEPATH) cd $(ENV_DIR)/automake-$(AUTOMAKE_VERSION); make install
 	PATH=$(SAFEPATH) cd /mingw/share/; ln -s automake-1.11 automake
 
-
+/mingw:
+	@echo "/mingw directory not found, mounting"
+	mount $(MINGW_DIR) /mingw	
