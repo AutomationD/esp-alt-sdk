@@ -17,9 +17,7 @@ addons:
     packages:
       - texinfo
       - unrar
-      - unzip
-      - autoconf
-      - automake
+      - unzip      
       - libtool
       - gcc
       - g++-
@@ -35,7 +33,10 @@ addons:
       - sed
       - git
       - gcc-multilib
-      - g++-multilib    
+      - g++-multilib
+install:
+  - cd env/; make
+
 script:
   - PLATFORM=$TRAVIS_OS_NAME
   - PROJECT_NAME="esp-alt-sdk"

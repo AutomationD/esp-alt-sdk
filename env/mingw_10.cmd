@@ -8,8 +8,8 @@ choco update chocolatey
 echo Add repository
 choco sources add -name kireevco -source 'https://www.myget.org/F/kireevco-chocolatey/'
 
-echo Installing wget
-choco install wget -y
+echo Installing wget & curl
+choco install wget curl -y
 
 echo Installing MingGW-get (pulls down mingw too)
 choco install mingw-get -y
@@ -22,8 +22,8 @@ setx /M PATH "c:\tools\mingw64\bin\;%PATH%" && set PATH=c:\tools\mingw64\bin\;%P
 
 echo Installing required mingw components
 
-mingw-get install mingw32-base mingw32-mgwport mingw32-pdcurses mingw32-make mingw-developer-toolkit mingw32-gdb gcc gcc-c++ libz bzip2
-mingw-get install coreutils msys-patch
+mingw-get install mingw32-base mingw32-mgwport mingw32-pdcurses mingw32-make mingw-developer-toolkit mingw32-gdb gcc gcc-c++ libz bzip2 wget 
+mingw-get install coreutils msys-patch msys-zip
 mingw-get remove autoconf
 :: mingw-get mingw32-autoconf mingw32-automake 
 
