@@ -1,0 +1,15 @@
+os: Windows Server 2012 R2
+init: 
+  - git config --global core.autocrlf=false input
+ matrix:
+    - build_platform: "x86"
+      build_compiler: "mingw"
+      build_bindings: 1
+
+    - build_platform: "x64"
+      build_compiler: "mingw"
+      build_bindings: 1
+
+
+build_script:
+  - C:\MinGW\msys\1.0\bin\bash.exe -c "make"
