@@ -10,6 +10,12 @@ env:
 cache:
   directories:
   - src/
+addons:
+  apt:
+    sources:
+    - ubuntu-toolchain-r-test
+    packages:
+      - texinfo    
 script:
   - PLATFORM=$TRAVIS_OS_NAME
   - PROJECT_NAME="esp-alt-sdk"
