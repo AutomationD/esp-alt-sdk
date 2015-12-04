@@ -1,4 +1,7 @@
 sudo: false
+os:
+  - linux
+  - osx
 language: cpp
 env:
   matrix:
