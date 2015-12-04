@@ -1,6 +1,6 @@
 os: Windows Server 2012 R2
 init: 
-  - git config --global core.autocrlf=false input
+  - git config --global core.autocrlf false
 environment:
   matrix:
     - build_platform: "x86"
