@@ -16,8 +16,8 @@ install:
   - C:\MinGW\bin\mingw-get install mingw32-base mingw32-mgwport mingw32-pdcurses mingw32-make mingw-developer-toolkit mingw32-gdb gcc gcc-c++ libz bzip2
   - C:\MinGW\bin\mingw-get install coreutils msys-patch
   - C:\MinGW\bin\mingw-get remove autoconf
-  - C:\MinGW\msys\1.0\bin\bash.exe -c 'cd env/; make'
+  - C:\MinGW\msys\1.0\bin\bash.exe -c 'cd env/; mingw32-make'
 
 build_script:
-  - C:\MinGW\msys\1.0\bin\bash.exe -c "make clean"
+  - C:\MinGW\msys\1.0\bin\bash.exe -c "mingw32-make clean"
   - C:\MinGW\msys\1.0\bin\bash.exe -c "VENDOR_SDK_VERSION=$VERSION"
