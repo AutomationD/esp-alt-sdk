@@ -115,6 +115,7 @@ $(TOP)/$(ESPTOOL_DIR)/esptool.py: $(XTDLP)/$(ESPTOOL_DIR)/esptool.py
 	cp $(XTDLP)/$(ESPTOOL_DIR)/* $(TOP)/$(ESPTOOL_DIR)/
 
 $(TOP)/$(ESPTOOL2_DIR)/$(ESPTOOL2_DIR)/esptool2: $(XTDLP)/$(ESPTOOL2_SRCREPO)/$(ESPTOOL2_DIR)/esptool2.c
+	make clean -C $(XTDLP)/$(ESPTOOL2_SRCREPO)/$(ESPTOOL2_DIR)/
 	make -C $(XTDLP)/$(ESPTOOL2_SRCREPO)/$(ESPTOOL2_DIR)/
 	mkdir -p $(TOP)/$(ESPTOOL2_DIR)
 	cp $(XTDLP)/$(ESPTOOL2_SRCREPO)/$(ESPTOOL2_DIR)/esptool2 $(TOP)/$(ESPTOOL2_DIR)/
@@ -515,7 +516,7 @@ clean: clean-sdk
 	rm -rf $(XTDLP)/$(GCC_DIR)/build-1
 	rm -rf $(XTDLP)/$(GCC_DIR)/build-2
 	rm -rf $(XTDLP)/$(NEWLIB_DIR)/build
-	cd $(XTDLP)/$(ESPTOOL2_SRCREPO)/$(ESPTOOL2_DIR); make clean
+	rm -rf $(XTDLP)/$(ESPTOOL2_SRCREPO)/$(ESPTOOL2_DIR)/esptool2
 	rm -rf $(TOP)/$(ESPTOOL2_DIR)/*
 	rm -rf $(TOP)/$(ESPTOOL_DIR)/*
 
