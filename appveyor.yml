@@ -21,5 +21,5 @@ install:
   - C:\MinGW\msys\1.0\bin\bash.exe -i -l -c 'cd /c/projects/%APPVEYOR_PROJECT_NAME%/env; make'
 
 build_script:
-  - C:\MinGW\msys\1.0\bin\bash.exe -i -l -c "make clean"
-  - C:\MinGW\msys\1.0\bin\bash.exe -i -l -c "VENDOR_SDK_VERSION=$VERSION"
+  - C:\MinGW\msys\1.0\bin\bash.exe -i -l -c "ls -la"
+  - C:\MinGW\msys\1.0\bin\bash.exe -i -l -c "make VENDOR_SDK_VERSION=$VERSION"
