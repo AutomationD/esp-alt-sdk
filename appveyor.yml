@@ -6,13 +6,22 @@ environment:
     - build_platform: "x86"
       build_compiler: "mingw"
       build_bindings: 1
+      VERSION:
+      - 1.2.0
+      - 1.3.0
+      - 1.4.0
 
     - build_platform: "x64"
       build_compiler: "mingw"
       build_bindings: 1
+      VERSION:
+      - 1.2.0
+      - 1.3.0
+      - 1.4.0
 cache:
   - src  # preserve "packages" directory in the root of build folder but will reset it if packages.config is modified
 install:
+  - echo %VERSION%
   - dir C:\MinGW\msys\1.0\bin\
   - C:\MinGW\msys\1.0\bin\bash.exe -i -l -c 'ls -la /'
   - C:\MinGW\bin\mingw-get install mingw32-base mingw32-mgwport mingw32-pdcurses mingw32-make mingw-developer-toolkit mingw32-gdb gcc gcc-c++ libz bzip2
@@ -21,5 +30,5 @@ install:
   - C:\MinGW\msys\1.0\bin\bash.exe -i -l -c 'cd /c/projects/%APPVEYOR_PROJECT_NAME%/env; make'
 
 build_script:
-  - C:\MinGW\msys\1.0\bin\bash.exe -i -l -c "ls -la"
-  - C:\MinGW\msys\1.0\bin\bash.exe -i -l -c "make VENDOR_SDK_VERSION=$VERSION"
+  - C:\MinGW\msys\1.0\bin\bash.exe -i -l -c "cd /c/projects/%APPVEYOR_PROJECT_NAME%; make clean"
+  - C:\MinGW\msys\1.0\bin\bash.exe -i -l -c "cd /c/projects/%APPVEYOR_PROJECT_NAME%; make VENDOR_SDK_VERSION=$VERSION"
