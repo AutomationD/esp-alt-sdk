@@ -1,4 +1,4 @@
-sd
+sudo: required
 language: cpp
 os:
   - linux
