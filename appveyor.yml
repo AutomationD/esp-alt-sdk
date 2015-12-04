@@ -10,7 +10,8 @@ environment:
     - build_platform: "x64"
       build_compiler: "mingw"
       build_bindings: 1
-
+cache:
+  - src  # preserve "packages" directory in the root of build folder but will reset it if packages.config is modified
 install:
   - C:\MinGW\bin\mingw-get install mingw32-base mingw32-mgwport mingw32-pdcurses mingw32-make mingw-developer-toolkit mingw32-gdb gcc gcc-c++ libz bzip2
   - C:\MinGW\bin\mingw-get coreutils msys-patch
@@ -18,4 +19,5 @@ install:
   - C:\MinGW\msys\1.0\bin\bash.exe -c 'cd env/; make'
 
 build_script:
-  - C:\MinGW\msys\1.0\bin\bash.exe -c "make"
+  - C:\MinGW\msys\1.0\bin\bash.exe -c "make clean"
+  - C:\MinGW\msys\1.0\bin\bash.exe -c "VENDOR_SDK_VERSION=$VERSION"

@@ -8,9 +8,13 @@ env:
     - VERSION=1.2.0
     - VERSION=1.3.0
     - VERSION=1.4.0    
+cache:
+  directories:
+  - src/
 script:
   - PLATFORM=$TRAVIS_OS_NAME
   - PROJECT_NAME="esp-alt-sdk"
   - VENDOR_SDK_VERSION=$VERSION  
   - FILENAME="${PROJECT_NAME}-${VERSION}-${PLATFORM}-${ARCH}.tar.gz"  
+  - make clean
   - make VENDOR_SDK_VERSION=$VERSION
