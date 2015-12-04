@@ -532,9 +532,9 @@ clean-sdk:
 
 
 purge: clean
-	cd $(XTDLP)/$(GMP_DIR)/; git reset --hard
-	cd $(XTDLP)/$(MPFR_DIR)/; git reset --hard
-	cd $(XTDLP)/$(MPC_DIR)/; git reset --hard
+	rm -rf $(XTDLP)/$(GMP_DIR)/
+	rm -rf $(XTDLP)/$(MPFR_DIR)/
+	rm -rf $(XTDLP)/$(MPC_DIR)/
 	cd $(XTDLP)/$(BINUTILS_DIR)/; git reset --hard
 	cd $(XTDLP)/$(GCC_DIR)/; git reset --hard
 	cd $(XTDLP)/$(NEWLIB_DIR)/; git reset --hard
