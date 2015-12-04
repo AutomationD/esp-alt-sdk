@@ -441,7 +441,7 @@ $(XTBP)/mpc: $(XTDLP)/$(MPC_DIR)/build
 # Binutils
 $(XTDLP)/$(BINUTILS_DIR)/build: $(XTDLP)/$(BINUTILS_DIR)/configure.ac
 	mkdir -p $(XTDLP)/$(BINUTILS_DIR)/build
-	cd $(XTDLP)/$(BINUTILS_DIR)/build/; chmod +rx ../configure; ../configure --prefix=$(TOOLCHAIN) --target=$(TARGET) --enable-werror=no  --enable-multilib --disable-nls --disable-shared --disable-threads --with-gcc --with-gnu-as --with-gnu-ld
+	cd $(XTDLP)/$(BINUTILS_DIR)/build/; chmod -R 777 $(XTDLP)/$(BINUTILS_DIR); ../configure --prefix=$(TOOLCHAIN) --target=$(TARGET) --enable-werror=no  --enable-multilib --disable-nls --disable-shared --disable-threads --with-gcc --with-gnu-as --with-gnu-ld
 	make -C $(XTDLP)/$(BINUTILS_DIR)/build/
 
 $(XTBP)/$(BINUTILS_DIR): $(XTDLP)/$(BINUTILS_DIR)/build
