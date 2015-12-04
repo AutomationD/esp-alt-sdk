@@ -12,9 +12,9 @@ environment:
       build_bindings: 1
 
 install:
-  - mingw-get install mingw32-base mingw32-mgwport mingw32-pdcurses mingw32-make mingw-developer-toolkit mingw32-gdb gcc gcc-c++ libz bzip2
-  - mingw-get install coreutils msys-patch
-  - mingw-get remove autoconf
+  - C:\MinGW\bin\mingw-get install mingw32-base mingw32-mgwport mingw32-pdcurses mingw32-make mingw-developer-toolkit mingw32-gdb gcc gcc-c++ libz bzip2
+  - C:\MinGW\bin\mingw-get coreutils msys-patch
+  - C:\MinGW\bin\mingw-get remove autoconf
   - C:\MinGW\msys\1.0\bin\bash.exe -c 'cd env/; make'
 
 build_script:
