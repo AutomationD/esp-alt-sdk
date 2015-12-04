@@ -40,6 +40,8 @@ addons:
 #   - cd env/; make
 
 script:
+  - automake --version
+  - autoconf --version
   - PLATFORM=$TRAVIS_OS_NAME
   - PROJECT_NAME="esp-alt-sdk"
   - VENDOR_SDK_VERSION=$VERSION  
