@@ -32,6 +32,9 @@ GCC_DIR = gcc-xtensa
 NEWLIB_DIR = newlib-xtensa
 BINUTILS_DIR = esp-binutils
 LIBHAL_DIR = lx106-hal
+ESPTOOL_DIR = esptool
+ESPTOOL2_DIR = esptool2
+ESPTOOL2_SRCREPO = rabutron-esp8266
 
 UNZIP = unzip -q -o
 UNTAR = tar -xf
@@ -101,11 +104,21 @@ else
 	@echo
 endif
 
-esptool: toolchain
-	@echo "esptool will be copied here"
+esptool: $(TOP)/$(ESPTOOL_DIR)/esptool.py
+	
+	
+esptool2: $(TOP)/$(ESPTOOL2_DIR)/$(ESPTOOL2_DIR)/esptool2
 
-esptool2: toolchain
-	@echo "esptool2 will be copied here"
+
+$(TOP)/$(ESPTOOL_DIR)/esptool.py: $(XTDLP)/$(ESPTOOL_DIR)/esptool.py
+	mkdir -p $(TOP)/$(ESPTOOL_DIR)/
+	cp $(XTDLP)/$(ESPTOOL_DIR)/* $(TOP)/$(ESPTOOL_DIR)/
+
+$(TOP)/$(ESPTOOL2_DIR)/$(ESPTOOL2_DIR)/esptool2: $(XTDLP)/$(ESPTOOL2_SRCREPO)/$(ESPTOOL2_DIR)/esptool2.c
+	make -C $(XTDLP)/$(ESPTOOL2_SRCREPO)/$(ESPTOOL2_DIR)/
+	mkdir -p $(TOP)/$(ESPTOOL2_DIR)
+	cp $(XTDLP)/$(ESPTOOL2_SRCREPO)/$(ESPTOOL2_DIR)/esptool2 $(TOP)/$(ESPTOOL2_DIR)/
+
 
 $(TOOLCHAIN)/xtensa-lx106-elf/lib/libcirom.a: $(TOOLCHAIN)/xtensa-lx106-elf/lib/libc.a $(TOOLCHAIN)/bin/xtensa-lx106-elf-gcc
 	@echo "Creating irom version of libc..."
@@ -330,6 +343,17 @@ $(XTDLP)/$(LIBHAL_DIR)/configure.ac:
 	git submodule update --init --recursive
 
 
+$(XTDLP)/$(ESPTOOL_DIR)/esptool.py:
+	@echo "You cloned without --recursive, fetching esptool for you."
+	git submodule update --init --recursive
+
+$(XTDLP)/rabutron-8266/$(ESPTOOL2_DIR)/esptool2.c:
+	@echo "You cloned without --recursive, fetching esptool2 for you."
+	git submodule update --init --recursive
+
+
+
+
 libhal: $(TOOLCHAIN)/xtensa-lx106-elf/lib/libhal.a
 
 $(TOOLCHAIN)/xtensa-lx106-elf/lib/libhal.a: $(TOOLCHAIN)/bin/xtensa-lx106-elf-gcc $(XTDLP)/$(LIBHAL_DIR)
@@ -390,8 +414,6 @@ $(XTBP):
 $(TOOLCHAIN):
 	git config --global core.autocrlf false
 	mkdir -p $(TOOLCHAIN)
-
-
 
 # GMP
 $(XTDLP)/$(GMP_DIR): $(XTDLP)/$(GMP_TAR)
@@ -493,6 +515,9 @@ clean: clean-sdk
 	rm -rf $(XTDLP)/$(GCC_DIR)/build-1
 	rm -rf $(XTDLP)/$(GCC_DIR)/build-2
 	rm -rf $(XTDLP)/$(NEWLIB_DIR)/build
+	cd $(XTDLP)/$(ESPTOOL2_SRCREPO)/$(ESPTOOL2_DIR); make clean
+	rm -rf $(TOP)/$(ESPTOOL2_DIR)/*
+	rm -rf $(TOP)/$(ESPTOOL_DIR)/*
 
 clean-sdk:
 	rm -rf $(VENDOR_SDK_DIR)
@@ -512,6 +537,7 @@ purge: clean
 	cd $(XTDLP)/$(BINUTILS_DIR)/; git reset --hard
 	cd $(XTDLP)/$(GCC_DIR)/; git reset --hard
 	cd $(XTDLP)/$(NEWLIB_DIR)/; git reset --hard
+	cd $(XTDLP)/$(ESPTOOL2_SRCREPO)/$(ESPTOOL2_DIR); git reset --hard
 
 clean-sysroot:
 	rm -rf $(TOOLCHAIN)/xtensa-lx106-elf/usr/lib/*
