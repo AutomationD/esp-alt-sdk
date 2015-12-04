@@ -13,6 +13,7 @@ environment:
 cache:
   - src  # preserve "packages" directory in the root of build folder but will reset it if packages.config is modified
 install:
+  - dir C:\MinGW\msys\1.0\bin\
   - C:\MinGW\bin\mingw-get install mingw32-base mingw32-mgwport mingw32-pdcurses mingw32-make mingw-developer-toolkit mingw32-gdb gcc gcc-c++ libz bzip2
   - C:\MinGW\bin\mingw-get install coreutils msys-patch
   - C:\MinGW\bin\mingw-get remove autoconf
