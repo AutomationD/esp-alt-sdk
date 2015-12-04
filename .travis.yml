@@ -34,8 +34,10 @@ addons:
       - git
       - gcc-multilib
       - g++-multilib
-install:
-  - cd env/; make
+      - automake
+      - autoconf
+# install:
+#   - cd env/; make
 
 script:
   - PLATFORM=$TRAVIS_OS_NAME
