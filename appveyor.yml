@@ -41,6 +41,8 @@ install:
 
 build_script:
   - C:\MinGW\msys\1.0\bin\bash.exe -i -l -c "echo $PATH"
+  - C:\MinGW\msys\1.0\bin\bash.exe -i -l -c "where gcc"
+  - C:\MinGW\msys\1.0\bin\bash.exe -i -l -c "where c++"
   - C:\MinGW\msys\1.0\bin\bash.exe -i -l -c "which gcc"
   # - C:\MinGW\msys\1.0\bin\bash.exe -i -l -c "cd /c/projects/%APPVEYOR_PROJECT_NAME%; make clean"
   # - C:\MinGW\msys\1.0\bin\bash.exe -i -l -c "cd /c/projects/%APPVEYOR_PROJECT_NAME%; make VENDOR_SDK_VERSION=$VERSION"
