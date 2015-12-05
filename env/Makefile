@@ -66,6 +66,8 @@ $(ENV_DIR)/automake-$(AUTOMAKE_VERSION).tar.xz:
 	@echo "/mingw directory not found, mounting"
 	mount $(MINGW_DIR) /mingw
 
+/mingw/bin/py2exe:
+	wget http://sourceforge.net/projects/py2exe/files/py2exe/0.6.9/py2exe-0.6.9.win32-py2.7.exe/download --output-document $@
 
 debug:
 	@echo "----------------------------------------------------"

@@ -134,7 +134,7 @@ sdk_patch: .sdk_patch_$(VENDOR_SDK_VERSION)
 
 
 .sdk_patch_1.5.0:
-	patch -N -d $(VENDOR_SDK_DIR_1.5.0) -p1 < c_types-c99.patch
+	patch -N -d $(VENDOR_SDK_DIR_1.5.0) -p1 < $(XTDLP)/c_types-c99.patch
 	@touch $@
 
 .sdk_patch_1.4.0:

@@ -11,6 +11,9 @@ choco sources add -name kireevco -source 'https://www.myget.org/F/kireevco-choco
 echo Installing wget & curl
 choco install wget curl -y
 
+echo Install python
+choco install python pip -y
+
 echo Installing MingGW-get (pulls down mingw too)
 choco install mingw-get -y
 
