@@ -35,9 +35,7 @@ addons:
       - sed
       - git
       - gcc-multilib
-      - g++-multilib
-      - automake
-      - autoconf
+      - g++-multilib      
 # install:
 #   - cd env/; make
 

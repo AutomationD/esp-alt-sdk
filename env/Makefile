@@ -7,10 +7,8 @@ PLATFORM := $(shell uname -s)
 
 SAFEPATH := $(TOOLCHAIN)/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/mingw/bin/:/c/tools/mingw64/bin
 
-all: platform-specific
+all: debug platform-specific
 	
-
-platform-specific: mingw
 
 mingw: /mingw /mingw/bin/autoconf /mingw/bin/automake
 
@@ -19,8 +17,11 @@ cygwin:
 
 macos:
 	@echo "Macos ENV preps"
-ubuntu:
-	@echo "Ubuntu ENV preps"
+
+freebsd:
+	@echo "FreBSD ENV preps"
+
+ubuntu: /usr/bin/autoconf /usr/bin/automake
 
 rhel:
 	@echo "RHEL ENV preps"
@@ -46,6 +47,57 @@ $(ENV_DIR)/automake-$(AUTOMAKE_VERSION).tar.xz:
 	PATH=$(SAFEPATH) cd /mingw/share/; ln -s aclocal-1.11 aclocal
 	PATH=$(SAFEPATH) cd /mingw/share/; ln -s automake-1.11 automake
 
+/usr/bin/autoconf: $(ENV_DIR)/autoconf-$(AUTOCONF_VERSION).tar.xz
+	echo Installing autoconf-$(AUTOCONF_VERSION)
+	tar -xf $(ENV_DIR)/autoconf-$(AUTOCONF_VERSION).tar.xz
+	PATH=$(SAFEPATH) cd $(ENV_DIR)/autoconf-$(AUTOCONF_VERSION); ./configure --prefix=/usr
+	PATH=$(SAFEPATH) cd $(ENV_DIR)/autoconf-$(AUTOCONF_VERSION); make
+	PATH=$(SAFEPATH) cd $(ENV_DIR)/autoconf-$(AUTOCONF_VERSION); make install
+
+/usr/bin/automake: /usr/bin/autoconf $(ENV_DIR)/automake-$(AUTOMAKE_VERSION).tar.xz	
+	tar -xf $(ENV_DIR)/automake-$(AUTOMAKE_VERSION).tar.xz
+	PATH=$(SAFEPATH) cd $(ENV_DIR)/automake-$(AUTOMAKE_VERSION); ./configure --prefix=/usr
+	PATH=$(SAFEPATH) cd $(ENV_DIR)/automake-$(AUTOMAKE_VERSION); make
+	PATH=$(SAFEPATH) cd $(ENV_DIR)/automake-$(AUTOMAKE_VERSION); make install
+	# PATH=$(SAFEPATH) cd /usr/share/; ln -s aclocal-1.11 aclocal
+	# PATH=$(SAFEPATH) cd /usr/share/; ln -s automake-1.11 automake
+
 /mingw:
 	@echo "/mingw directory not found, mounting"
-	mount $(MINGW_DIR) /mingw	
+	mount $(MINGW_DIR) /mingw
+
+
+debug:
+	@echo "----------------------------------------------------"
+	@echo "Outputting debug info. Makefiles are so Makefiles..."	
+	@echo "PATH: $(PATH)"
+	@echo "----------------------------------------------------"
+
+platform-specific:
+	@echo "Performing platform-specific actions"
+	
+ifeq ($(OS),Windows_NT)
+  ifneq (,$(findstring MINGW32,$(PLATFORM)))    
+		@echo "Detected: MinGW32."
+		$(MAKE) mingw
+  else
+	    ifneq (,$(findstring CYGWIN,$(PLATFORM)))
+				@echo "Detected: CYGWIN"
+				$(MAKE) cygwin
+	    endif
+  endif
+else  
+  ifeq ($(PLATFORM),Darwin)    
+			@echo "Detected: MacOS"
+			$(MAKE) macos
+  endif
+  ifeq ($(PLATFORM),Linux)
+			@echo "Detected: Linux"
+			$(MAKE) ubuntu
+  endif
+  ifeq ($(PLATFORM),FreeBSD)
+      @echo "Detected: FreeBSD"
+      $(MAKE) freebsd
+  endif
+endif
+
