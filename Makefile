@@ -88,7 +88,7 @@ STANDALONE = y
 .PHONY: toolchain libhal libcirom sdk
 
 # all: esptool libcirom standalone sdk sdk_patch $(TOOLCHAIN)/xtensa-lx106-elf/sysroot/usr/lib/libhal.a $(TOOLCHAIN)/bin/xtensa-lx106-elf-gcc
-all: debug platform-specific standalone $(TOP)/sdk sdk_patch $(TOOLCHAIN)/xtensa-lx106-elf/lib/libhal.a $(TOOLCHAIN)/bin/xtensa-lx106-elf-gcc esptool esptool2 libcirom
+all: debug platform-specific $(TOOLCHAIN)/bin/xtensa-lx106-elf-gcc standalone $(TOP)/sdk sdk_patch $(TOOLCHAIN)/xtensa-lx106-elf/lib/libhal.a esptool esptool2 libcirom
 # all: platform-specific
 	@echo
 	@echo "Xtensa toolchain is built, to use it:"
