@@ -2,9 +2,12 @@
 ### Work in progress
 _Please don't report bugs (yet)_
 ## Why?
-- Open build process
 - Cross platform
+    + Windows
+    + Linux
+    + MacOS
 - Up-to-date binary builds
+- Open build process 
 
 ## Contents
 - [Xtensa Toolchain](https://github.com/jcmvbkbc/gcc-xtensa/)
@@ -81,3 +84,10 @@ Start build
 ```shell
 make -C env/ && make
 ```
+
+
+-----
+#### Credits:
+- Max Fillipov (@jcmvbkbc) for major xtensa-toolchain heavylifting (gcc-extensa, newlib-xtensa)
+- Paul Sokolovsky (@pfalcon) for esp-open-sdk and major integration work
+- Fabien Poussin (@fpoussin) for xtensa-lx106-elf build script
