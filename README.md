@@ -1,6 +1,11 @@
 # ESP8266 Cross platform SDK
 ### Work in progress
 _Please don't report bugs (yet)_
+## Why?
+- Open build process
+- Cross platform
+- Up-to-date binary builds
+
 ## Contents
 - [Xtensa Toolchain](https://github.com/jcmvbkbc/gcc-xtensa/)
 - [Espressif NONOS SDK](http://bbs.espressif.com/viewforum.php?f=46) with patches
