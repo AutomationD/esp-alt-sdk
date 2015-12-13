@@ -2,10 +2,10 @@
 ### Work in progress
 _Please don't report bugs (yet)_
 ## Contents
-- Xtensa Toolchain
-- Espressif SDK with patches
-- Esptool
-- Esptool2
+- [Xtensa Toolchain](https://github.com/jcmvbkbc/gcc-xtensa/)
+- [Espressif NONOS SDK](http://bbs.espressif.com/viewforum.php?f=46) with patches
+- [Esptool](https://github.com/themadinventor/esptool)
+- [Esptool2](https://github.com/raburton/esptool2)
 
 ## Download
 | Windows  | MacOS | Linux |
