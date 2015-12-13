@@ -9,8 +9,11 @@ _Please don't report bugs (yet)_
 ## Contents
 - [Xtensa Toolchain](https://github.com/jcmvbkbc/gcc-xtensa/)
 - [Espressif NONOS SDK](http://bbs.espressif.com/viewforum.php?f=46) with patches
-- [Esptool](https://github.com/themadinventor/esptool)
-- [Esptool2](https://github.com/raburton/esptool2)
+- [lx106-hal](https://github.com/tommie/lx106-hal)
+- [newlib-xtensa](https://github.com/jcmvbkbc/newlib-xtensa)
+- [esp-binutils](https://github.com/fpoussin/esp-binutils/)
+- [esptool](https://github.com/themadinventor/esptool)
+- [esptool2](https://github.com/raburton/esptool2)
 
 ## Download
 | Windows  | MacOS | Linux |
