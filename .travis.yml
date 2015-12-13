@@ -36,8 +36,8 @@ addons:
       - git
       - gcc-multilib
       - g++-multilib      
-# install:
-#   - cd env/; make
+install:
+  - cd env/; make
 
 script:
   - automake --version
@@ -45,6 +45,6 @@ script:
   - PLATFORM=$TRAVIS_OS_NAME
   - PROJECT_NAME="esp-alt-sdk"
   - VENDOR_SDK_VERSION=$VERSION  
-  - FILENAME="${PROJECT_NAME}-${VERSION}-${PLATFORM}-${ARCH}.tar.gz"  
+  - FILENAME="${PROJECT_NAME}-${VERSION}-${PLATFORM}-${ARCH}.tar.gz"    
   - make clean
   - make VENDOR_SDK_VERSION=$VERSION
