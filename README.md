@@ -1,6 +1,12 @@
 # ESP8266 Cross platform SDK
 ### Work in progress
 _Please don't report bugs (yet)_
+## Contents
+- Xtensa Toolchain
+- Espressif SDK with patches
+- Esptool
+- Esptool2
+
 ## Download
 | Windows  | MacOS | Linux |
 | ------------- | ------------- | ------------- |
