@@ -1,8 +1,16 @@
 # ESP8266 Cross platform SDK
 ### Work in progress
 _Please don't report bugs (yet)_
+## Download
+| Windows  | MacOS | Linux |
+| ------------- | ------------- | ------------- |
+| [1.2.0](https://bintray.com/artifact/download/kireevco/generic/esp-alt-sdk-1.2.0-windows-x86_x64.zip)  | [1.2.0](https://bintray.com/artifact/download/kireevco/generic/esp-alt-sdk-1.2.0-macos-x86_64.zip) | [1.2.0](https://bintray.com/artifact/download/kireevco/generic/esp-alt-sdk-1.2.0-linux-x86_64.tar.gz) |
+| [1.3.0](https://bintray.com/artifact/download/kireevco/generic/esp-alt-sdk-1.3.0-windows-x86_x64.zip)  | [1.3.0](https://bintray.com/artifact/download/kireevco/generic/esp-alt-sdk-1.3.0-macos-x86_64.zip) | [1.3.0](https://bintray.com/artifact/download/kireevco/generic/esp-alt-sdk-1.3.0-linux-x86_64.tar.gz) |
+| [1.4.0](https://bintray.com/artifact/download/kireevco/generic/esp-alt-sdk-1.4.0-windows-x86_x64.zip)  | [1.4.0](https://bintray.com/artifact/download/kireevco/generic/esp-alt-sdk-1.3.0-macos-x86_64.zip) | [1.4.0](https://bintray.com/artifact/download/kireevco/generic/esp-alt-sdk-1.4.0-linux-x86_64.tar.gz) |
+| [1.5.0](https://bintray.com/artifact/download/kireevco/generic/esp-alt-sdk-1.5.0-windows-x86_x64.zip)  | [1.5.0](https://bintray.com/artifact/download/kireevco/generic/esp-alt-sdk-1.5.0-macos-x86_64.zip) | [1.5.0](https://bintray.com/artifact/download/kireevco/generic/esp-alt-sdk-1.5.0-linux-x86_64.tar.gz) |
 
-## Windows
+## Build yourself
+### Windows
 Install git:
 ```cmd
 choco install git.install --params="/NoAutoCrlf" -y
@@ -29,11 +37,11 @@ env\mingw_10.cmd
 
 Restart cmd and run:
 ```cmd
-bash.exe -c "cd env; make"
-bash.exe -c "make"
+bash.exe -i -l -c "cd env; make"
+bash.exe -i -l -c "make"
 ```
 
-## MacOS
+### MacOS
 Clone repo, configure environment
 ```shell
 git clone https://github.com/kireevco/esp-alt-sdk.git
@@ -47,7 +55,7 @@ make -C env/ && make
 ```
 
 
-## Ubuntu
+### Ubuntu
 Clone repo, configure environment
 ```shell
 git clone https://github.com/kireevco/esp-alt-sdk.git

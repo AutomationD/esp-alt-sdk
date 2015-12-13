@@ -19,14 +19,16 @@ choco install mingw-get -y
 
 echo Adding ENV variables
 
-setx /M HOME "c:\Users"
+setx /M HOME "c:\Users\User"
 setx /M PATH "c:\tools\mingw64\msys\1.0\bin\;%PATH%" && set PATH=c:\tools\mingw64\msys\1.0\bin\;%PATH%
 setx /M PATH "c:\tools\mingw64\bin\;%PATH%" && set PATH=c:\tools\mingw64\bin\;%PATH%
 
 echo Installing required mingw components
 
-mingw-get install mingw32-base mingw32-mgwport mingw32-pdcurses mingw32-make mingw-developer-toolkit mingw32-gdb gcc gcc-c++ libz bzip2 wget 
-mingw-get install coreutils msys-patch msys-zip
+mingw-get install mingw32-base mingw32-mgwport mingw32-pdcurses mingw32-make mingw-developer-toolkit mingw32-gdb libz bzip2 wget 
+
+:: mingw-get install gcc gcc-c++
+mingw-get install msys-zip
 mingw-get remove autoconf
 :: mingw-get mingw32-autoconf mingw32-automake 
 
