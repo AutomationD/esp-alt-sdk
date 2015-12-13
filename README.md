@@ -11,7 +11,7 @@ _Please don't report bugs (yet)_
 
 ## Contents
 - [Xtensa Toolchain](https://github.com/jcmvbkbc/gcc-xtensa/)
-- [Espressif NONOS SDK](http://bbs.espressif.com/viewforum.php?f=46) with patches
+- [Espressif NONOS SDK](http://bbs.espressif.com/viewforum.php?f=46) with official patches
 - [lx106-hal](https://github.com/tommie/lx106-hal)
 - [newlib-xtensa](https://github.com/jcmvbkbc/newlib-xtensa)
 - [esp-binutils](https://github.com/fpoussin/esp-binutils/)
