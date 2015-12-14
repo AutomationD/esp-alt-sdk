@@ -397,7 +397,7 @@ platform-specific:
 ifeq ($(OS),Windows_NT)
   ifneq (,$(findstring MINGW32,$(PLATFORM)))    
 		@echo "Detected: MinGW32."
-		$(MAKE) /mingw EXTRA_CONFIGURE_PARAMS=--build=i686-w64-mingw32 --host=i686-w64-mingw32
+		$(MAKE) /mingw EXTRA_CONFIGURE_PARAMS="--build=i686-w64-mingw32 --host=i686-w64-mingw32"
   else
 	    ifneq (,$(findstring CYGWIN,$(PLATFORM)))
 				@echo "Detected: CYGWIN"
