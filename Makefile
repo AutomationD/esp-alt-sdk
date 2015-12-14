@@ -14,6 +14,7 @@ MPC_VERSION = 1.0.2
 TOP = $(PWD)
 TARGET = xtensa-lx106-elf
 TOOLCHAIN = $(TOP)/$(TARGET)
+BUILD_TARGET := 
 MINGW_DIR = c:\tools\mingw64
 
 XTTC = $(TOOLCHAIN)
@@ -38,7 +39,6 @@ ESPTOOL2_SRCREPO = rabutron-esp8266
 
 UNZIP = unzip -q -o
 UNTAR = tar -xf
-EXTRA_CONFIGURE_PARAMS := 
 
 PLATFORM := $(shell uname -s)
 
@@ -397,7 +397,7 @@ platform-specific:
 ifeq ($(OS),Windows_NT)
   ifneq (,$(findstring MINGW32,$(PLATFORM)))    
 		@echo "Detected: MinGW32."
-		EXTRA_CONFIGURE_PARAMS="--build=i686-w64-mingw32 --host=i686-w64-mingw32" $(MAKE) /mingw
+		BUILD_TARGET="i686-w64-mingw32" $(MAKE) /mingw
   else
 	    ifneq (,$(findstring CYGWIN,$(PLATFORM)))
 				@echo "Detected: CYGWIN"
@@ -437,7 +437,7 @@ $(XTDLP)/$(GMP_DIR): $(XTDLP)/$(GMP_TAR)
 
 $(XTDLP)/$(GMP_DIR)/build: $(XTDLP)/$(GMP_DIR)
 	mkdir -p $(XTDLP)/$(GMP_DIR)/build/
-	cd $(XTDLP)/$(GMP_DIR)/build/; ../configure --prefix=$(XTBP)/gmp --disable-shared --enable-static $(EXTRA_CONFIGURE_PARAMS)
+	cd $(XTDLP)/$(GMP_DIR)/build/; ../configure --prefix=$(XTBP)/gmp --disable-shared --enable-static --build=$(BUILD_TARGET) --host=$(BUILD_TARGET)
 	make -C $(XTDLP)/$(GMP_DIR)/build/	
 
 $(XTBP)/gmp: $(XTDLP)/$(GMP_DIR)/build
@@ -451,7 +451,7 @@ $(XTDLP)/$(MPFR_DIR): $(XTDLP)/$(MPFR_TAR)
 
 $(XTDLP)/$(MPFR_DIR)/build: $(XTDLP)/$(MPFR_DIR)
 	mkdir -p $(XTDLP)/$(MPFR_DIR)/build
-	cd $(XTDLP)/$(MPFR_DIR)/build/; ../configure --prefix=$(XTBP)/mpfr --with-gmp=$(XTBP)/gmp --disable-shared --enable-static $(EXTRA_CONFIGURE_PARAMS)
+	cd $(XTDLP)/$(MPFR_DIR)/build/; ../configure --prefix=$(XTBP)/mpfr --with-gmp=$(XTBP)/gmp --disable-shared --enable-static --build=$(BUILD_TARGET) --host=$(BUILD_TARGET)
 	make -C $(XTDLP)/$(MPFR_DIR)/build/	
 
 $(XTBP)/mpfr: $(XTDLP)/$(MPFR_DIR)/build
@@ -466,7 +466,7 @@ $(XTDLP)/$(MPC_DIR): $(XTDLP)/$(MPC_TAR)
 
 $(XTDLP)/$(MPC_DIR)/build: $(XTDLP)/$(MPC_DIR)
 	mkdir -p $(XTDLP)/$(MPC_DIR)/build	
-	cd $(XTDLP)/$(MPC_DIR)/build/; ../configure --prefix=$(XTBP)/mpc --with-mpfr=$(XTBP)/mpfr --with-gmp=$(XTBP)/gmp --disable-shared --enable-static $(EXTRA_CONFIGURE_PARAMS)
+	cd $(XTDLP)/$(MPC_DIR)/build/; ../configure --prefix=$(XTBP)/mpc --with-mpfr=$(XTBP)/mpfr --with-gmp=$(XTBP)/gmp --disable-shared --enable-static --build=$(BUILD_TARGET) --host=$(BUILD_TARGET)
 	make -C $(XTDLP)/$(MPC_DIR)/build/
 	make install -C $(XTDLP)/$(MPC_DIR)/build/
 
@@ -477,7 +477,7 @@ $(XTBP)/mpc: $(XTDLP)/$(MPC_DIR)/build
 # Binutils
 $(XTDLP)/$(BINUTILS_DIR)/build: $(XTDLP)/$(BINUTILS_DIR)/configure.ac
 	mkdir -p $(XTDLP)/$(BINUTILS_DIR)/build
-	cd $(XTDLP)/$(BINUTILS_DIR)/build/; chmod -R 777 $(XTDLP)/$(BINUTILS_DIR); ../configure --prefix=$(TOOLCHAIN) --target=$(TARGET) --enable-werror=no  --enable-multilib --disable-nls --disable-shared --disable-threads --with-gcc --with-gnu-as --with-gnu-ld $(EXTRA_CONFIGURE_PARAMS)
+	cd $(XTDLP)/$(BINUTILS_DIR)/build/; chmod -R 777 $(XTDLP)/$(BINUTILS_DIR); ../configure --prefix=$(TOOLCHAIN) --target=$(TARGET) --enable-werror=no  --enable-multilib --disable-nls --disable-shared --disable-threads --with-gcc --with-gnu-as --with-gnu-ld --build=$(BUILD_TARGET) --host=$(BUILD_TARGET)
 	make -C $(XTDLP)/$(BINUTILS_DIR)/build/
 
 $(XTBP)/$(BINUTILS_DIR): $(XTDLP)/$(BINUTILS_DIR)/build
@@ -486,7 +486,7 @@ $(XTBP)/$(BINUTILS_DIR): $(XTDLP)/$(BINUTILS_DIR)/build
 # GCC Step 1
 $(XTDLP)/$(GCC_DIR)/build-1: $(XTDLP)/$(GCC_DIR)/configure.ac
 	mkdir -p $(XTDLP)/$(GCC_DIR)/build-1
-	cd $(XTDLP)/$(GCC_DIR)/build-1/; ../configure --prefix=$(TOOLCHAIN) --target=$(TARGET) --enable-multilib --enable-languages=c --with-newlib --disable-nls --disable-shared --disable-threads --with-gnu-as --with-gnu-ld --with-gmp=$(XTBP)/gmp --with-mpfr=$(XTBP)/mpfr --with-mpc=$(XTBP)/mpc  --disable-libssp --without-headers --disable-__cxa_atexit $(EXTRA_CONFIGURE_PARAMS)
+	cd $(XTDLP)/$(GCC_DIR)/build-1/; ../configure --prefix=$(TOOLCHAIN) --target=$(TARGET) --enable-multilib --enable-languages=c --with-newlib --disable-nls --disable-shared --disable-threads --with-gnu-as --with-gnu-ld --with-gmp=$(XTBP)/gmp --with-mpfr=$(XTBP)/mpfr --with-mpc=$(XTBP)/mpc  --disable-libssp --without-headers --disable-__cxa_atexit --build=$(BUILD_TARGET) --host=$(BUILD_TARGET)
 	make all-gcc -C $(XTDLP)/$(GCC_DIR)/build-1/
 	make install-gcc -C $(XTDLP)/$(GCC_DIR)/build-1/
 	cd $(TOOLCHAIN)/bin/; ln -sf xtensa-lx106-elf-gcc xtensa-lx106-elf-cc
@@ -495,7 +495,7 @@ $(XTDLP)/$(GCC_DIR)/build-1: $(XTDLP)/$(GCC_DIR)/configure.ac
 # GCC Step 2
 $(XTDLP)/$(GCC_DIR)/build-2: $(XTDLP)/$(GCC_DIR)/configure.ac $(XTBP)/$(NEWLIB_DIR)
 	mkdir -p $(XTDLP)/$(GCC_DIR)/build-2
-	cd $(XTDLP)/$(GCC_DIR)/build-2/; ../configure --prefix=$(TOOLCHAIN) --target=$(TARGET) --enable-multilib --disable-nls --disable-shared --disable-threads --with-gnu-as --with-gnu-ld --with-gmp=$(XTBP)/gmp --with-mpfr=$(XTBP)/mpfr --with-mpc=$(XTBP)/mpc --enable-languages=c,c++ --with-newlib --disable-libssp --disable-__cxa_atexit $(EXTRA_CONFIGURE_PARAMS)
+	cd $(XTDLP)/$(GCC_DIR)/build-2/; ../configure --prefix=$(TOOLCHAIN) --target=$(TARGET) --enable-multilib --disable-nls --disable-shared --disable-threads --with-gnu-as --with-gnu-ld --with-gmp=$(XTBP)/gmp --with-mpfr=$(XTBP)/mpfr --with-mpc=$(XTBP)/mpc --enable-languages=c,c++ --with-newlib --disable-libssp --disable-__cxa_atexit --build=$(BUILD_TARGET) --host=$(BUILD_TARGET)
 	make -C $(XTDLP)/$(GCC_DIR)/build-2/
 	make install -C $(XTDLP)/$(GCC_DIR)/build-2/
 
@@ -504,7 +504,7 @@ $(XTBP)/$(GCC_DIR): $(XTDLP)/$(GCC_DIR)/build-1 $(XTDLP)/$(GCC_DIR)/build-2
 # Newlib
 $(XTDLP)/$(NEWLIB_DIR)/build: $(XTDLP)/$(NEWLIB_DIR)/configure.ac
 	mkdir $(XTDLP)/$(NEWLIB_DIR)/build
-	cd $(XTDLP)/$(NEWLIB_DIR)/build/; ../configure  --prefix=$(TOOLCHAIN) --target=$(TARGET) --enable-multilib --with-gnu-as --with-gnu-ld --disable-nls $(EXTRA_CONFIGURE_PARAMS)
+	cd $(XTDLP)/$(NEWLIB_DIR)/build/; ../configure  --prefix=$(TOOLCHAIN) --target=$(TARGET) --enable-multilib --with-gnu-as --with-gnu-ld --disable-nls --build=$(BUILD_TARGET) --host=$(BUILD_TARGET)
 	make -C $(XTDLP)/$(NEWLIB_DIR)/build/
 	
 $(XTBP)/$(NEWLIB_DIR): $(XTDLP)/$(NEWLIB_DIR)/build
