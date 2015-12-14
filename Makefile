@@ -14,7 +14,6 @@ MPC_VERSION = 1.0.2
 TOP = $(PWD)
 TARGET = xtensa-lx106-elf
 TOOLCHAIN = $(TOP)/$(TARGET)
-BUILD_TARGET := 
 MINGW_DIR = c:\tools\mingw64
 
 XTTC = $(TOOLCHAIN)
