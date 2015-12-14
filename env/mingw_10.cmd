@@ -15,13 +15,15 @@ echo Install python
 choco install python pip -y
 
 echo Installing MingGW-get (pulls down mingw too)
+choco install mingw -y
+choco install mingw --x86
 choco install mingw-get -y
 
 echo Adding ENV variables
 
 setx /M HOME "c:\Users\User"
 setx /M PATH "c:\tools\mingw64\msys\1.0\bin\;%PATH%" && set PATH=c:\tools\mingw64\msys\1.0\bin\;%PATH%
-setx /M PATH "c:\tools\mingw64\bin\;%PATH%" && set PATH=c:\tools\mingw64\bin\;%PATH%
+setx /M PATH "C:\tools\mingw32\bin;c:\tools\mingw64\bin\;%PATH%" && set PATH=C:\tools\mingw32\bin;c:\tools\mingw64\bin\;%PATH%
 
 echo Installing required mingw components
 

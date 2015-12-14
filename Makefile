@@ -14,7 +14,7 @@ MPC_VERSION = 1.0.2
 TOP = $(PWD)
 TARGET = xtensa-lx106-elf
 TOOLCHAIN = $(TOP)/$(TARGET)
-MINGW_DIR = c:\tools\mingw64
+MINGW_DIR = c:\tools\mingw32
 
 XTTC = $(TOOLCHAIN)
 XTBP = $(TOP)/build
@@ -42,7 +42,7 @@ UNTAR = tar -xf
 PLATFORM := $(shell uname -s)
 
 PATH := $(TOOLCHAIN)/bin:$(PATH)
-SAFEPATH := $(TOOLCHAIN)/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/mingw/bin/:/c/tools/mingw64/bin
+SAFEPATH := $(TOOLCHAIN)/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/mingw/bin/:/c/tools/mingw64/bin:$(PATH)
 
 
 VENDOR_SDK_ZIP = $(VENDOR_SDK_ZIP_$(VENDOR_SDK_VERSION))
