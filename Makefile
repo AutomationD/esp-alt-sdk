@@ -43,7 +43,7 @@ EXTRA_CONFIGURE_PARAMS :=
 PLATFORM := $(shell uname -s)
 
 PATH := $(TOOLCHAIN)/bin:$(PATH)
-SAFEPATH := $(TOOLCHAIN)/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/mingw/bin/:/c/tools/mingw32/bin:/c/tools/mingw64/bin:$(PATH)
+SAFEPATH := $(TOOLCHAIN)/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/mingw/bin/:/c/tools/mingw32/bin:/c/tools/mingw64/bin
 
 
 VENDOR_SDK_ZIP = $(VENDOR_SDK_ZIP_$(VENDOR_SDK_VERSION))
