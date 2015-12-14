@@ -47,8 +47,8 @@ $(PREFIX)/bin/automake: /mingw/bin/autoconf $(ENV_DIR)/automake-$(AUTOMAKE_VERSI
 	PATH=$(SAFEPATH) cd $(ENV_DIR)/automake-$(AUTOMAKE_VERSION); ./configure --prefix=$(PREFIX)
 	PATH=$(SAFEPATH) cd $(ENV_DIR)/automake-$(AUTOMAKE_VERSION); make
 	PATH=$(SAFEPATH) cd $(ENV_DIR)/automake-$(AUTOMAKE_VERSION); make install
-	PATH=$(SAFEPATH) cd /mingw/share/; ln -s aclocal-1.11 aclocal
-	PATH=$(SAFEPATH) cd /mingw/share/; ln -s automake-1.11 automake
+	PATH=$(SAFEPATH) cd $(PREFIX)/share/; ln -s aclocal-1.11 aclocal
+	PATH=$(SAFEPATH) cd $(PREFIX)/share/; ln -s automake-1.11 automake
 
 /mingw/bin/autoconf: $(ENV_DIR)/autoconf-$(AUTOCONF_VERSION).tar.xz
 	echo Installing autoconf-$(AUTOCONF_VERSION)
