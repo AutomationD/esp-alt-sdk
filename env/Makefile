@@ -113,14 +113,12 @@ else
   endif
   ifeq ($(PLATFORM),Linux)
 			@echo "Detected: Linux"
-			ifneq ($(strip $(TRAVIS_BUILD_DIR)),)
+      ifneq ($(strip $(TRAVIS_BUILD_DIR)),)
 				@echo "Detected TravisCI"
 				$(MAKE) ubuntu PREFIX=$(TRAVIS_BUILD_DIR)
-			else
+      else
 				$(MAKE) ubuntu
-			endif
-			
-			
+      endif
   endif
   ifeq ($(PLATFORM),FreeBSD)
       @echo "Detected: FreeBSD"
