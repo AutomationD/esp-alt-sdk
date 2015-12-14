@@ -5,6 +5,8 @@ AUTOMAKE_VERSION = 1.11.6
 
 PLATFORM := $(shell uname -s)
 
+PREFIX := ""
+
 SAFEPATH := $(TOOLCHAIN)/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/mingw/bin/:/c/tools/mingw64/bin
 
 all: debug platform-specific
@@ -21,7 +23,7 @@ macos:
 freebsd:
 	@echo "FreBSD ENV preps"
 
-ubuntu: /usr/bin/autoconf /usr/bin/automake
+ubuntu: $(PREFIX)/bin/autoconf $(PREFIX)/bin/automake
 
 rhel:
 	@echo "RHEL ENV preps"
@@ -31,6 +33,22 @@ $(ENV_DIR)/autoconf-$(AUTOCONF_VERSION).tar.xz:
 
 $(ENV_DIR)/automake-$(AUTOMAKE_VERSION).tar.xz:
 	wget ftp://ftp.gnu.org/pub/gnu/automake/automake-$(AUTOMAKE_VERSION).tar.xz --output-document $@
+
+
+$(PREFIX)/bin/autoconf: $(ENV_DIR)/autoconf-$(AUTOCONF_VERSION).tar.xz
+	echo Installing autoconf-$(AUTOCONF_VERSION)
+	tar -xf $(ENV_DIR)/autoconf-$(AUTOCONF_VERSION).tar.xz
+	PATH=$(SAFEPATH) cd $(ENV_DIR)/autoconf-$(AUTOCONF_VERSION); ./configure --prefix=/mingw
+	PATH=$(SAFEPATH) cd $(ENV_DIR)/autoconf-$(AUTOCONF_VERSION); make
+	PATH=$(SAFEPATH) cd $(ENV_DIR)/autoconf-$(AUTOCONF_VERSION); make install
+
+$(PREFIX)/bin/automake: /mingw/bin/autoconf $(ENV_DIR)/automake-$(AUTOMAKE_VERSION).tar.xz	
+	tar -xf $(ENV_DIR)/automake-$(AUTOMAKE_VERSION).tar.xz
+	PATH=$(SAFEPATH) cd $(ENV_DIR)/automake-$(AUTOMAKE_VERSION); ./configure --prefix=/mingw
+	PATH=$(SAFEPATH) cd $(ENV_DIR)/automake-$(AUTOMAKE_VERSION); make
+	PATH=$(SAFEPATH) cd $(ENV_DIR)/automake-$(AUTOMAKE_VERSION); make install
+	PATH=$(SAFEPATH) cd /mingw/share/; ln -s aclocal-1.11 aclocal
+	PATH=$(SAFEPATH) cd /mingw/share/; ln -s automake-1.11 automake
 
 /mingw/bin/autoconf: $(ENV_DIR)/autoconf-$(AUTOCONF_VERSION).tar.xz
 	echo Installing autoconf-$(AUTOCONF_VERSION)
@@ -95,7 +113,14 @@ else
   endif
   ifeq ($(PLATFORM),Linux)
 			@echo "Detected: Linux"
-			$(MAKE) ubuntu
+			ifeq($(TRAVIS_BUILD_DIR),)
+				@echo "Detected TravisCI"
+				$(MAKE) ubuntu PREFIX=$(TRAVIS_BUILD_DIR)
+			else
+				$(MAKE) ubuntu
+			endif
+			
+			
   endif
   ifeq ($(PLATFORM),FreeBSD)
       @echo "Detected: FreeBSD"
