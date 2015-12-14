@@ -39,6 +39,8 @@ script:
   - cd $TRAVIS_BUILD_DIR
   - automake --version
   - autoconf --version
+  - g++ --version
+  - gcc --version
   - PLATFORM=$TRAVIS_OS_NAME
   - PROJECT_NAME="esp-alt-sdk"
   - VENDOR_SDK_VERSION=$VERSION  
