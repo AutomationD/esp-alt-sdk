@@ -36,6 +36,7 @@ install:
   - cd env/; make
 
 script:
+  - cd $TRAVIS_BUILD_DIR
   - automake --version
   - autoconf --version
   - PLATFORM=$TRAVIS_OS_NAME
