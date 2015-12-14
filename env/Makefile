@@ -7,7 +7,7 @@ PLATFORM := $(shell uname -s)
 
 PREFIX := ""
 
-SAFEPATH := $(TOOLCHAIN)/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/mingw/bin/:/c/tools/mingw64/bin
+SAFEPATH := $(PATH):$(TOOLCHAIN)/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/mingw/bin/:/c/tools/mingw64/bin:
 
 all: debug platform-specific
 	
@@ -115,7 +115,7 @@ else
 			@echo "Detected: Linux"
       ifneq ($(strip $(TRAVIS_BUILD_DIR)),)
 				@echo "Detected TravisCI"
-				$(MAKE) ubuntu PREFIX=$(TRAVIS_BUILD_DIR)
+				$(MAKE) ubuntu PREFIX=$(HOME)
       else
 				$(MAKE) ubuntu
       endif
