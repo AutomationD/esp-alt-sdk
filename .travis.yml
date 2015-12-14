@@ -14,7 +14,6 @@ addons:
   apt:
     sources:
     - ubuntu-toolchain-r-test
-    - dns/gnu
 
     packages:
       - texinfo
