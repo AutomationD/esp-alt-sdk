@@ -30,7 +30,7 @@ MPC_DIR = mpc-$(MPC_VERSION)
 
 GCC_DIR = gcc-xtensa
 NEWLIB_DIR = newlib-xtensa
-BINUTILS_DIR = esp-binutils
+BINUTILS_DIR = binutils-gdb-xtensa
 LIBHAL_DIR = lx106-hal
 ESPTOOL_DIR = esptool
 ESPTOOL2_DIR = esptool2
@@ -336,8 +336,7 @@ $(XTDLP)/$(MPFR_TAR):
 	wget -c http://ftp.gnu.org/gnu/mpfr/$(MPFR_TAR) --output-document $(XTDLP)/$(MPFR_TAR)
 
 $(XTDLP)/$(BINUTILS_DIR)/configure.ac:
-#	git clone https://github.com/fpoussin/esp-binutils.git $(XTDLP)/$(BINUTILS_DIR)
-	@echo "You cloned without --recursive, fetching fpoussin/esp-binutils for you."
+	@echo "You cloned without --recursive, fetching $(BINUTILS_DIR) for you."
 	git submodule update --init --recursive
 
 

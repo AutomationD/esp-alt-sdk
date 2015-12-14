@@ -17,3 +17,6 @@
 [submodule "src/rabutron-esp8266"]
 	path = src/rabutron-esp8266
 	url = https://github.com/raburton/esp8266.git
+[submodule "src/binutils-gdb-xtensa"]
+	path = src/binutils-gdb-xtensa
+	url = https://github.com/jcmvbkbc/binutils-gdb-xtensa.git
