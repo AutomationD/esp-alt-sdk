@@ -88,7 +88,7 @@ STANDALONE = y
 .PHONY: toolchain libhal libcirom sdk
 
 # all: esptool libcirom standalone sdk sdk_patch $(TOOLCHAIN)/xtensa-lx106-elf/sysroot/usr/lib/libhal.a $(TOOLCHAIN)/bin/xtensa-lx106-elf-gcc
-all: debug platform-specific $(TOOLCHAIN)/bin/xtensa-lx106-elf-gcc standalone $(TOP)/sdk sdk_patch $(TOOLCHAIN)/xtensa-lx106-elf/lib/libhal.a esptool esptool2 libcirom
+all: debug platform-specific
 # all: platform-specific
 	@echo
 	@echo "Xtensa toolchain is built, to use it:"
@@ -105,6 +105,8 @@ else
 	@echo "Espressif ESP8266 SDK is installed, its libraries and headers are merged with the toolchain"
 	@echo
 endif
+
+build: $(TOOLCHAIN)/bin/xtensa-lx106-elf-gcc standalone $(TOP)/sdk sdk_patch $(TOOLCHAIN)/xtensa-lx106-elf/lib/libhal.a esptool esptool2 libcirom
 
 esptool: $(TOP)/$(ESPTOOL_DIR)/esptool.py
 	
@@ -396,7 +398,8 @@ platform-specific:
 ifeq ($(OS),Windows_NT)
   ifneq (,$(findstring MINGW32,$(PLATFORM)))    
 		@echo "Detected: MinGW32."
-		$(MAKE) /mingw BUILD_TARGET="i686-w64-mingw32"
+		$(MAKE) /mingw BUILD_TARGET=i686-w64-mingw32
+		$(MAKE) build BUILD_TARGET=i686-w64-mingw32
   else
 	    ifneq (,$(findstring CYGWIN,$(PLATFORM)))
 				@echo "Detected: CYGWIN"
@@ -404,13 +407,16 @@ ifeq ($(OS),Windows_NT)
   endif
 else  
   ifeq ($(PLATFORM),Darwin)    
-			@echo "Detected: MacOS"      
+			@echo "Detected: MacOS"
+			$(MAKE) build
   endif
   ifeq ($(PLATFORM),Linux)
 			@echo "Detected: Linux"
+			$(MAKE) build
   endif
   ifeq ($(PLATFORM),FreeBSD)
-      @echo "Detected: FreeBSD"      
+      @echo "Detected: FreeBSD"
+      $(MAKE) build
   endif
 endif
 
