@@ -400,9 +400,10 @@ ifeq ($(OS),Windows_NT)
 		$(MAKE) /mingw
 		$(MAKE) build PATH="/c/tools/mingw32/bin:$(PATH)" BUILD_TARGET=i686-w64-mingw32
   else
-	    ifneq (,$(findstring CYGWIN,$(PLATFORM)))
+      ifneq (,$(findstring CYGWIN,$(PLATFORM)))
 				@echo "Detected: CYGWIN"
-	    endif
+				$(MAKE) build
+      endif
   endif
 else  
   ifeq ($(PLATFORM),Darwin)    
