@@ -398,7 +398,7 @@ ifeq ($(OS),Windows_NT)
   ifneq (,$(findstring MINGW32,$(PLATFORM)))    
 		@echo "Detected: MinGW32."
 		$(MAKE) /mingw
-		$(MAKE) build PATH="/c/tools/mingw32/bin:$PATH" BUILD_TARGET=i686-w64-mingw32
+		$(MAKE) build PATH="/c/tools/mingw32/bin:$(PATH)" BUILD_TARGET=i686-w64-mingw32
   else
 	    ifneq (,$(findstring CYGWIN,$(PLATFORM)))
 				@echo "Detected: CYGWIN"
