@@ -14,17 +14,17 @@ _Please don't report bugs (yet)_
 - [Espressif NONOS SDK](http://bbs.espressif.com/viewforum.php?f=46) with official patches
 - [lx106-hal](https://github.com/tommie/lx106-hal)
 - [newlib-xtensa](https://github.com/jcmvbkbc/newlib-xtensa)
-- [esp-binutils](https://github.com/fpoussin/esp-binutils/)
+- [binutils-gdb-xtensa](https://github.com/jcmvbkbc/binutils-gdb-xtensa) with GDB debugger
 - [esptool](https://github.com/themadinventor/esptool)
 - [esptool2](https://github.com/raburton/esptool2)
 
 ## Download
-| Windows  | MacOS | Linux |
-| ------------- | ------------- | ------------- |
-| [1.2.0](https://bintray.com/artifact/download/kireevco/generic/esp-alt-sdk-1.2.0-windows-x86_x64.zip)  | [1.2.0](https://bintray.com/artifact/download/kireevco/generic/esp-alt-sdk-1.2.0-macos-x86_64.zip) | [1.2.0](https://bintray.com/artifact/download/kireevco/generic/esp-alt-sdk-1.2.0-linux-x86_64.tar.gz) |
-| [1.3.0](https://bintray.com/artifact/download/kireevco/generic/esp-alt-sdk-1.3.0-windows-x86_x64.zip)  | [1.3.0](https://bintray.com/artifact/download/kireevco/generic/esp-alt-sdk-1.3.0-macos-x86_64.zip) | [1.3.0](https://bintray.com/artifact/download/kireevco/generic/esp-alt-sdk-1.3.0-linux-x86_64.tar.gz) |
-| [1.4.0](https://bintray.com/artifact/download/kireevco/generic/esp-alt-sdk-1.4.0-windows-x86_x64.zip)  | [1.4.0](https://bintray.com/artifact/download/kireevco/generic/esp-alt-sdk-1.3.0-macos-x86_64.zip) | [1.4.0](https://bintray.com/artifact/download/kireevco/generic/esp-alt-sdk-1.4.0-linux-x86_64.tar.gz) |
-| [1.5.0](https://bintray.com/artifact/download/kireevco/generic/esp-alt-sdk-1.5.0-windows-x86_x64.zip)  | [1.5.0](https://bintray.com/artifact/download/kireevco/generic/esp-alt-sdk-1.5.0-macos-x86_64.zip) | [1.5.0](https://bintray.com/artifact/download/kireevco/generic/esp-alt-sdk-1.5.0-linux-x86_64.tar.gz) |
+| Windows (x86) | Windows (x64)  | MacOS | Linux |
+| ------------- | ------------- | ------------- | ------------- |
+| [1.2.0](https://bintray.com/artifact/download/kireevco/generic/esp-alt-sdk-1.2.0-windows-x86.zip) | [1.2.0](https://bintray.com/artifact/download/kireevco/generic/esp-alt-sdk-1.2.0-windows-x86_x64.zip)  | [1.2.0](https://bintray.com/artifact/download/kireevco/generic/esp-alt-sdk-1.2.0-macos-x86_64.zip) | [1.2.0](https://bintray.com/artifact/download/kireevco/generic/esp-alt-sdk-1.2.0-linux-x86_64.tar.gz) |
+| [1.3.0](https://bintray.com/artifact/download/kireevco/generic/esp-alt-sdk-1.3.0-windows-x86.zip) | [1.3.0](https://bintray.com/artifact/download/kireevco/generic/esp-alt-sdk-1.3.0-windows-x86_x64.zip)  | [1.3.0](https://bintray.com/artifact/download/kireevco/generic/esp-alt-sdk-1.3.0-macos-x86_64.zip) | [1.3.0](https://bintray.com/artifact/download/kireevco/generic/esp-alt-sdk-1.3.0-linux-x86_64.tar.gz) |
+| [1.4.0](https://bintray.com/artifact/download/kireevco/generic/esp-alt-sdk-1.4.0-windows-x86.zip) | [1.4.0](https://bintray.com/artifact/download/kireevco/generic/esp-alt-sdk-1.4.0-windows-x86_x64.zip)  | [1.4.0](https://bintray.com/artifact/download/kireevco/generic/esp-alt-sdk-1.3.0-macos-x86_64.zip) | [1.4.0](https://bintray.com/artifact/download/kireevco/generic/esp-alt-sdk-1.4.0-linux-x86_64.tar.gz) |
+| [1.5.0](https://bintray.com/artifact/download/kireevco/generic/esp-alt-sdk-1.5.0-windows-x86.zip) | [1.5.0](https://bintray.com/artifact/download/kireevco/generic/esp-alt-sdk-1.5.0-windows-x86_x64.zip)  | [1.5.0](https://bintray.com/artifact/download/kireevco/generic/esp-alt-sdk-1.5.0-macos-x86_64.zip) | [1.5.0](https://bintray.com/artifact/download/kireevco/generic/esp-alt-sdk-1.5.0-linux-x86_64.tar.gz) |
 
 ## Build yourself
 ### Windows
