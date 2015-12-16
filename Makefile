@@ -14,7 +14,7 @@ MPC_VERSION = 1.0.2
 TOP = $(PWD)
 TARGET = xtensa-lx106-elf
 TOOLCHAIN = $(TOP)/$(TARGET)
-MINGW_DIR = c:\tools\mingw64
+MINGW_DIR := c:\tools\mingw64
 
 XTTC = $(TOOLCHAIN)
 XTBP = $(TOP)/build
@@ -30,7 +30,7 @@ MPC_DIR = mpc-$(MPC_VERSION)
 
 GCC_DIR = gcc-xtensa
 NEWLIB_DIR = newlib-xtensa
-BINUTILS_DIR = binutils-gdb-xtensa
+BINUTILS_DIR = esp-binutils
 LIBHAL_DIR = lx106-hal
 ESPTOOL_DIR = esptool
 ESPTOOL2_DIR = esptool2

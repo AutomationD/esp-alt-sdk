@@ -12,28 +12,39 @@ echo Installing wget & curl
 choco install wget curl -y
 
 echo Install python
-choco install python pip -y
+choco install python2-x86_32 -y
+
+pip install
+
+echo [build] > c:\tools\python2-x86_32\Lib\distutils\distutils.cfg
+echo compiler = mingw32 >> c:\tools\python2-x86_32\Lib\distutils\distutils.cfg
 
 echo Installing MingGW-get (pulls down mingw too)
 choco install mingw -y
-choco install mingw --x86
+choco install mingw --x86 -y
 choco install mingw-get -y
+
 
 echo Adding ENV variables
 
 setx /M HOME "c:\Users\User"
 setx /M PATH "c:\tools\mingw64\msys\1.0\bin\;%PATH%" && set PATH=c:\tools\mingw64\msys\1.0\bin\;%PATH%
-setx /M PATH "C:\tools\mingw32\bin;c:\tools\mingw64\bin\;%PATH%" && set PATH=C:\tools\mingw32\bin;c:\tools\mingw64\bin\;%PATH%
+setx /M PATH "C:\tools\python2-x86_32\script;C:\tools\mingw32\bin;c:\tools\mingw64\bin\;%PATH%" && set PATH=C:\tools\python2-x86_32\script;C:\tools\mingw32\bin;c:\tools\mingw64\bin\;%PATH%
+
 
 echo Installing required mingw components
 
 mingw-get install mingw32-base mingw32-mgwport mingw32-pdcurses mingw32-make mingw-developer-toolkit mingw32-gdb libz bzip2 wget 
-
 :: mingw-get install gcc gcc-c++
 mingw-get install msys-zip
 mingw-get remove autoconf
 :: mingw-get mingw32-autoconf mingw32-automake 
 
+echo Install pyinstaller
+pip install pyinstaller
+
+::echo Running pip in a different cmd shell
+::cmd /c pip install http://sourceforge.net/projects/py2exe/files/latest/download?source=files
 
 :: hack for xgettext.exe bug
 echo renaming xgettext.exe to xgettext_.exe
