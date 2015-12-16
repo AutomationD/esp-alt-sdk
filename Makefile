@@ -9,6 +9,7 @@ VENDOR_SDK_VERSION = 1.4.0
 GMP_VERSION = 6.0.0a
 MPFR_VERSION = 3.1.2
 MPC_VERSION = 1.0.2
+GDB_VERSION = 7.10
 
 
 TOP = $(PWD)
@@ -23,10 +24,12 @@ XTDLP = $(TOP)/src
 GMP_TAR = gmp-$(GMP_VERSION).tar.bz2
 MPFR_TAR = mpfr-$(MPFR_VERSION).tar.bz2
 MPC_TAR = mpc-$(MPC_VERSION).tar.gz
+GDB_TAR = gdb-$(GDB_VERSION).tar.xz
 
 GMP_DIR = gmp-$(GMP_VERSION)
 MPFR_DIR = mpfr-$(MPFR_VERSION)
 MPC_DIR = mpc-$(MPC_VERSION)
+GDB_DIR = gdb-$(GDB_VERSION)
 
 GCC_DIR = gcc-xtensa
 NEWLIB_DIR = newlib-xtensa
@@ -335,6 +338,10 @@ $(XTDLP)/$(MPC_TAR):
 $(XTDLP)/$(MPFR_TAR):
 	wget -c http://ftp.gnu.org/gnu/mpfr/$(MPFR_TAR) --output-document $(XTDLP)/$(MPFR_TAR)
 
+$(XTDLP)/$(GDB_TAR):
+	wget http://ftp.gnu.org/gnu/gdb/$(GDB_TAR) --output-document $(XTDLP)/$(GDB_TAR)
+
+
 $(XTDLP)/$(BINUTILS_DIR)/configure.ac:
 	@echo "You cloned without --recursive, fetching $(BINUTILS_DIR) for you."
 	git submodule update --init --recursive
@@ -487,6 +494,20 @@ $(XTDLP)/$(BINUTILS_DIR)/build: $(XTDLP)/$(BINUTILS_DIR)/configure.ac
 
 $(XTBP)/$(BINUTILS_DIR): $(XTDLP)/$(BINUTILS_DIR)/build
 	make install -C $(XTDLP)/$(BINUTILS_DIR)/build/
+
+# GDB
+$(XTDLP)/$(GDB_DIR)/configure.ac: $(XTDLP)/$(GDB_TAR)
+	mkdir -p $(XTDLP)/$(GDB_TAR)
+	$(UNTAR) $(XTDLP)/$(GDB_TAR) -C $(XTDLP)/$(GDB_DIR)
+	mv $(XTDLP)/$(GDB_DIR)/gdb-*/* $(XTDLP)/$(GDB_DIR)
+
+$(XTDLP)/$(GDB_DIR)/build: $(XTDLP)/$(GDB_DIR)/configure.ac
+	mkdir -p $(XTDLP)/$(GDB_DIR)/build
+	cd $(XTDLP)/$(GDB_DIR)/build/; chmod -R 777 $(XTDLP)/$(GDB_DIR); ../configure --prefix=$(TOOLCHAIN) --target=$(TARGET) --enable-werror=no  --enable-multilib --disable-nls --disable-shared --disable-threads --with-gcc --with-gnu-as --with-gnu-ld --build=$(BUILD_TARGET) --host=$(BUILD_TARGET)
+	make -C $(XTDLP)/$(GDB_DIR)/build/
+
+$(XTBP)/$(GDB_DIR): $(XTDLP)/$(GDB_DIR)/build
+	make install -C $(XTDLP)/$(GDB_DIR)/build/
 
 # GCC Step 1
 $(XTDLP)/$(GCC_DIR)/build-1: $(XTDLP)/$(GCC_DIR)/configure.ac
