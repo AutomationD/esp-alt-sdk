@@ -544,7 +544,7 @@ build-binutils: build-gmp build-mpfr build-mpc $(XTDLP)/$(BINUTILS_DIR)/build $(
 build-first-stage-gcc: build-gmp build-mpfr build-mpc build-binutils $(XTDLP)/$(GCC_DIR)/build-1
 build-second-stage-gcc: build-gmp build-mpfr build-mpc build-binutils build-first-stage-gcc $(XTDLP)/$(GCC_DIR)/build-2
 build-newlib: build-gmp build-mpfr build-mpc build-binutils $(XTDLP)/$(NEWLIB_DIR)/build $(XTBP)/$(NEWLIB_DIR) 
-build-gdb: build-binutils $(XTDLP)/$(GDB_DIR)/build
+build-gdb: build-binutils $(XTDLP)/$(GDB_DIR)/build $(XTBP)/$(GDB_DIR)
 
 clean: clean-sdk
 	-rm -rf $(TOOLCHAIN)
