@@ -456,8 +456,8 @@ else
 			$(MAKE) build
   endif
   ifeq ($(PLATFORM),FreeBSD)
-  		@echo "Detected: FreeBSD"
-  		$(MAKE) build
+			@echo "Detected: FreeBSD"
+			$(MAKE) build
   endif
 endif
 
