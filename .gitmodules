@@ -14,9 +14,9 @@
 [submodule "src/esptool"]
 	path = src/esptool
 	url = https://github.com/themadinventor/esptool.git
-[submodule "src/rabutron-esp8266"]
-	path = src/rabutron-esp8266
-	url = https://github.com/raburton/esp8266.git
 [submodule "src/binutils-gdb-xtensa"]
 	path = src/binutils-gdb-xtensa
 	url = https://github.com/jcmvbkbc/binutils-gdb-xtensa.git
+[submodule "src/esptool2"]
+	path = src/esptool2
+	url = https://github.com/raburton/esptool2

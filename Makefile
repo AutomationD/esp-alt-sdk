@@ -20,6 +20,7 @@ MINGW_DIR := c:\tools\mingw64
 XTTC = $(TOOLCHAIN)
 XTBP = $(TOP)/build
 XTDLP = $(TOP)/src
+UTILS_DIR = $(TOP)/utils
 
 GMP_TAR = gmp-$(GMP_VERSION).tar.bz2
 MPFR_TAR = mpfr-$(MPFR_VERSION).tar.bz2
@@ -38,6 +39,8 @@ LIBHAL_DIR = lx106-hal
 ESPTOOL_DIR = esptool
 ESPTOOL2_DIR = esptool2
 ESPTOOL2_SRCREPO = rabutron-esp8266
+
+
 
 UNZIP = unzip -q -o
 UNTAR = tar -xf
@@ -111,21 +114,21 @@ endif
 
 build: $(TOOLCHAIN)/bin/xtensa-lx106-elf-gcc standalone $(TOP)/sdk sdk_patch $(TOOLCHAIN)/xtensa-lx106-elf/lib/libhal.a esptool esptool2 libcirom
 
-esptool: $(TOP)/$(ESPTOOL_DIR)/esptool.py
-	
-	
-esptool2: $(TOP)/$(ESPTOOL2_DIR)/$(ESPTOOL2_DIR)/esptool2
+esptool: $(UTILS_DIR)/esptool
+esptool2: $(UTILS_DIR)/esptool2
 
 
-$(TOP)/$(ESPTOOL_DIR)/esptool.py: $(XTDLP)/$(ESPTOOL_DIR)/esptool.py
-	mkdir -p $(TOP)/$(ESPTOOL_DIR)/
-	cp $(XTDLP)/$(ESPTOOL_DIR)/* $(TOP)/$(ESPTOOL_DIR)/
+$(UTILS_DIR)/esptool: $(XTDLP)/$(ESPTOOL_DIR)/esptool.py
+	mkdir -p $(UTILS_DIR)/
+	cd $(XTDLP)/$(ESPTOOL_DIR)
+	pyinstaller --onefile --distpath=\. esptool.py
+	cp esptool.exe $(UTILS_DIR)/
 
-$(TOP)/$(ESPTOOL2_DIR)/$(ESPTOOL2_DIR)/esptool2: $(XTDLP)/$(ESPTOOL2_SRCREPO)/$(ESPTOOL2_DIR)/esptool2.c
-	make clean -C $(XTDLP)/$(ESPTOOL2_SRCREPO)/$(ESPTOOL2_DIR)/
-	make -C $(XTDLP)/$(ESPTOOL2_SRCREPO)/$(ESPTOOL2_DIR)/
-	mkdir -p $(TOP)/$(ESPTOOL2_DIR)
-	cp $(XTDLP)/$(ESPTOOL2_SRCREPO)/$(ESPTOOL2_DIR)/esptool2 $(TOP)/$(ESPTOOL2_DIR)/
+$(UTILS_DIR)/esptool2: $(XTDLP)/$(ESPTOOL2_DIR)/esptool2.c
+	make clean -C $(XTDLP)/$(ESPTOOL2_DIR)/
+	make -C $(XTDLP)/$(ESPTOOL2_DIR)/
+	mkdir -p $(UTILS_DIR)
+	cp $(XTDLP)/$(ESPTOOL2_DIR)/esptool2 $(UTILS_DIR)/
 
 
 $(TOOLCHAIN)/xtensa-lx106-elf/lib/libcirom.a: $(TOOLCHAIN)/xtensa-lx106-elf/lib/libc.a $(TOOLCHAIN)/bin/xtensa-lx106-elf-gcc
@@ -367,7 +370,7 @@ $(XTDLP)/$(ESPTOOL_DIR)/esptool.py:
 	@echo "You cloned without --recursive, fetching esptool for you."
 	git submodule update --init --recursive
 
-$(XTDLP)/rabutron-8266/$(ESPTOOL2_DIR)/esptool2.c:
+$(XTDLP)/$(ESPTOOL2_DIR)/esptool2.c:
 	@echo "You cloned without --recursive, fetching esptool2 for you."
 	git submodule update --init --recursive
 
@@ -555,9 +558,8 @@ clean: clean-sdk
 	rm -rf $(XTDLP)/$(GCC_DIR)/build-1
 	rm -rf $(XTDLP)/$(GCC_DIR)/build-2
 	rm -rf $(XTDLP)/$(NEWLIB_DIR)/build
-	rm -rf $(XTDLP)/$(ESPTOOL2_SRCREPO)/$(ESPTOOL2_DIR)/esptool2
-	rm -rf $(TOP)/$(ESPTOOL2_DIR)/*
-	rm -rf $(TOP)/$(ESPTOOL_DIR)/*
+	rm -rf $(XTDLP)/$(ESPTOOL2_DIR)/esptool2	
+	rm -rf $(UTILS_DIR)/*
 
 clean-sdk:
 	rm -rf $(VENDOR_SDK_DIR)
@@ -577,7 +579,7 @@ purge: clean
 	cd $(XTDLP)/$(BINUTILS_DIR)/; git reset --hard
 	cd $(XTDLP)/$(GCC_DIR)/; git reset --hard
 	cd $(XTDLP)/$(NEWLIB_DIR)/; git reset --hard
-	cd $(XTDLP)/$(ESPTOOL2_SRCREPO)/$(ESPTOOL2_DIR); git reset --hard
+	cd $(XTDLP)/$(ESPTOOL2_DIR); git reset --hard
 
 clean-sysroot:
 	rm -rf $(TOOLCHAIN)/xtensa-lx106-elf/usr/lib/*
