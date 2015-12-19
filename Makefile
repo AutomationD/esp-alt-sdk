@@ -96,7 +96,7 @@ VENDOR_SDK_DIR_0.9.2 = esp_iot_sdk_v0.9.2
 STANDALONE = y
 PREBUILT_TOOLCHAIN = n
 
-.PHONY: toolchain libhal libcirom sdk
+.PHONY: standalone sdk sdk_patch utils
 
 # all: esptool libcirom standalone sdk sdk_patch $(TOOLCHAIN)/xtensa-lx106-elf/sysroot/usr/lib/libhal.a $(TOOLCHAIN)/bin/xtensa-lx106-elf-gcc
 all: debug platform-specific
@@ -117,7 +117,8 @@ else
 	@echo
 endif
 
-build: $(TOOLCHAIN)/bin/xtensa-lx106-elf-gcc standalone $(TOP)/sdk sdk_patch $(TOOLCHAIN)/xtensa-lx106-elf/lib/libhal.a utils libcirom
+build: toolchain standalone $(TOP)/sdk sdk_patch $(TOOLCHAIN)/xtensa-lx106-elf/lib/libhal.a utils libcirom
+build-prebuilt-toolchain: standalone $(TOP)/sdk sdk_patch utils
 
 utils: esptool esptool2 memanalyzer
 esptool: $(UTILS_DIR)/esptool
@@ -139,19 +140,23 @@ $(UTILS_DIR)/memanalyzer:
 	mkdir -p $(UTILS_DIR)/	  
 	
 	cd $(XTDLP)/$(MEMANALYZER_DIR)/MemAnalyzer/; mcs Program.cs
+  
   ifeq ($(OS),Windows_NT)
 		cd $(XTDLP)/$(MEMANALYZER_DIR)/MemAnalyzer/; cp Program.exe $(UTILS_DIR)/memanalyzer.exe
-  else
-	  ifeq ($(PLATFORM),Darwin)    
-				cd $(XTDLP)/$(MEMANALYZER_DIR)/MemAnalyzer/; CC="cc -framework CoreFoundation -lobjc -liconv" mkbundle Program.exe -o memanalyzer --deps --static
-	  endif
-	  ifeq ($(PLATFORM),Linux)
-				cd $(XTDLP)/$(MEMANALYZER_DIR)/MemAnalyzer/; mkbundle Program.exe -o memanalyzer --deps --static
-	  endif
-	  ifeq ($(PLATFORM),FreeBSD)
-	  		cd $(XTDLP)/$(MEMANALYZER_DIR)/MemAnalyzer/; mkbundle Program.exe -o memanalyzer --deps --static
-	  endif
+  endif
+	
+  ifeq ($(PLATFORM),Darwin)
+	 	@echo "Detected: MacOS"
+		cd $(XTDLP)/$(MEMANALYZER_DIR)/MemAnalyzer/; CC="cc -framework CoreFoundation -lobjc -liconv" mkbundle Program.exe -o memanalyzer --deps --static
 		cd $(XTDLP)/$(MEMANALYZER_DIR)/MemAnalyzer/; cp memanalyzer $(UTILS_DIR)/
+  endif
+  ifeq ($(PLATFORM),Linux)
+		cd $(XTDLP)/$(MEMANALYZER_DIR)/MemAnalyzer/; mkbundle Program.exe -o memanalyzer --deps --static
+		cd $(XTDLP)/$(MEMANALYZER_DIR)/MemAnalyzer/; cp memanalyzer $(UTILS_DIR)/
+  endif
+  ifeq ($(PLATFORM),FreeBSD)
+	 	cd $(XTDLP)/$(MEMANALYZER_DIR)/MemAnalyzer/; mkbundle Program.exe -o memanalyzer --deps --static
+	 	cd $(XTDLP)/$(MEMANALYZER_DIR)/MemAnalyzer/; cp memanalyzer $(UTILS_DIR)/		
   endif
 
 $(UTILS_DIR)/esptool2: $(XTDLP)/$(ESPTOOL2_DIR)/esptool2.c
@@ -161,7 +166,7 @@ $(UTILS_DIR)/esptool2: $(XTDLP)/$(ESPTOOL2_DIR)/esptool2.c
 	cp $(XTDLP)/$(ESPTOOL2_DIR)/esptool2 $(UTILS_DIR)/
 
 
-$(TOOLCHAIN)/xtensa-lx106-elf/lib/libcirom.a: $(TOOLCHAIN)/xtensa-lx106-elf/lib/libc.a $(TOOLCHAIN)/bin/xtensa-lx106-elf-gcc
+$(TOOLCHAIN)/xtensa-lx106-elf/lib/libcirom.a: $(TOOLCHAIN)/xtensa-lx106-elf/lib/libc.a toolchain
 	@echo "Creating irom version of libc..."
 	$(TOOLCHAIN)/bin/xtensa-lx106-elf-objcopy --rename-section .text=.irom0.text \
 		--rename-section .literal=.irom0.literal $(<) $(@);
@@ -215,7 +220,7 @@ sdk_patch: .sdk_patch_$(VENDOR_SDK_VERSION)
 	$(TOOLCHAIN)/bin/xtensa-lx106-elf-ar r $(VENDOR_SDK_DIR_1.1.0)/lib/libmain.a empty_user_rf_pre_init.o
 	@touch $@
 
-empty_user_rf_pre_init.o: $(XTDLP)/empty_user_rf_pre_init.c $(TOOLCHAIN)/bin/xtensa-lx106-elf-gcc
+empty_user_rf_pre_init.o: $(XTDLP)/empty_user_rf_pre_init.c toolchain
 	$(TOOLCHAIN)/bin/xtensa-lx106-elf-gcc -O2 -c $<
 
 .sdk_patch_1.0.1: libnet80211.zip esp_iot_sdk_v1.0.1/.dir
@@ -262,7 +267,7 @@ empty_user_rf_pre_init.o: $(XTDLP)/empty_user_rf_pre_init.c $(TOOLCHAIN)/bin/xte
 	cp FRM_ERR_PATCH/*.a $(VENDOR_SDK_DIR)/lib/
 	@touch $@
 
-standalone: sdk sdk_patch toolchain
+standalone: sdk sdk_patch
 ifeq ($(STANDALONE),y)
 	@echo "Installing vendor SDK headers into toolchain sysroot"
 	@cp -R -f sdk/include/* $(TOOLCHAIN)/xtensa-lx106-elf/include/
@@ -425,7 +430,7 @@ $(XTDLP)/$(MEMANALYZER_DIR)/MemAnalyzer.sln:
 
 libhal: $(TOOLCHAIN)/xtensa-lx106-elf/lib/libhal.a
 
-$(TOOLCHAIN)/xtensa-lx106-elf/lib/libhal.a: $(TOOLCHAIN)/bin/xtensa-lx106-elf-gcc $(XTDLP)/$(LIBHAL_DIR)
+$(TOOLCHAIN)/xtensa-lx106-elf/lib/libhal.a: toolchain $(XTDLP)/$(LIBHAL_DIR)
 	make -C $(XTDLP)/$(LIBHAL_DIR) -f ../../Makefile _libhal
 
 _libhal: $(XTDLP)/$(LIBHAL_DIR)
@@ -435,10 +440,28 @@ _libhal: $(XTDLP)/$(LIBHAL_DIR)
 	PATH=$(SAFEPATH) make install
 
 
+debug:
+	@echo "----------------------------------------------------"
+	@echo "Outputting debug info. Makefiles are so Makefiles..."	
+	@echo "PATH: $(PATH)"
+	@echo "TOOLCHAIN: $(TOOLCHAIN)"
+	@echo "----------------------------------------------------"
+
+
 toolchain: $(TOOLCHAIN)/bin/xtensa-lx106-elf-gcc
 
-$(TOOLCHAIN)/bin/xtensa-lx106-elf-gcc: $(TOOLCHAIN) $(XTDLP) $(XTBP) get-src build-gmp build-mpfr build-mpc build-binutils build-gdb build-first-stage-gcc build-newlib build-second-stage-gcc
+$(TOOLCHAIN)/bin/xtensa-lx106-elf-gcc: $(TOOLCHAIN) $(XTDLP) $(XTBP) build-gmp build-mpfr build-mpc build-binutils build-gdb build-first-stage-gcc build-newlib build-second-stage-gcc
 # $(TOOLCHAIN)/bin/xtensa-lx106-elf-gcc: $(XTDLP) $(XTBP) build-gmp build-mpfr build-mpc build-binutils build-first-stage-gcc 
+
+get-src: $(XTDLP)/$(GMP_DIR) $(XTDLP)/$(MPFR_DIR) $(XTDLP)/$(MPC_DIR) $(XTDLP)/$(BINUTILS_DIR)/configure.ac $(XTDLP)/$(GCC_DIR)/configure.ac $(XTDLP)/$(NEWLIB_DIR)/configure.ac $(XTDLP)/$(GDB_DIR)/configure.ac
+build-gmp: get-src $(XTDLP)/$(GMP_DIR)/build $(XTBP)/gmp
+build-mpfr: get-src build-gmp $(XTDLP)/$(MPFR_DIR)/build $(XTBP)/mpfr
+build-mpc: get-src build-gmp build-mpfr $(XTDLP)/$(MPC_DIR)/build $(XTBP)/mpc
+build-binutils: get-src build-gmp build-mpfr build-mpc $(XTDLP)/$(BINUTILS_DIR)/build $(XTBP)/$(BINUTILS_DIR)
+build-first-stage-gcc: get-src build-gmp build-mpfr build-mpc build-binutils $(XTDLP)/$(GCC_DIR)/build-1
+build-second-stage-gcc: get-src build-gmp build-mpfr build-mpc build-binutils build-first-stage-gcc $(XTDLP)/$(GCC_DIR)/build-2
+build-newlib: get-src build-gmp build-mpfr build-mpc build-binutils $(XTDLP)/$(NEWLIB_DIR)/build $(XTBP)/$(NEWLIB_DIR) 
+build-gdb: get-src build-binutils $(XTDLP)/$(GDB_DIR)/build $(XTBP)/$(GDB_DIR)
 
 
 prebuilt-toolchain-windows: $(XTDLP)/$(XTENSA_TOOLCHAIN_WINDOWS_TAR)
@@ -454,13 +477,6 @@ prebuilt-toolchain-freebsd: $(XTDLP)/$(XTENSA_TOOLCHAIN_LINUX_TAR)
 	$(UNTAR) $(XTDLP)/$(XTENSA_TOOLCHAIN_LINUX_TAR) -C $(TOP)  
 
 
-debug:
-	@echo "----------------------------------------------------"
-	@echo "Outputting debug info. Makefiles are so Makefiles..."	
-	@echo "PATH: $(PATH)"
-	@echo "TOOLCHAIN: $(TOOLCHAIN)"
-	@echo "----------------------------------------------------"
-
 platform-specific:
 	@echo "Performing platform-specific actions"
 	
@@ -469,32 +485,41 @@ ifeq ($(OS),Windows_NT)
 		@echo "Detected: MinGW32."
 		$(MAKE) /mingw
     ifeq ($(PREBUILT_TOOLCHAIN),y)
-			$(MAKE) prebuilt-toolchain-windows					
+			$(MAKE) prebuilt-toolchain-windows
+			$(MAKE) build-prebuilt-toolchain
+    else
+			$(MAKE) build PATH="/c/tools/mingw32/bin:$(PATH)" BUILD_TARGET=i686-w64-mingw32
     endif
-		$(MAKE) build PATH="/c/tools/mingw32/bin:$(PATH)" BUILD_TARGET=i686-w64-mingw32
+  endif
+endif
+    
+ifneq (,$(findstring CYGWIN,$(PLATFORM)))
+	@echo "Detected: CYGWIN"				
+  ifeq ($(PREBUILT_TOOLCHAIN),y)
+		$(MAKE) prebuilt-toolchain-windows
+		$(MAKE) build-prebuilt-toolchain
   else
-      ifneq (,$(findstring CYGWIN,$(PLATFORM)))
-				@echo "Detected: CYGWIN"				
-        ifeq ($(PREBUILT_TOOLCHAIN),y)
-					$(MAKE) prebuilt-toolchain-windows					
-        endif
-				$(MAKE) build
-      endif
-  endif
-else  
-  ifeq ($(PLATFORM),Darwin)    
-			@echo "Detected: MacOS"
-      ifeq ($(PREBUILT_TOOLCHAIN),y)
-				$(MAKE) prebuilt-toolchain-mac
-      endif
+		$(MAKE) build
+  endif  
+endif
+
+ifeq ($(PLATFORM),Darwin)    
+		@echo "Detected: MacOS"
+    ifeq ($(PREBUILT_TOOLCHAIN),y)
+			$(MAKE) prebuilt-toolchain-mac
+			$(MAKE) build-prebuilt-toolchain
+    else
 			$(MAKE) build
-  endif
+    endif
+else
   ifeq ($(PLATFORM),Linux)
 			@echo "Detected: Linux"
       ifeq ($(PREBUILT_TOOLCHAIN),y)
 				$(MAKE) prebuilt-toolchain-linux
+				$(MAKE) build-prebuilt-toolchain
+      else
+				$(MAKE) build
       endif
-			$(MAKE) build
   endif
   ifeq ($(PLATFORM),FreeBSD)
 			@echo "Detected: FreeBSD"
@@ -504,6 +529,7 @@ else
 			$(MAKE) build
   endif
 endif
+
 
 /mingw:
 	@echo "/mingw directory not found, mounting"
@@ -614,15 +640,6 @@ $(XTDLP)/$(NEWLIB_DIR)/build: $(XTDLP)/$(NEWLIB_DIR)/configure.ac
 $(XTBP)/$(NEWLIB_DIR): $(XTDLP)/$(NEWLIB_DIR)/build
 	make install -C $(XTDLP)/$(NEWLIB_DIR)/build/
 
-get-src: $(XTDLP)/$(GMP_DIR) $(XTDLP)/$(MPFR_DIR) $(XTDLP)/$(MPC_DIR) $(XTDLP)/$(BINUTILS_DIR)/configure.ac $(XTDLP)/$(GCC_DIR)/configure.ac $(XTDLP)/$(NEWLIB_DIR)/configure.ac $(XTDLP)/$(GDB_DIR)/configure.ac
-build-gmp: $(XTDLP)/$(GMP_DIR)/build $(XTBP)/gmp
-build-mpfr: build-gmp $(XTDLP)/$(MPFR_DIR)/build $(XTBP)/mpfr
-build-mpc: build-gmp build-mpfr $(XTDLP)/$(MPC_DIR)/build $(XTBP)/mpc
-build-binutils: build-gmp build-mpfr build-mpc $(XTDLP)/$(BINUTILS_DIR)/build $(XTBP)/$(BINUTILS_DIR)
-build-first-stage-gcc: build-gmp build-mpfr build-mpc build-binutils $(XTDLP)/$(GCC_DIR)/build-1
-build-second-stage-gcc: build-gmp build-mpfr build-mpc build-binutils build-first-stage-gcc $(XTDLP)/$(GCC_DIR)/build-2
-build-newlib: build-gmp build-mpfr build-mpc build-binutils $(XTDLP)/$(NEWLIB_DIR)/build $(XTBP)/$(NEWLIB_DIR) 
-build-gdb: build-binutils $(XTDLP)/$(GDB_DIR)/build $(XTBP)/$(GDB_DIR)
 
 clean: clean-sdk
 	-rm -rf $(TOOLCHAIN)
@@ -652,6 +669,7 @@ purge: clean
 	rm -rf $(XTDLP)/$(MPFR_DIR)/
 	rm -rf $(XTDLP)/$(MPC_DIR)/
 	rm -rf $(XTDLP)/$(GDB_DIR)/
+	rm -rf $(XTDLP)/$(UTILS_DIR)/
 	rm -rf $(XTDLP)/*.{zip,bz2,xz,gz}
 	cd $(XTDLP)/$(BINUTILS_DIR)/; git reset --hard
 	cd $(XTDLP)/$(GCC_DIR)/; git reset --hard
