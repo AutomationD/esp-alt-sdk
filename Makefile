@@ -132,8 +132,8 @@ $(UTILS_DIR)/esptool: $(XTDLP)/$(ESPTOOL_DIR)/esptool.py
 $(UTILS_DIR)/memanalyzer:
 	mkdir -p $(UTILS_DIR)/
 	cd $(XTDLP)/$(MEMANALYZER_DIR)  
-  cd $(XTDLP)/$(MEMANALYZER_DIR)/MemAnalyzer/
-  mcs Program.cs
+	cd $(XTDLP)/$(MEMANALYZER_DIR)/MemAnalyzer/
+	mcs Program.cs
   ifeq ($(OS),Windows_NT)
 		cp Program.exe $(UTILS_DIR)/memanalyzer.exe
   else
