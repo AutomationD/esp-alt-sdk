@@ -295,14 +295,10 @@ lib_mem_optimize_150714.zip:
 
 
 $(TOP)/sdk: $(VENDOR_SDK_DIR)/.dir
+	ln -snf $(VENDOR_SDK_DIR) sdk
   ifeq ($(OS),Windows_NT)
-		pyinstaller --onefile --distpath=\. esptool.py
-		cp esptool.exe $(UTILS_DIR)/
-  else
-		ln -snf $(VENDOR_SDK_DIR) sdk
+		ln -snf $(VENDOR_SDK_DIR) ESP8266_SDK
   endif
-
-
 
 sdk: $(TOP)/sdk
 	
