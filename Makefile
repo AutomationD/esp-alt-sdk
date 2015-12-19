@@ -26,12 +26,15 @@ GMP_TAR = gmp-$(GMP_VERSION).tar.bz2
 MPFR_TAR = mpfr-$(MPFR_VERSION).tar.bz2
 MPC_TAR = mpc-$(MPC_VERSION).tar.gz
 GDB_TAR = gdb-$(GDB_VERSION).tar.xz
-XTENSA_TOOLCHAIN_TAR :=
+
 
 GMP_DIR = gmp-$(GMP_VERSION)
 MPFR_DIR = mpfr-$(MPFR_VERSION)
 MPC_DIR = mpc-$(MPC_VERSION)
 GDB_DIR = gdb-$(GDB_VERSION)
+XTENSA_TOOLCHAIN_WINDOWS_TAR := xtensa-lx106-elf-windows-x86.zip
+XTENSA_TOOLCHAIN_MAC_TAR := xtensa-lx106-elf-mac-x86_64.zip
+XTENSA_TOOLCHAIN_LINUX_TAR := xtensa-lx106-elf-linux-x86_64.tar.gz
 
 GCC_DIR = gcc-xtensa
 NEWLIB_DIR = newlib-xtensa
@@ -362,7 +365,6 @@ esp_iot_sdk_v0.9.3_14_11_21.zip:
 esp_iot_sdk_v0.9.2_14_10_24.zip:
 	wget --content-disposition "http://bbs.espressif.com/download/file.php?id=9" --output-document $@
 
-
 $(XTDLP)/$(GMP_TAR):
 	wget -c http://ftp.gnu.org/gnu/gmp/$(GMP_TAR) --output-document $(XTDLP)/$(GMP_TAR)	
 
@@ -376,9 +378,21 @@ $(XTDLP)/$(GDB_TAR):
 	wget http://ftp.gnu.org/gnu/gdb/$(GDB_TAR) --output-document $(XTDLP)/$(GDB_TAR)
 
 
+
+$(XTDLP)/$(XTENSA_TOOLCHAIN_WINDOWS_TAR):
+	wget --no-check-certificate -c https://bintray.com/artifact/download/kireevco/generic/$(XTENSA_TOOLCHAIN_WINDOWS_TAR) --output-document $(XTDLP)/$(XTENSA_TOOLCHAIN_WINDOWS_TAR)
+
+$(XTDLP)/$(XTENSA_TOOLCHAIN_MAC_TAR):
+	wget --no-check-certificate -c https://bintray.com/artifact/download/kireevco/generic/$(XTENSA_TOOLCHAIN_MAC_TAR) --output-document $(XTDLP)/$(XTENSA_TOOLCHAIN_MAC_TAR)
+
+$(XTDLP)/$(XTENSA_TOOLCHAIN_LINUX_TAR):
+	wget --no-check-certificate -c https://bintray.com/artifact/download/kireevco/generic/$(XTENSA_TOOLCHAIN_LINUX_TAR) --output-document $(XTDLP)/$(XTENSA_TOOLCHAIN_LINUX_TAR)
+
 $(XTDLP)/$(BINUTILS_DIR)/configure.ac:
 	@echo "You cloned without --recursive, fetching $(BINUTILS_DIR) for you."
 	git submodule update --init --recursive
+
+
 
 $(XTDLP)/$(NEWLIB_DIR)/configure.ac:
 #	git clone -b xtensa https://github.com/jcmvbkbc/newlib-xtensa.git $(XTDLP)/$(NEWLIB_DIR)
@@ -421,20 +435,24 @@ _libhal: $(XTDLP)/$(LIBHAL_DIR)
 	PATH=$(SAFEPATH) make install
 
 
-toolchain: prebuilt-toolchain $(TOOLCHAIN)/bin/xtensa-lx106-elf-gcc
+toolchain: $(TOOLCHAIN)/bin/xtensa-lx106-elf-gcc
 
-$(TOOLCHAIN)/bin/xtensa-lx106-elf-gcc: prebuilt-toolchain $(TOOLCHAIN) $(XTDLP) $(XTBP) get-src build-gmp build-mpfr build-mpc build-binutils build-gdb build-first-stage-gcc build-newlib build-second-stage-gcc
+$(TOOLCHAIN)/bin/xtensa-lx106-elf-gcc: $(TOOLCHAIN) $(XTDLP) $(XTBP) get-src build-gmp build-mpfr build-mpc build-binutils build-gdb build-first-stage-gcc build-newlib build-second-stage-gcc
 # $(TOOLCHAIN)/bin/xtensa-lx106-elf-gcc: $(XTDLP) $(XTBP) build-gmp build-mpfr build-mpc build-binutils build-first-stage-gcc 
 
-prebuilt-toolchain: 
-  ifeq ($(PREBUILT_TOOLCHAIN),y)  	
-		wget --no-check-certificate -c https://bintray.com/artifact/download/kireevco/generic/$(XTENSA_TOOLCHAIN_TAR) --output-document $(XTDLP)/$(XTENSA_TOOLCHAIN_TAR)		
-      ifeq ($(OS), Linux)
-      	$(UNTAR) $(XTDLP)/$(XTENSA_TOOLCHAIN_TAR) -C $(TOP)
-      else
-				$(UNZIP) $(XTDLP)/$(XTENSA_TOOLCHAIN_TAR) -d $(TOP)
-      endif
-  endif
+
+prebuilt-toolchain-windows: $(XTDLP)/$(XTENSA_TOOLCHAIN_WINDOWS_TAR)
+	$(UNZIP) $(XTDLP)/$(XTENSA_TOOLCHAIN_WINDOWS_TAR) -d $(TOP)
+
+prebuilt-toolchain-mac: $(XTDLP)/$(XTENSA_TOOLCHAIN_MAC_TAR)
+	$(UNZIP) $(XTDLP)/$(XTENSA_TOOLCHAIN_MAC_TAR) -d $(TOP)  
+
+prebuilt-toolchain-linux: $(XTDLP)/$(XTENSA_TOOLCHAIN_LINUX_TAR)
+	$(UNTAR) $(XTDLP)/$(XTENSA_TOOLCHAIN_LINUX_TAR) -C $(TOP)  
+
+prebuilt-toolchain-freebsd: $(XTDLP)/$(XTENSA_TOOLCHAIN_LINUX_TAR)
+	$(UNTAR) $(XTDLP)/$(XTENSA_TOOLCHAIN_LINUX_TAR) -C $(TOP)  
+
 
 debug:
 	@echo "----------------------------------------------------"
@@ -450,24 +468,39 @@ ifeq ($(OS),Windows_NT)
   ifneq (,$(findstring MINGW32,$(PLATFORM)))    
 		@echo "Detected: MinGW32."
 		$(MAKE) /mingw
-		$(MAKE) build PATH="/c/tools/mingw32/bin:$(PATH)" BUILD_TARGET=i686-w64-mingw32 XTENSA_TOOLCHAIN_TAR=xtensa-lx106-elf-windows-x86.zip 
+    ifeq ($(PREBUILT_TOOLCHAIN),y)
+			$(MAKE) prebuilt-toolchain-windows					
+    endif
+		$(MAKE) build PATH="/c/tools/mingw32/bin:$(PATH)" BUILD_TARGET=i686-w64-mingw32
   else
       ifneq (,$(findstring CYGWIN,$(PLATFORM)))
-				@echo "Detected: CYGWIN"
-				$(MAKE) build XTENSA_TOOLCHAIN_TAR=xtensa-lx106-elf-windows-x86.zip 
+				@echo "Detected: CYGWIN"				
+        ifeq ($(PREBUILT_TOOLCHAIN),y)
+					$(MAKE) prebuilt-toolchain-windows					
+        endif
+				$(MAKE) build
       endif
   endif
 else  
   ifeq ($(PLATFORM),Darwin)    
 			@echo "Detected: MacOS"
-			$(MAKE) build XTENSA_TOOLCHAIN_TAR=xtensa-lx106-elf-mac-x86_64.zip 
+      ifeq ($(PREBUILT_TOOLCHAIN),y)
+				$(MAKE) prebuilt-toolchain-mac
+      endif
+			$(MAKE) build
   endif
   ifeq ($(PLATFORM),Linux)
 			@echo "Detected: Linux"
-			$(MAKE) build XTENSA_TOOLCHAIN_TAR=xtensa-lx106-elf-linux-x86_64.tar.gz
+      ifeq ($(PREBUILT_TOOLCHAIN),y)
+				$(MAKE) prebuilt-toolchain-linux
+      endif
+			$(MAKE) build
   endif
   ifeq ($(PLATFORM),FreeBSD)
 			@echo "Detected: FreeBSD"
+      ifeq ($(PREBUILT_TOOLCHAIN),y)
+				$(MAKE) prebuilt-toolchain-freebsd
+      endif
 			$(MAKE) build
   endif
 endif
