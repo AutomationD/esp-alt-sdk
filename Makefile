@@ -651,6 +651,8 @@ purge: clean
 	rm -rf $(XTDLP)/$(GMP_DIR)/
 	rm -rf $(XTDLP)/$(MPFR_DIR)/
 	rm -rf $(XTDLP)/$(MPC_DIR)/
+	rm -rf $(XTDLP)/$(GDB_DIR)/
+	rm -rf $(XTDLP)/*.{zip,bz2,xz,gz}
 	cd $(XTDLP)/$(BINUTILS_DIR)/; git reset --hard
 	cd $(XTDLP)/$(GCC_DIR)/; git reset --hard
 	cd $(XTDLP)/$(NEWLIB_DIR)/; git reset --hard
