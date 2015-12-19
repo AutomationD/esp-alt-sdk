@@ -20,3 +20,6 @@
 [submodule "src/esptool2"]
 	path = src/esptool2
 	url = https://github.com/raburton/esptool2
+[submodule "src/ESP8266_memory_analyzer"]
+	path = src/ESP8266_memory_analyzer
+	url = https://github.com/Sermus/ESP8266_memory_analyzer.git

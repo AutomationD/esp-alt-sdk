@@ -25,7 +25,11 @@ choco install mingw --x86 -y
 choco install mingw-get -y
 
 
+echo Installing Mono (for MemAnalyzer and others)
+choco install mono  -version 3.2.3 -y
+
 echo Adding ENV variables
+setx /M PATH "C:\Program Files (x86)\Mono-3.2.3\bin;%PATH%" && set PATH=C:\Program Files(x86)\Mono-3.2.3\bin;%PATH%
 
 setx /M HOME "c:\Users\User"
 setx /M PATH "c:\tools\mingw64\msys\1.0\bin\;%PATH%" && set PATH=c:\tools\mingw64\msys\1.0\bin\;%PATH%

@@ -39,7 +39,7 @@ LIBHAL_DIR = lx106-hal
 ESPTOOL_DIR = esptool
 ESPTOOL2_DIR = esptool2
 ESPTOOL2_SRCREPO = rabutron-esp8266
-
+MEMANALYZER_DIR = ESP8266_memory_analyzer
 
 
 UNZIP = unzip -q -o
@@ -112,17 +112,42 @@ else
 	@echo
 endif
 
-build: $(TOOLCHAIN)/bin/xtensa-lx106-elf-gcc standalone $(TOP)/sdk sdk_patch $(TOOLCHAIN)/xtensa-lx106-elf/lib/libhal.a esptool esptool2 libcirom
+build: $(TOOLCHAIN)/bin/xtensa-lx106-elf-gcc standalone $(TOP)/sdk sdk_patch $(TOOLCHAIN)/xtensa-lx106-elf/lib/libhal.a esptool esptool2 memanalyzer libcirom
 
 esptool: $(UTILS_DIR)/esptool
 esptool2: $(UTILS_DIR)/esptool2
+memanalyzer: $(UTILS_DIR)/memanalyzer
 
 
 $(UTILS_DIR)/esptool: $(XTDLP)/$(ESPTOOL_DIR)/esptool.py
 	mkdir -p $(UTILS_DIR)/
 	cd $(XTDLP)/$(ESPTOOL_DIR)
-	pyinstaller --onefile --distpath=\. esptool.py
-	cp esptool.exe $(UTILS_DIR)/
+  ifeq ($(OS),Windows_NT)
+		pyinstaller --onefile --distpath=\. esptool.py
+		cp esptool.exe $(UTILS_DIR)/
+  else
+		cp $(XTDLP)/$(ESPTOOL_DIR)/esptool.py $(UTILS_DIR)/
+  endif
+
+$(UTILS_DIR)/memanalyzer:
+	mkdir -p $(UTILS_DIR)/
+	cd $(XTDLP)/$(MEMANALYZER_DIR)  
+  cd $(XTDLP)/$(MEMANALYZER_DIR)/MemAnalyzer/
+  mcs Program.cs
+  ifeq ($(OS),Windows_NT)
+		cp Program.exe $(UTILS_DIR)/memanalyzer.exe
+  else
+	  ifeq ($(PLATFORM),Darwin)    
+				CC="cc -framework CoreFoundation -lobjc -liconv" mkbundle Program.exe -o memanalyzer --deps --static
+	  endif
+	  ifeq ($(PLATFORM),Linux)
+				mkbundle Program.exe -o memanalyzer --deps --static
+	  endif
+	  ifeq ($(PLATFORM),FreeBSD)
+	  		mkbundle Program.exe -o memanalyzer --deps --static
+	  endif
+		cp memanalyzer $(UTILS_DIR)/
+  endif
 
 $(UTILS_DIR)/esptool2: $(XTDLP)/$(ESPTOOL2_DIR)/esptool2.c
 	make clean -C $(XTDLP)/$(ESPTOOL2_DIR)/
@@ -270,7 +295,14 @@ lib_mem_optimize_150714.zip:
 
 
 $(TOP)/sdk: $(VENDOR_SDK_DIR)/.dir
-	ln -snf $(VENDOR_SDK_DIR) sdk
+  ifeq ($(OS),Windows_NT)
+		pyinstaller --onefile --distpath=\. esptool.py
+		cp esptool.exe $(UTILS_DIR)/
+  else
+		ln -snf $(VENDOR_SDK_DIR) sdk
+  endif
+
+
 
 sdk: $(TOP)/sdk
 	
@@ -374,6 +406,9 @@ $(XTDLP)/$(ESPTOOL2_DIR)/esptool2.c:
 	@echo "You cloned without --recursive, fetching esptool2 for you."
 	git submodule update --init --recursive
 
+$(XTDLP)/$(MEMANALYZER_DIR)/MemAnalyzer.sln:
+	@echo "You cloned without --recursive, fetching MemAnalyzer for you."
+	git submodule update --init --recursive
 
 
 
@@ -425,8 +460,8 @@ else
 			$(MAKE) build
   endif
   ifeq ($(PLATFORM),FreeBSD)
-      @echo "Detected: FreeBSD"
-      $(MAKE) build
+  		@echo "Detected: FreeBSD"
+  		$(MAKE) build
   endif
 endif
 
