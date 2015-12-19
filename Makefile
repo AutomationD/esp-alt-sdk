@@ -124,8 +124,8 @@ $(UTILS_DIR)/esptool: $(XTDLP)/$(ESPTOOL_DIR)/esptool.py
 	mkdir -p $(UTILS_DIR)/
 	cd $(XTDLP)/$(ESPTOOL_DIR); python setup.py install
   ifeq ($(OS),Windows_NT)
-		cd $(XTDLP)/$(ESPTOOL_DIR); pyinstaller --hidden-import=pyserial --onefile --distpath=\. esptool.py
-		cd $(XTDLP)/$(ESPTOOL_DIR); cp esptool.exe $(UTILS_DIR)/
+		cd $(XTDLP)/$(ESPTOOL_DIR); pyinstaller --onefile esptool.py
+		cd $(XTDLP)/$(ESPTOOL_DIR)/dist; cp esptool.exe $(UTILS_DIR)/
   else
 		cp $(XTDLP)/$(ESPTOOL_DIR)/esptool.py $(UTILS_DIR)/
   endif
