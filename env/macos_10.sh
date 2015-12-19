@@ -26,7 +26,10 @@ brew install gnu-sed --with-default-names
 brew install findutils --with-default-names
 
 echo "Installing mono"
-brew install mono
+brew install mono 
+
+echo "Installing upx"
+brew install upx
 
 # brew install binutils
 # brew install diffutils
