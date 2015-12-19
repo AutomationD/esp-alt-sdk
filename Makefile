@@ -121,33 +121,31 @@ memanalyzer: $(UTILS_DIR)/memanalyzer
 
 
 $(UTILS_DIR)/esptool: $(XTDLP)/$(ESPTOOL_DIR)/esptool.py
-	mkdir -p $(UTILS_DIR)/
-	cd $(XTDLP)/$(ESPTOOL_DIR)
+	mkdir -p $(UTILS_DIR)/	
   ifeq ($(OS),Windows_NT)
-		pyinstaller --onefile --distpath=\. esptool.py
-		cp esptool.exe $(UTILS_DIR)/
+		cd $(XTDLP)/$(ESPTOOL_DIR); pyinstaller --onefile --distpath=\. esptool.py
+		cd $(XTDLP)/$(ESPTOOL_DIR); cp esptool.exe $(UTILS_DIR)/
   else
 		cp $(XTDLP)/$(ESPTOOL_DIR)/esptool.py $(UTILS_DIR)/
   endif
 
 $(UTILS_DIR)/memanalyzer:
-	mkdir -p $(UTILS_DIR)/
-	cd $(XTDLP)/$(MEMANALYZER_DIR)  
-	cd $(XTDLP)/$(MEMANALYZER_DIR)/MemAnalyzer/
-	mcs Program.cs
+	mkdir -p $(UTILS_DIR)/	  
+	
+	cd $(XTDLP)/$(MEMANALYZER_DIR)/MemAnalyzer/; mcs Program.cs
   ifeq ($(OS),Windows_NT)
-		cp Program.exe $(UTILS_DIR)/memanalyzer.exe
+		cd $(XTDLP)/$(MEMANALYZER_DIR)/MemAnalyzer/; cp Program.exe $(UTILS_DIR)/memanalyzer.exe
   else
 	  ifeq ($(PLATFORM),Darwin)    
-				CC="cc -framework CoreFoundation -lobjc -liconv" mkbundle Program.exe -o memanalyzer --deps --static
+				cd $(XTDLP)/$(MEMANALYZER_DIR)/MemAnalyzer/; CC="cc -framework CoreFoundation -lobjc -liconv" mkbundle Program.exe -o memanalyzer --deps --static
 	  endif
 	  ifeq ($(PLATFORM),Linux)
-				mkbundle Program.exe -o memanalyzer --deps --static
+				cd $(XTDLP)/$(MEMANALYZER_DIR)/MemAnalyzer/; mkbundle Program.exe -o memanalyzer --deps --static
 	  endif
 	  ifeq ($(PLATFORM),FreeBSD)
-	  		mkbundle Program.exe -o memanalyzer --deps --static
+	  		cd $(XTDLP)/$(MEMANALYZER_DIR)/MemAnalyzer/; mkbundle Program.exe -o memanalyzer --deps --static
 	  endif
-		cp memanalyzer $(UTILS_DIR)/
+		cd $(XTDLP)/$(MEMANALYZER_DIR)/MemAnalyzer/; cp memanalyzer $(UTILS_DIR)/
   endif
 
 $(UTILS_DIR)/esptool2: $(XTDLP)/$(ESPTOOL2_DIR)/esptool2.c
@@ -421,7 +419,10 @@ _libhal: $(XTDLP)/$(LIBHAL_DIR)
 	PATH=$(SAFEPATH) make install
 
 
-toolchain: $(TOOLCHAIN)/bin/xtensa-lx106-elf-gcc
+toolchain: prebuilt-toolchain $(TOOLCHAIN)/bin/xtensa-lx106-elf-gcc
+
+prebuilt-toolchain:
+
 
 $(TOOLCHAIN)/bin/xtensa-lx106-elf-gcc: $(TOOLCHAIN) $(XTDLP) $(XTBP) get-src build-gmp build-mpfr build-mpc build-binutils build-gdb build-first-stage-gcc build-newlib build-second-stage-gcc
 # $(TOOLCHAIN)/bin/xtensa-lx106-elf-gcc: $(XTDLP) $(XTBP) build-gmp build-mpfr build-mpc build-binutils build-first-stage-gcc 
