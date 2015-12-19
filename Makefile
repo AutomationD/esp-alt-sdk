@@ -385,13 +385,14 @@ $(XTDLP)/$(GDB_TAR):
 
 
 $(XTDLP)/$(XTENSA_TOOLCHAIN_WINDOWS_TAR):
-	wget --no-check-certificate -c http://bintray.com/artifact/download/kireevco/generic/$(XTENSA_TOOLCHAIN_WINDOWS_TAR) --output-document $(XTDLP)/$(XTENSA_TOOLCHAIN_WINDOWS_TAR)
+	wget https://dl.bintray.com/kireevco/generic/$(XTENSA_TOOLCHAIN_WINDOWS_TAR) --output-document $(XTDLP)/$(XTENSA_TOOLCHAIN_WINDOWS_TAR)
 
-$(XTDLP)/$(XTENSA_TOOLCHAIN_MAC_TAR):
-	wget --no-check-certificate -c http://bintray.com/artifact/download/kireevco/generic/$(XTENSA_TOOLCHAIN_MAC_TAR) --output-document $(XTDLP)/$(XTENSA_TOOLCHAIN_MAC_TAR)
+$(XTDLP)/$(XTENSA_TOOLCHAIN_MAC_TAR):	
+	wget https://dl.bintray.com/kireevco/generic/$(XTENSA_TOOLCHAIN_MAC_TAR) --output-document $(XTDLP)/$(XTENSA_TOOLCHAIN_MAC_TAR)
 
 $(XTDLP)/$(XTENSA_TOOLCHAIN_LINUX_TAR):
-	wget --no-check-certificate -c http://bintray.com/artifact/download/kireevco/generic/$(XTENSA_TOOLCHAIN_LINUX_TAR) --output-document $(XTDLP)/$(XTENSA_TOOLCHAIN_LINUX_TAR)
+	wget https://dl.bintray.com/kireevco/generic/$(XTENSA_TOOLCHAIN_LINUX_TAR) --output-document $(XTDLP)/$(XTENSA_TOOLCHAIN_LINUX_TAR)
+	
 
 $(XTDLP)/$(BINUTILS_DIR)/configure.ac:
 	@echo "You cloned without --recursive, fetching $(BINUTILS_DIR) for you."
