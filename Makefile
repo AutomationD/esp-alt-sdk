@@ -112,8 +112,9 @@ else
 	@echo
 endif
 
-build: $(TOOLCHAIN)/bin/xtensa-lx106-elf-gcc standalone $(TOP)/sdk sdk_patch $(TOOLCHAIN)/xtensa-lx106-elf/lib/libhal.a esptool esptool2 memanalyzer libcirom
+build: $(TOOLCHAIN)/bin/xtensa-lx106-elf-gcc standalone $(TOP)/sdk sdk_patch $(TOOLCHAIN)/xtensa-lx106-elf/lib/libhal.a utils libcirom
 
+utils: esptool esptool2 memanalyzer
 esptool: $(UTILS_DIR)/esptool
 esptool2: $(UTILS_DIR)/esptool2
 memanalyzer: $(UTILS_DIR)/memanalyzer
