@@ -46,8 +46,8 @@ ESPTOOL2_SRCREPO = rabutron-esp8266
 MEMANALYZER_DIR = ESP8266_memory_analyzer
 
 
-UNZIP = unzip -q -o
-UNTAR = tar -xf
+
+UNTAR = bsdtar -xf
 
 PLATFORM := $(shell uname -s)
 
@@ -189,9 +189,9 @@ sdk_patch: .sdk_patch_$(VENDOR_SDK_VERSION)
 	@touch $@
 
 .sdk_patch_1.2.0: lib_mem_optimize_150714.zip libssl_patch_1.2.0-2.zip empty_user_rf_pre_init.o
-	#$(UNZIP) libssl_patch_1.2.0-2.zip
-	#$(UNZIP) libsmartconfig_2.4.2.zip
-	$(UNZIP) lib_mem_optimize_150714.zip
+	#$(UNTAR) libssl_patch_1.2.0-2.zip
+	#$(UNTAR) libsmartconfig_2.4.2.zip
+	$(UNTAR) lib_mem_optimize_150714.zip
 	#mv libsmartconfig_2.4.2.a $(VENDOR_SDK_DIR_1.2.0)/lib/libsmartconfig.a
 	mv libssl.a libnet80211.a libpp.a libsmartconfig.a $(VENDOR_SDK_DIR_1.2.0)/lib/
 	patch -N -f -d $(VENDOR_SDK_DIR_1.2.0) -p1 < $(XTDLP)/c_types-c99.patch
@@ -199,8 +199,8 @@ sdk_patch: .sdk_patch_$(VENDOR_SDK_VERSION)
 	@touch $@
 
 .sdk_patch_1.1.2: scan_issue_test.zip 1.1.2_patch_02.zip empty_user_rf_pre_init.o
-	$(UNZIP) scan_issue_test.zip
-	$(UNZIP) 1.1.2_patch_02.zip
+	$(UNTAR) scan_issue_test.zip
+	$(UNTAR) 1.1.2_patch_02.zip
 	mv libmain.a libnet80211.a libpp.a $(VENDOR_SDK_DIR_1.1.2)/lib/
 	patch -N -f -d $(VENDOR_SDK_DIR_1.1.2) -p1 < $(XTDLP)/c_types-c99.patch
 	$(TOOLCHAIN)/bin/xtensa-lx106-elf-ar r $(VENDOR_SDK_DIR_1.1.2)/lib/libmain.a empty_user_rf_pre_init.o
@@ -212,7 +212,7 @@ sdk_patch: .sdk_patch_$(VENDOR_SDK_VERSION)
 	@touch $@
 
 .sdk_patch_1.1.0: lib_patch_on_sdk_v1.1.0.zip empty_user_rf_pre_init.o
-	$(UNZIP) $<
+	$(UNTAR) $<
 	mv libsmartconfig_patch_01.a $(VENDOR_SDK_DIR_1.1.0)/lib/libsmartconfig.a
 	mv libmain_patch_01.a $(VENDOR_SDK_DIR_1.1.0)/lib/libmain.a
 	mv libssl_patch_01.a $(VENDOR_SDK_DIR_1.1.0)/lib/libssl.a
@@ -224,13 +224,13 @@ empty_user_rf_pre_init.o: $(XTDLP)/empty_user_rf_pre_init.c toolchain
 	$(TOOLCHAIN)/bin/xtensa-lx106-elf-gcc -O2 -c $<
 
 .sdk_patch_1.0.1: libnet80211.zip esp_iot_sdk_v1.0.1/.dir
-	$(UNZIP) $<
+	$(UNTAR) $<
 	mv libnet80211.a $(VENDOR_SDK_DIR_1.0.1)/lib/
 	patch -N -f -d $(VENDOR_SDK_DIR_1.0.1) -p1 < $(XTDLP)/c_types-c99.patch
 	@touch $@
 
 .sdk_patch_1.0.1b2: libssl.zip esp_iot_sdk_v1.0.1_b2/.dir
-	$(UNZIP) $<
+	$(UNTAR) $<
 	mv libssl/libssl.a $(VENDOR_SDK_DIR_1.0.1b2)/lib/
 	patch -N -d $(VENDOR_SDK_DIR_1.0.1b2) -p1 < $(XTDLP)/c_types-c99.patch
 	@touch $@
@@ -248,7 +248,7 @@ empty_user_rf_pre_init.o: $(XTDLP)/empty_user_rf_pre_init.c toolchain
 	@touch $@
 
 .sdk_patch_0.9.5: sdk095_patch1.zip esp_iot_sdk_v0.9.5/.dir
-	$(UNZIP) $<
+	$(UNTAR) $<
 	mv libmain_fix_0.9.5.a $(VENDOR_SDK_DIR)/lib/libmain.a
 	mv user_interface.h $(VENDOR_SDK_DIR)/include/
 	patch -N -d $(VENDOR_SDK_DIR_0.9.5) -p1 < $(XTDLP)/c_types-c99.patch
@@ -259,7 +259,7 @@ empty_user_rf_pre_init.o: $(XTDLP)/empty_user_rf_pre_init.c toolchain
 	@touch $@
 
 .sdk_patch_0.9.3: esp_iot_sdk_v0.9.3_14_11_21_patch1.zip esp_iot_sdk_v0.9.3/.dir
-	$(UNZIP) $<
+	$(UNTAR) $<
 	@touch $@
 
 .sdk_patch_0.9.2: FRM_ERR_PATCH.rar esp_iot_sdk_v0.9.2/.dir 
@@ -314,7 +314,7 @@ sdk: $(TOP)/sdk
 	
 
 $(VENDOR_SDK_DIR)/.dir: $(VENDOR_SDK_ZIP)
-	$(UNZIP) $^
+	$(UNTAR) $^
 	-mv License $(VENDOR_SDK_DIR)
 	touch $@
 
@@ -466,10 +466,10 @@ build-gdb: get-src build-binutils $(XTDLP)/$(GDB_DIR)/build $(XTBP)/$(GDB_DIR)
 
 
 prebuilt-toolchain-windows: $(XTDLP)/$(XTENSA_TOOLCHAIN_WINDOWS_TAR)
-	$(UNZIP) $(XTDLP)/$(XTENSA_TOOLCHAIN_WINDOWS_TAR) -d $(TOP)
+	$(UNTAR) $(XTDLP)/$(XTENSA_TOOLCHAIN_WINDOWS_TAR) -d $(TOP)
 
 prebuilt-toolchain-mac: $(XTDLP)/$(XTENSA_TOOLCHAIN_MAC_TAR)
-	$(UNZIP) $(XTDLP)/$(XTENSA_TOOLCHAIN_MAC_TAR) -d $(TOP)  
+	$(UNTAR) $(XTDLP)/$(XTENSA_TOOLCHAIN_MAC_TAR) -d $(TOP)  
 
 prebuilt-toolchain-linux: $(XTDLP)/$(XTENSA_TOOLCHAIN_LINUX_TAR)
 	$(UNTAR) $(XTDLP)/$(XTENSA_TOOLCHAIN_LINUX_TAR) -C $(TOP)  
