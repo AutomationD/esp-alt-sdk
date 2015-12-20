@@ -308,7 +308,7 @@ $(TOP)/sdk: $(VENDOR_SDK_DIR)/.dir
 	rm -rf sdk
 	ln -snf $(VENDOR_SDK_DIR) sdk
   ifeq ($(OS),Windows_NT)
-  	rm -rf ESP8266_SDK
+		rm -rf ESP8266_SDK
 		ln -snf $(VENDOR_SDK_DIR) ESP8266_SDK
   endif
 
