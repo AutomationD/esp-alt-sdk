@@ -31,9 +31,6 @@ brew install mono
 echo "Installing upx"
 brew install upx
 
-echo "Installing bsdtar"
-brew install bsdtar
-
 # brew install binutils
 # brew install diffutils
 # brew install ed --default-names

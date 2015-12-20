@@ -465,11 +465,11 @@ build-newlib: get-src build-gmp build-mpfr build-mpc build-binutils $(XTDLP)/$(N
 build-gdb: get-src build-binutils $(XTDLP)/$(GDB_DIR)/build $(XTBP)/$(GDB_DIR)
 
 
-prebuilt-toolchain-windows: $(XTDLP)/$(XTENSA_TOOLCHAIN_WINDOWS_TAR)
-	$(UNTAR) $(XTDLP)/$(XTENSA_TOOLCHAIN_WINDOWS_TAR) -d $(TOP)
+prebuilt-toolchain-windows: $(XTDLP)/$(XTENSA_TOOLCHAIN_WINDOWS_TAR)	
+	$(UNTAR) $(XTDLP)/$(XTENSA_TOOLCHAIN_WINDOWS_TAR) -C $(TOP)
 
 prebuilt-toolchain-mac: $(XTDLP)/$(XTENSA_TOOLCHAIN_MAC_TAR)
-	$(UNTAR) $(XTDLP)/$(XTENSA_TOOLCHAIN_MAC_TAR) -d $(TOP)  
+	$(UNTAR) $(XTDLP)/$(XTENSA_TOOLCHAIN_MAC_TAR) -C $(TOP)  
 
 prebuilt-toolchain-linux: $(XTDLP)/$(XTENSA_TOOLCHAIN_LINUX_TAR)
 	$(UNTAR) $(XTDLP)/$(XTENSA_TOOLCHAIN_LINUX_TAR) -C $(TOP)  
