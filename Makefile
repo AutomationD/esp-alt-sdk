@@ -128,7 +128,7 @@ memanalyzer: $(UTILS_DIR)/memanalyzer
 
 $(UTILS_DIR)/esptool: $(XTDLP)/$(ESPTOOL_DIR)/esptool.py
 	mkdir -p $(UTILS_DIR)/
-	cd $(XTDLP)/$(ESPTOOL_DIR); python setup.py install
+#	cd $(XTDLP)/$(ESPTOOL_DIR); python setup.py install
   ifeq ($(OS),Windows_NT)
 		cd $(XTDLP)/$(ESPTOOL_DIR); pyinstaller --onefile esptool.py
 		cd $(XTDLP)/$(ESPTOOL_DIR)/dist; cp esptool.exe $(UTILS_DIR)/
