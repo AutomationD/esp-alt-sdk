@@ -33,7 +33,7 @@ MPFR_DIR = mpfr-$(MPFR_VERSION)
 MPC_DIR = mpc-$(MPC_VERSION)
 GDB_DIR = gdb-$(GDB_VERSION)
 XTENSA_TOOLCHAIN_WINDOWS_TAR := xtensa-lx106-elf-windows-x86.zip
-XTENSA_TOOLCHAIN_MAC_TAR := xtensa-lx106-elf-mac-x86_64.zip
+XTENSA_TOOLCHAIN_MAC_TAR := xtensa-lx106-elf-macos-x86_64.zip
 XTENSA_TOOLCHAIN_LINUX_TAR := xtensa-lx106-elf-linux-x86_64.tar.gz
 
 GCC_DIR = gcc-xtensa
