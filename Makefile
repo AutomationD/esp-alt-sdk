@@ -305,8 +305,10 @@ lib_mem_optimize_150714.zip:
 
 
 $(TOP)/sdk: $(VENDOR_SDK_DIR)/.dir
+	rm -rf sdk
 	ln -snf $(VENDOR_SDK_DIR) sdk
   ifeq ($(OS),Windows_NT)
+  	rm -rf ESP8266_SDK
 		ln -snf $(VENDOR_SDK_DIR) ESP8266_SDK
   endif
 
