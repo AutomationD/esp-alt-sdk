@@ -47,7 +47,7 @@ echo Installing required mingw components
 
 mingw-get install mingw32-base mingw32-mgwport mingw32-pdcurses mingw32-make mingw-developer-toolkit mingw32-gdb libz bzip2
 :: mingw-get install gcc gcc-c++
-mingw-get install msys-zip
+mingw-get install msys-zip bsdtar
 mingw-get remove autoconf
 :: mingw-get mingw32-autoconf mingw32-automake 
 
