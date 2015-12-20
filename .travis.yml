@@ -47,4 +47,4 @@ script:
   - FILENAME="${PROJECT_NAME}-${VERSION}-${PLATFORM}-${ARCH}.tar.gz"    
   - echo $PWD
   - make clean
-  - make VENDOR_SDK_VERSION=$VERSION
+  - make VENDOR_SDK_VERSION=$VERSION PREBUILT_TOOLCHAIN=y
