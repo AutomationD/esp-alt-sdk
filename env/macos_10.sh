@@ -31,6 +31,8 @@ brew install mono
 echo "Installing upx"
 brew install upx
 
+brew install pkg-config
+
 # brew install binutils
 # brew install diffutils
 # brew install ed --default-names
