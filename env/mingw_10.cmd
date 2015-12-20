@@ -11,10 +11,17 @@ choco sources add -name kireevco -source 'https://www.myget.org/F/kireevco-choco
 echo Installing wget & curl
 choco install wget curl -y
 
+choco install upx -version 3.08
+
 echo Install python
 choco install python2-x86_32 -y
+pip install pyinstaller
+easy_install --always-unzip pyserial
 
-pip install
+
+echo Install pyinstaller
+pip install pyinstaller
+
 
 echo [build] > c:\tools\python2-x86_32\Lib\distutils\distutils.cfg
 echo compiler = mingw32 >> c:\tools\python2-x86_32\Lib\distutils\distutils.cfg
@@ -25,7 +32,11 @@ choco install mingw --x86 -y
 choco install mingw-get -y
 
 
+echo Installing Mono (for MemAnalyzer and others)
+choco install mono  -version 3.2.3 -y
+
 echo Adding ENV variables
+setx /M PATH "C:\Program Files (x86)\Mono-3.2.3\bin;%PATH%" && set PATH=C:\Program Files(x86)\Mono-3.2.3\bin;%PATH%
 
 setx /M HOME "c:\Users\User"
 setx /M PATH "c:\tools\mingw64\msys\1.0\bin\;%PATH%" && set PATH=c:\tools\mingw64\msys\1.0\bin\;%PATH%
@@ -34,14 +45,12 @@ setx /M PATH "C:\tools\python2-x86_32\script;C:\tools\mingw32\bin;c:\tools\mingw
 
 echo Installing required mingw components
 
-mingw-get install mingw32-base mingw32-mgwport mingw32-pdcurses mingw32-make mingw-developer-toolkit mingw32-gdb libz bzip2 wget 
+mingw-get install mingw32-base mingw32-mgwport mingw32-pdcurses mingw32-make mingw-developer-toolkit mingw32-gdb libz bzip2
 :: mingw-get install gcc gcc-c++
 mingw-get install msys-zip
 mingw-get remove autoconf
 :: mingw-get mingw32-autoconf mingw32-automake 
 
-echo Install pyinstaller
-pip install pyinstaller
 
 ::echo Running pip in a different cmd shell
 ::cmd /c pip install http://sourceforge.net/projects/py2exe/files/latest/download?source=files

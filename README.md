@@ -19,6 +19,7 @@ _Please don't report bugs (yet)_
 - [esptool2](https://github.com/raburton/esptool2)
 
 ## Download
+__Download links are still unstable, please check__ [bintray](https://bintray.com/kireevco/generic/esp-alt-sdk/view#files)
 | Windows | MacOS | Linux |
 | ------------- | ------------- | ------------- |
 | [1.2.0](https://bintray.com/artifact/download/kireevco/generic/esp-alt-sdk-1.2.0-windows-x86.zip) | [1.2.0](https://bintray.com/artifact/download/kireevco/generic/esp-alt-sdk-1.2.0-macos-x86_64.zip) | [1.2.0](https://bintray.com/artifact/download/kireevco/generic/esp-alt-sdk-1.2.0-linux-x86_64.tar.gz) |

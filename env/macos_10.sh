@@ -25,6 +25,12 @@ brew install binutils coreutils automake wget gawk libtool gperf grep python pyt
 brew install gnu-sed --with-default-names
 brew install findutils --with-default-names
 
+echo "Installing mono"
+brew install mono 
+
+echo "Installing upx"
+brew install upx
+
 # brew install binutils
 # brew install diffutils
 # brew install ed --default-names
