@@ -31,9 +31,10 @@ addons:
       - sed
       - git
       - gcc-multilib
-      - g++-multilib      
-install:
-  - cd env/; make
+      - g++-multilib
+      - mono-complete
+# install:
+#   - cd env/; make
 
 script:
   - cd $TRAVIS_BUILD_DIR

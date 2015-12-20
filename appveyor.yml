@@ -36,8 +36,7 @@ install:
   # - C:\MinGW\msys\1.0\bin\bash.exe -i -l -c 'ls -la /'
   - C:\MinGW\bin\mingw-get install mingw32-base mingw32-mgwport mingw32-pdcurses mingw32-make mingw-developer-toolkit mingw32-gdb gcc gcc-c++ libz bzip2
   - C:\MinGW\bin\mingw-get install msys-patch msys-zip
-  - C:\MinGW\msys\1.0\bin\bash.exe -i -l -c 'cd /c/projects/%APPVEYOR_PROJECT_NAME%/env; make'
 
 build_script:
-  - C:\MinGW\msys\1.0\bin\bash.exe -i -l -c "PATH=/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/mingw/bin/:/c/mingw/bin:$PATH cd /c/projects/%APPVEYOR_PROJECT_NAME%; make clean"
-  - C:\MinGW\msys\1.0\bin\bash.exe -i -l -c "PATH=/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/mingw/bin/:/c/mingw/bin:$PATH cd /c/projects/%APPVEYOR_PROJECT_NAME%; make VENDOR_SDK_VERSION=$VERSION PREBUILT_TOOLCHAIN=y"
+  - C:\MinGW\msys\1.0\bin\bash.exe -i -l -c "cd /c/projects/%APPVEYOR_PROJECT_NAME%; make clean"
+  - C:\MinGW\msys\1.0\bin\bash.exe -i -l -c "cd /c/projects/%APPVEYOR_PROJECT_NAME%; make VENDOR_SDK_VERSION=$VERSION PREBUILT_TOOLCHAIN=y"
