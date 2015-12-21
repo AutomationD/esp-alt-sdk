@@ -25,12 +25,11 @@ install:
   - choco install mono  -version 3.2.3 -y  
   - pip install pyinstaller
   - easy_install --always-unzip pyserial
-  - dir C:\Python27\scripts
   # - echo %VERSION%
   # - dir C:\MinGW\msys\1.0\bin\
   # - C:\MinGW\msys\1.0\bin\bash.exe -i -l -c 'ls -la /'
-  - C:\MinGW\bin\mingw-get install mingw32-base mingw32-make mingw-developer-toolkit libz bzip2 bsdtar
-  - C:\MinGW\bin\mingw-get install msys-patch msys-zip 
+  - C:\MinGW\bin\mingw-get install libz bzip2 bsdtar
+  - C:\MinGW\bin\mingw-get install msys-patch
 
 build_script:
   - C:\MinGW\msys\1.0\bin\bash.exe -i -l -c "cd /c/projects/%APPVEYOR_PROJECT_NAME%; make clean"
