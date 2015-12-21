@@ -47,7 +47,7 @@ MEMANALYZER_DIR = ESP8266_memory_analyzer
 
 
 
-UNTAR = bsdtar -xf -v
+UNTAR = bsdtar -xfv
 
 PLATFORM := $(shell uname -s)
 
