@@ -30,7 +30,6 @@ install:
   # - dir C:\MinGW\msys\1.0\bin\
   # - C:\MinGW\msys\1.0\bin\bash.exe -i -l -c 'ls -la /'
   - C:\MinGW\bin\mingw-get install libz bzip2 bsdtar
-  - C:\MinGW\bin\mingw-get install msys-patch
 
 build_script:
   - C:\MinGW\msys\1.0\bin\bash.exe -i -l -c "cd /c/projects/%APPVEYOR_PROJECT_NAME%; make clean"
