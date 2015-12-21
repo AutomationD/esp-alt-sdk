@@ -37,11 +37,10 @@ addons:
       - g++-multilib
       - mono-complete
       - bsdtar
-before_install:
-  - brew update
+before_script:
+  - if [ "$TRAVIS_OS_NAME" == "osx" ]; then brew update; brew install mono; fi
 install:
   # - cd env/; make
-  - if [ "${TRAVIS_OS_NAME}" -eq "osx" ]; then brew install mono; fi
 
 script:
   - cd $TRAVIS_BUILD_DIR
