@@ -606,7 +606,6 @@ $(XTBP)/$(BINUTILS_DIR): $(XTDLP)/$(BINUTILS_DIR)/build
 $(XTDLP)/$(GDB_DIR)/configure.ac: $(XTDLP)/$(GDB_TAR)
 	mkdir -p $(XTDLP)/$(GDB_DIR)
 	$(UNTAR) $(XTDLP)/$(GDB_TAR) -C $(XTDLP)/$(GDB_DIR)
-	mv $(XTDLP)/$(GDB_DIR)/gdb-*/* $(XTDLP)/$(GDB_DIR)
 
 $(XTDLP)/$(GDB_DIR)/build: $(XTDLP)/$(GDB_DIR)/configure.ac
 	mkdir -p $(XTDLP)/$(GDB_DIR)/build
