@@ -7,6 +7,9 @@ env:
     - VERSION=1.2.0
     - VERSION=1.3.0
     - VERSION=1.4.0
+    include:
+    - os: "osx"
+    install: brew install mono
 cache:
   directories:
   - src/
@@ -34,15 +37,14 @@ addons:
       - g++-multilib
       - mono-complete
       - bsdtar
-# install:
-#   - cd env/; make
+before_install:
+  - brew update
+install:
+  # - cd env/; make
+  - if [ "${TRAVIS_OS_NAME}" -eq "osx" ]; then brew install mono; fi
 
 script:
   - cd $TRAVIS_BUILD_DIR
-  - automake --version
-  - autoconf --version
-  - g++ --version
-  - gcc --version
   - PLATFORM=$TRAVIS_OS_NAME
   - PROJECT_NAME="esp-alt-sdk"
   - VENDOR_SDK_VERSION=$VERSION  
