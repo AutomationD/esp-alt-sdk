@@ -6,7 +6,7 @@ env:
   matrix:
     - VERSION=1.2.0
     - VERSION=1.3.0
-    - VERSION=1.4.0
+    - VERSION=1.4.0    
 cache:
   directories:
   - src/
@@ -33,15 +33,14 @@ addons:
       - gcc-multilib
       - g++-multilib
       - mono-complete
-# install:
-#   - cd env/; make
+      - bsdtar
+before_script:
+  - if [ "$TRAVIS_OS_NAME" == "osx" ]; then brew update; brew install mono; fi
+install:
+  # - cd env/; make
 
 script:
   - cd $TRAVIS_BUILD_DIR
-  - automake --version
-  - autoconf --version
-  - g++ --version
-  - gcc --version
   - PLATFORM=$TRAVIS_OS_NAME
   - PROJECT_NAME="esp-alt-sdk"
   - VENDOR_SDK_VERSION=$VERSION  

@@ -17,6 +17,7 @@ echo Install python
 choco install python2-x86_32 -y
 pip install pyinstaller
 easy_install --always-unzip pyserial
+echo_install
 
 
 echo Install pyinstaller
