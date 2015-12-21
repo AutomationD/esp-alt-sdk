@@ -17,7 +17,8 @@ environment:
       build_bindings: 1
       VERSION: 1.4.0
 cache:
-  - src  # preserve "packages" directory in the root of build folder but will reset it if packages.config is modified
+  - src/  # preserve "packages" directory in the root of build folder but will reset it if packages.config is modified
+  - src/xtensa-lx106-elf-*windows*
 install:
   - echo %PATH%
   - choco sources add -name kireevco -source 'https://www.myget.org/F/kireevco-chocolatey/'
