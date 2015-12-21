@@ -19,6 +19,7 @@ environment:
 cache:
   - src  # preserve "packages" directory in the root of build folder but will reset it if packages.config is modified
 install:
+  - echo %PATH%
   - choco sources add -name kireevco -source 'https://www.myget.org/F/kireevco-chocolatey/'
   - choco install python2-x86_32 wget curl -y
   - choco install mono  -version 3.2.3 -y  
