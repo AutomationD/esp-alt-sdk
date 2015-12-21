@@ -15,10 +15,8 @@ choco install upx -version 3.08
 
 echo Install python
 choco install python2-x86_32 -y
-pip install pyinstaller
-easy_install --always-unzip pyserial
-echo_install
 
+easy_install --always-unzip pyserial
 
 echo Install pyinstaller
 pip install pyinstaller

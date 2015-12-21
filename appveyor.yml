@@ -15,27 +15,22 @@ environment:
       build_compiler: "mingw"
       build_bindings: 1
       VERSION: 1.4.0
-
-    - build_platform: "x64"
-      build_compiler: "mingw"
-      build_bindings: 1
-      VERSION: 1.2.0
-    - build_platform: "x64"
-      build_compiler: "mingw"
-      build_bindings: 1
-      VERSION: 1.3.0
-    - build_platform: "x64"
-      build_compiler: "mingw"
-      build_bindings: 1
-      VERSION: 1.4.0
 cache:
   - src  # preserve "packages" directory in the root of build folder but will reset it if packages.config is modified
 install:
-  - echo %VERSION%
-  - dir C:\MinGW\msys\1.0\bin\
+  - choco sources add -name kireevco -source 'https://www.myget.org/F/kireevco-chocolatey/'
+  - choco install python2-x86_32 wget curl -y
+  - choco install mono  -version 3.2.3 -y
+  - setx /M PATH "C:\Program Files (x86)\Mono-3.2.3\bin;%PATH%" && set PATH=C:\Program Files(x86)\Mono-3.2.3\bin;%PATH%
+  - setx /M PATH "c:\tools\mingw64\msys\1.0\bin\;%PATH%" && set PATH=c:\tools\mingw64\msys\1.0\bin\;%PATH%
+  - setx /M PATH "C:\tools\python2-x86_32\script;C:\tools\mingw32\bin;c:\tools\mingw64\bin\;%PATH%" && set PATH=C:\tools\python2-x86_32\script;C:\tools\mingw32\bin;c:\tools\mingw64\bin\;%PATH%
+  - pip install pyinstaller
+  - easy_install --always-unzip pyserial
+  # - echo %VERSION%
+  # - dir C:\MinGW\msys\1.0\bin\
   # - C:\MinGW\msys\1.0\bin\bash.exe -i -l -c 'ls -la /'
-  - C:\MinGW\bin\mingw-get install mingw32-base mingw32-mgwport mingw32-pdcurses mingw32-make mingw-developer-toolkit mingw32-gdb gcc gcc-c++ libz bzip2
-  - C:\MinGW\bin\mingw-get install msys-patch msys-zip
+  - C:\MinGW\bin\mingw-get install mingw32-base mingw32-make mingw-developer-toolkit gcc gcc-c++ libz bzip2 bsdtar
+  - C:\MinGW\bin\mingw-get install msys-patch msys-zip 
 
 build_script:
   - C:\MinGW\msys\1.0\bin\bash.exe -i -l -c "cd /c/projects/%APPVEYOR_PROJECT_NAME%; make clean"
