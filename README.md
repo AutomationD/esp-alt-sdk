@@ -1,4 +1,5 @@
 # ESP8266 Cross platform SDK
+[![Build Status](https://travis-ci.org/kireevco/esp-alt-sdk.svg?branch=master)](https://travis-ci.org/kireevco/esp-alt-sdk)
 ### Work in progress
 _Please don't report bugs (yet)_
 ## Why?
