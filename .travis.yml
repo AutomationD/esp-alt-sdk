@@ -33,6 +33,7 @@ addons:
       - gcc-multilib
       - g++-multilib
       - mono-complete
+      - bsdtar
 # install:
 #   - cd env/; make
 
