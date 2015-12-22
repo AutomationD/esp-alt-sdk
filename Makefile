@@ -3,9 +3,14 @@
 # Credits to Paul Sokolovsky (@pfalcon) for esp-open-sdk
 # Credits to Fabien Poussin (@fpoussin) for xtensa-lx106-elf build script
 #
+# (@Juppit) adaptation for gcc-4.9.2 and Cygwin
+# (@Juppit) touch makedir after make 
 
 
-VENDOR_SDK_VERSION = 1.4.0
+# for utils you need the tools pyinstaller and mcs
+BUILD_UTILS = n
+
+VENDOR_SDK_VERSION = 1.5.0
 GMP_VERSION = 6.0.0a
 MPFR_VERSION = 3.1.2
 MPC_VERSION = 1.0.2
@@ -17,10 +22,10 @@ TARGET = xtensa-lx106-elf
 TOOLCHAIN = $(TOP)/$(TARGET)
 MINGW_DIR := c:\tools\mingw64
 
-XTTC = $(TOOLCHAIN)
 XTBP = $(TOP)/build
 XTDLP = $(TOP)/src
 UTILS_DIR = $(TOP)/utils
+PATCH_DIR = $(TOP)/local_patches
 
 GMP_TAR = gmp-$(GMP_VERSION).tar.bz2
 MPFR_TAR = mpfr-$(MPFR_VERSION).tar.bz2
@@ -45,14 +50,24 @@ ESPTOOL2_DIR = esptool2
 ESPTOOL2_SRCREPO = rabutron-esp8266
 MEMANALYZER_DIR = ESP8266_memory_analyzer
 
+# supress some noise
+MAKE = make -s
+INSTALL = install -s
+CONFIGURE = configure -q
 
-
-UNTAR = bsdtar -xf
+UNTAR = bsdtar -vxf
 
 PLATFORM := $(shell uname -s)
 
 PATH := $(TOOLCHAIN)/bin:$(PATH)
-SAFEPATH := $(TOOLCHAIN)/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/mingw/bin/:/c/tools/mingw32/bin:/c/tools/mingw64/bin
+ifeq ($(OS),Windows_NT)
+  ifneq (,$(findstring MINGW32,$(PLATFORM)))    
+    SAFEPATH := $(TOOLCHAIN)/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/mingw/bin/:/c/tools/mingw32/bin:/c/tools/mingw64/bin
+  endif
+  ifneq (,$(findstring CYGWIN,$(PLATFORM)))
+    SAFEPATH := $(TOOLCHAIN)/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin
+  endif
+endif
 
 
 VENDOR_SDK_ZIP = $(VENDOR_SDK_ZIP_$(VENDOR_SDK_VERSION))
@@ -117,7 +132,7 @@ else
 	@echo
 endif
 
-build: toolchain standalone $(TOP)/sdk sdk_patch $(TOOLCHAIN)/xtensa-lx106-elf/lib/libhal.a utils libcirom
+build: .toolchain standalone $(TOP)/sdk sdk_patch $(TOOLCHAIN)/xtensa-lx106-elf/lib/libhal.a utils libcirom
 build-prebuilt-toolchain: standalone $(TOP)/sdk sdk_patch utils
 
 utils: esptool esptool2 memanalyzer
@@ -127,46 +142,52 @@ memanalyzer: $(UTILS_DIR)/memanalyzer
 
 
 $(UTILS_DIR)/esptool: $(XTDLP)/$(ESPTOOL_DIR)/esptool.py
+  ifeq ($(BUILD_UTILS),y)
 	mkdir -p $(UTILS_DIR)/
 #	cd $(XTDLP)/$(ESPTOOL_DIR); python setup.py install
-  ifeq ($(OS),Windows_NT)
+    ifeq ($(OS),Windows_NT)
 		cd $(XTDLP)/$(ESPTOOL_DIR); pyinstaller --onefile esptool.py
 		cd $(XTDLP)/$(ESPTOOL_DIR)/dist; cp esptool.exe $(UTILS_DIR)/
-  else
+    else
 		cp $(XTDLP)/$(ESPTOOL_DIR)/esptool.py $(UTILS_DIR)/
+    endif
   endif
 
 $(UTILS_DIR)/memanalyzer:
+  ifeq ($(BUILD_UTILS),y)
 	mkdir -p $(UTILS_DIR)/	  
 	
 	cd $(XTDLP)/$(MEMANALYZER_DIR)/MemAnalyzer/; mcs Program.cs
   
-  ifeq ($(OS),Windows_NT)
+    ifeq ($(OS),Windows_NT)
 		cd $(XTDLP)/$(MEMANALYZER_DIR)/MemAnalyzer/; cp Program.exe $(UTILS_DIR)/memanalyzer.exe
-  endif
+    endif
 	
-  ifeq ($(PLATFORM),Darwin)
+    ifeq ($(PLATFORM),Darwin)
 	 	@echo "Detected: MacOS"
 		cd $(XTDLP)/$(MEMANALYZER_DIR)/MemAnalyzer/; CC="cc -framework CoreFoundation -lobjc -liconv" mkbundle Program.exe -o memanalyzer --deps --static
 		cd $(XTDLP)/$(MEMANALYZER_DIR)/MemAnalyzer/; cp memanalyzer $(UTILS_DIR)/
-  endif
-  ifeq ($(PLATFORM),Linux)
+    endif
+    ifeq ($(PLATFORM),Linux)
 		cd $(XTDLP)/$(MEMANALYZER_DIR)/MemAnalyzer/; mkbundle Program.exe -o memanalyzer --deps --static
 		cd $(XTDLP)/$(MEMANALYZER_DIR)/MemAnalyzer/; cp memanalyzer $(UTILS_DIR)/
-  endif
-  ifeq ($(PLATFORM),FreeBSD)
+    endif
+    ifeq ($(PLATFORM),FreeBSD)
 	 	cd $(XTDLP)/$(MEMANALYZER_DIR)/MemAnalyzer/; mkbundle Program.exe -o memanalyzer --deps --static
 	 	cd $(XTDLP)/$(MEMANALYZER_DIR)/MemAnalyzer/; cp memanalyzer $(UTILS_DIR)/		
+    endif
   endif
 
 $(UTILS_DIR)/esptool2: $(XTDLP)/$(ESPTOOL2_DIR)/esptool2.c
+  ifeq ($(BUILD_UTILS),y)
 	make clean -C $(XTDLP)/$(ESPTOOL2_DIR)/
 	make -C $(XTDLP)/$(ESPTOOL2_DIR)/
 	mkdir -p $(UTILS_DIR)
 	cp $(XTDLP)/$(ESPTOOL2_DIR)/esptool2 $(UTILS_DIR)/
+  endif
 
 
-$(TOOLCHAIN)/xtensa-lx106-elf/lib/libcirom.a: $(TOOLCHAIN)/xtensa-lx106-elf/lib/libc.a toolchain
+$(TOOLCHAIN)/xtensa-lx106-elf/lib/libcirom.a: $(TOOLCHAIN)/xtensa-lx106-elf/lib/libc.a .toolchain
 	@echo "Creating irom version of libc..."
 	$(TOOLCHAIN)/bin/xtensa-lx106-elf-objcopy --rename-section .text=.irom0.text \
 		--rename-section .literal=.irom0.literal $(<) $(@);
@@ -307,10 +328,10 @@ lib_mem_optimize_150714.zip:
 $(TOP)/sdk: $(VENDOR_SDK_DIR)/.dir
 	rm -rf sdk
 	ln -snf $(VENDOR_SDK_DIR) sdk
-  ifeq ($(OS),Windows_NT)
+    ifeq ($(OS),Windows_NT)
 		rm -rf ESP8266_SDK
 		ln -snf $(VENDOR_SDK_DIR) ESP8266_SDK
-  endif
+    endif
 
 sdk: $(TOP)/sdk
 	
@@ -394,13 +415,11 @@ $(XTDLP)/$(XTENSA_TOOLCHAIN_MAC_TAR):
 
 $(XTDLP)/$(XTENSA_TOOLCHAIN_LINUX_TAR):
 	wget --no-check-certificate https://dl.bintray.com/kireevco/generic/$(XTENSA_TOOLCHAIN_LINUX_TAR) --output-document $(XTDLP)/$(XTENSA_TOOLCHAIN_LINUX_TAR)
-	
 
 $(XTDLP)/$(BINUTILS_DIR)/configure.ac:
+#	git clone https://github.com/fpoussin/esp-binutils.git $(XTDLP)/$(BINUTILS_DIR)
 	@echo "You cloned without --recursive, fetching $(BINUTILS_DIR) for you."
 	git submodule update --init --recursive
-
-
 
 $(XTDLP)/$(NEWLIB_DIR)/configure.ac:
 #	git clone -b xtensa https://github.com/jcmvbkbc/newlib-xtensa.git $(XTDLP)/$(NEWLIB_DIR)
@@ -413,58 +432,60 @@ $(XTDLP)/$(GCC_DIR)/configure.ac:
 	git submodule update --init --recursive
 
 $(XTDLP)/$(LIBHAL_DIR)/configure.ac:
+#	git clone https://github.com/tommie/lx106-hal.git $(XTDLP)/$(LIBHAL_DIR)
 	@echo "You cloned without --recursive, fetching submodules for you."
 	git submodule update --init --recursive
 
-
 $(XTDLP)/$(ESPTOOL_DIR)/esptool.py:
+#	git clone https://github.com/themadinventor/esptool $(XTDLP)/$(ESPTOOL_DIR)
 	@echo "You cloned without --recursive, fetching esptool for you."
 	git submodule update --init --recursive
 
 $(XTDLP)/$(ESPTOOL2_DIR)/esptool2.c:
+#	git clone https://github.com/raburton/esptool2 $(XTDLP)/$(ESPTOOL2_DIR)
 	@echo "You cloned without --recursive, fetching esptool2 for you."
 	git submodule update --init --recursive
 
 $(XTDLP)/$(MEMANALYZER_DIR)/MemAnalyzer.sln:
+#	git clone https://github.com/Sermus/ESP8266_memory_analyzer $(XTDLP)/$(MEMANALYZER_DIR)
 	@echo "You cloned without --recursive, fetching MemAnalyzer for you."
 	git submodule update --init --recursive
 
 
 
-libhal: $(TOOLCHAIN)/xtensa-lx106-elf/lib/libhal.a
-
-$(TOOLCHAIN)/xtensa-lx106-elf/lib/libhal.a: toolchain $(XTDLP)/$(LIBHAL_DIR)
-	make -C $(XTDLP)/$(LIBHAL_DIR) -f ../../Makefile _libhal
+$(TOOLCHAIN)/xtensa-lx106-elf/lib/libhal.a: .toolchain $(XTDLP)/$(LIBHAL_DIR)
+	$(MAKE) -C $(XTDLP)/$(LIBHAL_DIR) -f ../../Makefile _libhal
 
 _libhal: $(XTDLP)/$(LIBHAL_DIR)
 	autoreconf -i
-	PATH=$(SAFEPATH) ./configure --host=$(TARGET) --prefix=$(TOOLCHAIN)/xtensa-lx106-elf/
-	PATH=$(SAFEPATH) make
-	PATH=$(SAFEPATH) make install
-
+	PATH=$(SAFEPATH) ./$(CONFIGURE) --host=$(TARGET) --prefix=$(TOOLCHAIN)/xtensa-lx106-elf/
+	PATH=$(SAFEPATH) $(MAKE)
+	PATH=$(SAFEPATH) $(MAKE) $(INSTALL)
+	@touch $(XTDLP)/$(LIBHAL_DIR)
 
 debug:
 	@echo "----------------------------------------------------"
-	@echo "Outputting debug info. Makefiles are so Makefiles..."	
+	@echo "Outputting debug info. Makefiles are so Makefiles..."
 	@echo "PATH: $(PATH)"
 	@echo "TOOLCHAIN: $(TOOLCHAIN)"
 	@echo "----------------------------------------------------"
 
 
-toolchain: $(TOOLCHAIN)/bin/xtensa-lx106-elf-gcc
+.toolchain: $(TOOLCHAIN)/bin/xtensa-lx106-elf-gcc
+	@touch $@
 
 $(TOOLCHAIN)/bin/xtensa-lx106-elf-gcc: $(TOOLCHAIN) $(XTDLP) $(XTBP) build-gmp build-mpfr build-mpc build-binutils build-gdb build-first-stage-gcc build-newlib build-second-stage-gcc
-# $(TOOLCHAIN)/bin/xtensa-lx106-elf-gcc: $(XTDLP) $(XTBP) build-gmp build-mpfr build-mpc build-binutils build-first-stage-gcc 
 
-get-src: $(XTDLP)/$(GMP_DIR) $(XTDLP)/$(MPFR_DIR) $(XTDLP)/$(MPC_DIR) $(XTDLP)/$(BINUTILS_DIR)/configure.ac $(XTDLP)/$(GCC_DIR)/configure.ac $(XTDLP)/$(NEWLIB_DIR)/configure.ac $(XTDLP)/$(GDB_DIR)/configure.ac
+get-src: $(XTDLP)/$(GMP_DIR) $(XTDLP)/$(MPFR_DIR) $(XTDLP)/$(MPC_DIR) $(XTDLP)/$(BINUTILS_DIR)/configure.ac $(XTDLP)/$(GCC_DIR)/configure.ac $(XTDLP)/$(NEWLIB_DIR)/configure.ac $(XTDLP)/$(GDB_DIR)/configure.ac $(PATCH_DIR)
 build-gmp: get-src $(XTDLP)/$(GMP_DIR)/build $(XTBP)/gmp
 build-mpfr: get-src build-gmp $(XTDLP)/$(MPFR_DIR)/build $(XTBP)/mpfr
 build-mpc: get-src build-gmp build-mpfr $(XTDLP)/$(MPC_DIR)/build $(XTBP)/mpc
-build-binutils: get-src build-gmp build-mpfr build-mpc $(XTDLP)/$(BINUTILS_DIR)/build $(XTBP)/$(BINUTILS_DIR)
+build-binutils: get-src build-gmp build-mpfr build-mpc $(XTDLP)/$(BINUTILS_DIR)/build $(XTDLP)/$(BINUTILS_DIR)
 build-first-stage-gcc: get-src build-gmp build-mpfr build-mpc build-binutils $(XTDLP)/$(GCC_DIR)/build-1
 build-second-stage-gcc: get-src build-gmp build-mpfr build-mpc build-binutils build-first-stage-gcc $(XTDLP)/$(GCC_DIR)/build-2
-build-newlib: get-src build-gmp build-mpfr build-mpc build-binutils $(XTDLP)/$(NEWLIB_DIR)/build $(XTBP)/$(NEWLIB_DIR) 
-build-gdb: get-src build-binutils $(XTDLP)/$(GDB_DIR)/build $(XTBP)/$(GDB_DIR)
+build-newlib: get-src build-gmp build-mpfr build-mpc $(XTDLP)/$(NEWLIB_DIR)/build $(XTDLP)/$(NEWLIB_DIR) 
+build-gdb: get-src $(XTDLP)/$(GDB_DIR)/build $(XTDLP)/$(GDB_DIR)
+build-libhal: $(TOOLCHAIN)/xtensa-lx106-elf/lib/libhal.a
 
 
 prebuilt-toolchain-windows: $(XTDLP)/$(XTENSA_TOOLCHAIN_WINDOWS_TAR)	
@@ -486,57 +507,57 @@ platform-specific:
 ifeq ($(OS),Windows_NT)
   ifneq (,$(findstring MINGW32,$(PLATFORM)))    
 		@echo "Detected: MinGW32."
-		$(MAKE) /mingw
+		make /mingw
     ifeq ($(PREBUILT_TOOLCHAIN),y)
-			$(MAKE) prebuilt-toolchain-windows
-			$(MAKE) build-prebuilt-toolchain
+		make prebuilt-toolchain-windows
+		make build-prebuilt-toolchain
     else
-			$(MAKE) build PATH="/c/tools/mingw32/bin:$(PATH)" BUILD_TARGET=i686-w64-mingw32
+		make build PATH="/c/tools/mingw32/bin:$(PATH)" BUILD_TARGET=i686-w64-mingw32
     endif
   endif
 endif
     
 ifneq (,$(findstring CYGWIN,$(PLATFORM)))
-	@echo "Detected: CYGWIN"				
-  ifeq ($(PREBUILT_TOOLCHAIN),y)
-		$(MAKE) prebuilt-toolchain-windows
-		$(MAKE) build-prebuilt-toolchain
-  else
+	@echo "Detected: CYGWIN"
+    ifeq ($(PREBUILT_TOOLCHAIN),y)
+		make prebuilt-toolchain-windows
+		make build-prebuilt-toolchain
+    else
 		$(MAKE) build
-  endif  
+    endif  
 endif
 
 ifeq ($(PLATFORM),Darwin)    
-		@echo "Detected: MacOS"
+	@echo "Detected: MacOS"
     ifeq ($(PREBUILT_TOOLCHAIN),y)
-			$(MAKE) prebuilt-toolchain-mac
-			$(MAKE) build-prebuilt-toolchain
+		make prebuilt-toolchain-mac
+		make build-prebuilt-toolchain
     else
-			$(MAKE) build
+		make build
     endif
 else
   ifeq ($(PLATFORM),Linux)
-			@echo "Detected: Linux"
-      ifeq ($(PREBUILT_TOOLCHAIN),y)
-				$(MAKE) prebuilt-toolchain-linux
-				$(MAKE) build-prebuilt-toolchain
-      else
-				$(MAKE) build
-      endif
+		@echo "Detected: Linux"
+    ifeq ($(PREBUILT_TOOLCHAIN),y)
+		make prebuilt-toolchain-linux
+		make build-prebuilt-toolchain
+    else
+		make build
+    endif
   endif
   ifeq ($(PLATFORM),FreeBSD)
-			@echo "Detected: FreeBSD"
+		@echo "Detected: FreeBSD"
       ifeq ($(PREBUILT_TOOLCHAIN),y)
-				$(MAKE) prebuilt-toolchain-freebsd
+		make prebuilt-toolchain-freebsd
       endif
-			$(MAKE) build
+		make build
   endif
 endif
 
 
 /mingw:
 	@echo "/mingw directory not found, mounting"
-	mount $(MINGW_DIR) /mingw	
+	mount $(MINGW_DIR) /mingw
 
 $(XTDLP):
 	mkdir -p $(XTDLP)
@@ -548,103 +569,125 @@ $(TOOLCHAIN):
 	git config --global core.autocrlf false
 	mkdir -p $(TOOLCHAIN)
 
+$(PATCH_DIR):
+ifeq ($(GCC_VERSION),4.9.2)
+	cd $(XTDLP)/$(GCC_DIR)
+	patch -p1 < $(PATCH_DIR)/0001-WIP-don-t-bring-extra-u-int_least32_t-into-std.patch
+endif
+
 # GMP
 $(XTDLP)/$(GMP_DIR): $(XTDLP)/$(GMP_TAR)
 	mkdir -p $(XTDLP)/$(GMP_DIR)
 	$(UNTAR) $(XTDLP)/$(GMP_TAR) -C $(XTDLP)/$(GMP_DIR)
-	mv $(XTDLP)/$(GMP_DIR)/gmp-*/* $(XTDLP)/$(GMP_DIR)
+	rm -rf $(XTDLP)/$(GMP_DIR)/build
 
 $(XTDLP)/$(GMP_DIR)/build: $(XTDLP)/$(GMP_DIR)
 	mkdir -p $(XTDLP)/$(GMP_DIR)/build/
-	cd $(XTDLP)/$(GMP_DIR)/build/; ../configure --prefix=$(XTBP)/gmp --disable-shared --enable-static --build=$(BUILD_TARGET) --host=$(BUILD_TARGET)
-	make -C $(XTDLP)/$(GMP_DIR)/build/	
+	cd $(XTDLP)/$(GMP_DIR)/build/; ../$(CONFIGURE) --prefix=$(XTBP)/gmp --disable-shared --enable-static --build=$(BUILD_TARGET) --host=$(BUILD_TARGET)
+	$(MAKE) -C $(XTDLP)/$(GMP_DIR)/build/
+	@touch $(XTDLP)/$(GMP_DIR)/build
 
 $(XTBP)/gmp: $(XTDLP)/$(GMP_DIR)/build
-	make install -C $(XTDLP)/$(GMP_DIR)/build/
+	$(MAKE) $(INSTALL) -C $(XTDLP)/$(GMP_DIR)/build/
+	@touch $(XTBP)/gmp
 
-# MPFR	
+# MPFR
 $(XTDLP)/$(MPFR_DIR): $(XTDLP)/$(MPFR_TAR)
 	mkdir -p $(XTDLP)/$(MPFR_DIR)
 	$(UNTAR) $(XTDLP)/$(MPFR_TAR) -C $(XTDLP)/$(MPFR_DIR)
-	mv $(XTDLP)/$(MPFR_DIR)/mpfr-*/* $(XTDLP)/$(MPFR_DIR)
+	rm -rf $(XTDLP)/$(MPFR_DIR)/build
 
 $(XTDLP)/$(MPFR_DIR)/build: $(XTDLP)/$(MPFR_DIR)
 	mkdir -p $(XTDLP)/$(MPFR_DIR)/build
-	cd $(XTDLP)/$(MPFR_DIR)/build/; ../configure --prefix=$(XTBP)/mpfr --with-gmp=$(XTBP)/gmp --disable-shared --enable-static --build=$(BUILD_TARGET) --host=$(BUILD_TARGET)
-	make -C $(XTDLP)/$(MPFR_DIR)/build/	
+	cd $(XTDLP)/$(MPFR_DIR)/build/; ../$(CONFIGURE) --prefix=$(XTBP)/mpfr --with-gmp=$(XTBP)/gmp --disable-shared --enable-static --build=$(BUILD_TARGET) --host=$(BUILD_TARGET)
+	$(MAKE) -C $(XTDLP)/$(MPFR_DIR)/build/
+	@touch $(XTDLP)/$(MPFR_DIR)/build
 
 $(XTBP)/mpfr: $(XTDLP)/$(MPFR_DIR)/build
-	make install -C $(XTDLP)/$(MPFR_DIR)/build/
+	$(MAKE) $(INSTALL) -C $(XTDLP)/$(MPFR_DIR)/build/
+	@touch $(XTBP)/mpfr
 
-# MPC	
+# MPC
 $(XTDLP)/$(MPC_DIR): $(XTDLP)/$(MPC_TAR)
 	mkdir -p $(XTDLP)/$(MPC_DIR)
 	$(UNTAR) $(XTDLP)/$(MPC_TAR) -C $(XTDLP)/$(MPC_DIR)
-	mv $(XTDLP)/$(MPC_DIR)/mpc-*/* $(XTDLP)/$(MPC_DIR)
-
+	rm -rf $(XTDLP)/$(MPC_DIR)/build
 
 $(XTDLP)/$(MPC_DIR)/build: $(XTDLP)/$(MPC_DIR)
-	mkdir -p $(XTDLP)/$(MPC_DIR)/build	
-	cd $(XTDLP)/$(MPC_DIR)/build/; ../configure --prefix=$(XTBP)/mpc --with-mpfr=$(XTBP)/mpfr --with-gmp=$(XTBP)/gmp --disable-shared --enable-static --build=$(BUILD_TARGET) --host=$(BUILD_TARGET)
-	make -C $(XTDLP)/$(MPC_DIR)/build/
-	make install -C $(XTDLP)/$(MPC_DIR)/build/
+	mkdir -p $(XTDLP)/$(MPC_DIR)/build
+	cd $(XTDLP)/$(MPC_DIR)/build/; ../$(CONFIGURE) --prefix=$(XTBP)/mpc --with-mpfr=$(XTBP)/mpfr --with-gmp=$(XTBP)/gmp --disable-shared --enable-static --build=$(BUILD_TARGET) --host=$(BUILD_TARGET)
+	$(MAKE) -C $(XTDLP)/$(MPC_DIR)/build/
+	@touch $(XTDLP)/$(MPC_DIR)/build
 
 $(XTBP)/mpc: $(XTDLP)/$(MPC_DIR)/build
-	make install -C $(XTDLP)/$(MPC_DIR)/build/
+	$(MAKE) $(INSTALL) -C $(XTDLP)/$(MPC_DIR)/build/
+	@touch $(XTBP)/mpc
 
 
 # Binutils
 $(XTDLP)/$(BINUTILS_DIR)/build: $(XTDLP)/$(BINUTILS_DIR)/configure.ac
 	mkdir -p $(XTDLP)/$(BINUTILS_DIR)/build
 	cd $(XTDLP)/$(BINUTILS_DIR)/build/; chmod -R 777 $(XTDLP)/$(BINUTILS_DIR); ../configure --prefix=$(TOOLCHAIN) --target=$(TARGET) --enable-werror=no  --enable-multilib --disable-nls --disable-shared --disable-threads --with-gcc --with-gnu-as --with-gnu-ld --build=$(BUILD_TARGET) --host=$(BUILD_TARGET)
-	make -C $(XTDLP)/$(BINUTILS_DIR)/build/
+	$(MAKE) -C $(XTDLP)/$(BINUTILS_DIR)/build/
+	@touch $(XTDLP)/$(BINUTILS_DIR)/build
 
-$(XTBP)/$(BINUTILS_DIR): $(XTDLP)/$(BINUTILS_DIR)/build
-	make install -C $(XTDLP)/$(BINUTILS_DIR)/build/
+$(XTDLP)/$(BINUTILS_DIR): $(XTDLP)/$(BINUTILS_DIR)/build
+	$(MAKE) $(INSTALL) -C $(XTDLP)/$(BINUTILS_DIR)/build/
+	@touch $(XTDLP)/$(BINUTILS_DIR)
+
 
 # GDB
 $(XTDLP)/$(GDB_DIR)/configure.ac: $(XTDLP)/$(GDB_TAR)
+ifeq "$(wildcard $(XTDLP)/$(GDB_DIR) )" ""
 	mkdir -p $(XTDLP)/$(GDB_DIR)
-	$(UNTAR) $(XTDLP)/$(GDB_TAR) -C $(XTDLP)/$(GDB_DIR)
+	$(UNTAR) $(XTDLP)/$(GDB_TAR) -C $(XTDLP)
+	rm -rf $(XTDLP)/$(GDB_DIR)/build
+endif
 
 $(XTDLP)/$(GDB_DIR)/build: $(XTDLP)/$(GDB_DIR)/configure.ac
 	mkdir -p $(XTDLP)/$(GDB_DIR)/build
-	cd $(XTDLP)/$(GDB_DIR)/build/; chmod -R 777 $(XTDLP)/$(GDB_DIR); ../configure --prefix=$(TOOLCHAIN) --target=$(TARGET) --enable-werror=no  --enable-multilib --disable-nls --disable-shared --disable-threads --with-gcc --with-gnu-as --with-gnu-ld --build=$(BUILD_TARGET) --host=$(BUILD_TARGET)
-	make -C $(XTDLP)/$(GDB_DIR)/build/
+	cd $(XTDLP)/$(GDB_DIR)/build/; chmod -R 777 $(XTDLP)/$(GDB_DIR); ../$(CONFIGURE) --prefix=$(TOOLCHAIN) --target=$(TARGET) --enable-werror=no  --enable-multilib --disable-nls --disable-shared --disable-threads --with-gcc --with-gnu-as --with-gnu-ld --build=$(BUILD_TARGET) --host=$(BUILD_TARGET)
+	$(MAKE) -C $(XTDLP)/$(GDB_DIR)/build/
+	@touch $(XTDLP)/$(GDB_DIR)/build
 
-$(XTBP)/$(GDB_DIR): $(XTDLP)/$(GDB_DIR)/build
-	make install -C $(XTDLP)/$(GDB_DIR)/build/
+$(XTDLP)/$(GDB_DIR): $(XTDLP)/$(GDB_DIR)/build
+	$(MAKE) $(INSTALL) -C $(XTDLP)/$(GDB_DIR)/build/
+	@touch $(XTDLP)/$(GDB_DIR)
 
 # GCC Step 1
 $(XTDLP)/$(GCC_DIR)/build-1: $(XTDLP)/$(GCC_DIR)/configure.ac
 	mkdir -p $(XTDLP)/$(GCC_DIR)/build-1
-	cd $(XTDLP)/$(GCC_DIR)/build-1/; ../configure --prefix=$(TOOLCHAIN) --target=$(TARGET) --enable-multilib --enable-languages=c --with-newlib --disable-nls --disable-shared --disable-threads --with-gnu-as --with-gnu-ld --with-gmp=$(XTBP)/gmp --with-mpfr=$(XTBP)/mpfr --with-mpc=$(XTBP)/mpc  --disable-libssp --without-headers --disable-__cxa_atexit --build=$(BUILD_TARGET) --host=$(BUILD_TARGET)
-	make all-gcc -C $(XTDLP)/$(GCC_DIR)/build-1/
-	make install-gcc -C $(XTDLP)/$(GCC_DIR)/build-1/
+	cd $(XTDLP)/$(GCC_DIR)/build-1/; ../$(CONFIGURE) --prefix=$(TOOLCHAIN) --target=$(TARGET) --enable-multilib --enable-languages=c --with-newlib --disable-nls --disable-shared --disable-threads --with-gnu-as --with-gnu-ld --with-gmp=$(XTBP)/gmp --with-mpfr=$(XTBP)/mpfr --with-mpc=$(XTBP)/mpc  --disable-libssp --without-headers --disable-__cxa_atexit --build=$(BUILD_TARGET) --host=$(BUILD_TARGET)
+	$(MAKE) all-gcc -C $(XTDLP)/$(GCC_DIR)/build-1/
+	$(MAKE) install-gcc -C $(XTDLP)/$(GCC_DIR)/build-1/
 	cd $(TOOLCHAIN)/bin/; cp xtensa-lx106-elf-gcc xtensa-lx106-elf-cc
-	
-	
-# GCC Step 2
-$(XTDLP)/$(GCC_DIR)/build-2: $(XTDLP)/$(GCC_DIR)/configure.ac $(XTBP)/$(NEWLIB_DIR)
-	mkdir -p $(XTDLP)/$(GCC_DIR)/build-2
-	cd $(XTDLP)/$(GCC_DIR)/build-2/; ../configure --prefix=$(TOOLCHAIN) --target=$(TARGET) --enable-multilib --disable-nls --disable-shared --disable-threads --with-gnu-as --with-gnu-ld --with-gmp=$(XTBP)/gmp --with-mpfr=$(XTBP)/mpfr --with-mpc=$(XTBP)/mpc --enable-languages=c,c++ --with-newlib --disable-libssp --disable-__cxa_atexit --build=$(BUILD_TARGET) --host=$(BUILD_TARGET)
-	make -C $(XTDLP)/$(GCC_DIR)/build-2/
-	make install -C $(XTDLP)/$(GCC_DIR)/build-2/
+	@touch $(XTDLP)/$(GCC_DIR)/build-1
 
-$(XTBP)/$(GCC_DIR): $(XTDLP)/$(GCC_DIR)/build-1 $(XTDLP)/$(GCC_DIR)/build-2
-	
+# GCC Step 2
+$(XTDLP)/$(GCC_DIR)/build-2: $(XTDLP)/$(GCC_DIR)/configure.ac $(XTDLP)/$(NEWLIB_DIR)
+	mkdir -p $(XTDLP)/$(GCC_DIR)/build-2
+	cd $(XTDLP)/$(GCC_DIR)/build-2/; ../$(CONFIGURE) --prefix=$(TOOLCHAIN) --target=$(TARGET) --enable-multilib --disable-nls --disable-shared --disable-threads --with-gnu-as --with-gnu-ld --with-gmp=$(XTBP)/gmp --with-mpfr=$(XTBP)/mpfr --with-mpc=$(XTBP)/mpc --enable-languages=c,c++ --with-newlib --disable-libssp --disable-__cxa_atexit --build=$(BUILD_TARGET) --host=$(BUILD_TARGET)
+	$(MAKE) -C $(XTDLP)/$(GCC_DIR)/build-2/
+	$(MAKE) $(INSTALL) -C $(XTDLP)/$(GCC_DIR)/build-2/
+	@touch $(XTDLP)/$(GCC_DIR)/build-2
+
+$(XTDLP)/$(GCC_DIR): $(XTDLP)/$(GCC_DIR)/build-1 $(XTDLP)/$(GCC_DIR)/build-2
+	@touch $(XTDLP)/$(GCC_DIR)
+
 # Newlib
 $(XTDLP)/$(NEWLIB_DIR)/build: $(XTDLP)/$(NEWLIB_DIR)/configure.ac
-	mkdir $(XTDLP)/$(NEWLIB_DIR)/build
-	cd $(XTDLP)/$(NEWLIB_DIR)/build/; ../configure  --prefix=$(TOOLCHAIN) --target=$(TARGET) --enable-multilib --with-gnu-as --with-gnu-ld --disable-nls --build=$(BUILD_TARGET) --host=$(BUILD_TARGET)
-	make -C $(XTDLP)/$(NEWLIB_DIR)/build/
-	
-$(XTBP)/$(NEWLIB_DIR): $(XTDLP)/$(NEWLIB_DIR)/build
-	make install -C $(XTDLP)/$(NEWLIB_DIR)/build/
+	mkdir -p $(XTDLP)/$(NEWLIB_DIR)/build
+	cd $(XTDLP)/$(NEWLIB_DIR)/build/; ../$(CONFIGURE) --prefix=$(TOOLCHAIN) --target=$(TARGET) --enable-multilib --with-gnu-as --with-gnu-ld --disable-nls --build=$(BUILD_TARGET) --host=$(BUILD_TARGET)
+	$(MAKE) -C $(XTDLP)/$(NEWLIB_DIR)/build/
+	@touch $(XTDLP)/$(NEWLIB_DIR)/build
+
+$(XTDLP)/$(NEWLIB_DIR): $(XTDLP)/$(NEWLIB_DIR)/build
+	$(MAKE) $(INSTALL) -C $(XTDLP)/$(NEWLIB_DIR)/build/
+	@touch $(XTDLP)/$(NEWLIB_DIR)
 
 
 clean: clean-sdk
-	-rm -rf $(TOOLCHAIN)
+	rm -rf $(TOOLCHAIN)
 	rm -rf $(XTDLP)/$(GMP_DIR)/build
 	rm -rf $(XTDLP)/$(MPFR_DIR)/build
 	rm -rf $(XTDLP)/$(MPC_DIR)/build
@@ -652,7 +695,7 @@ clean: clean-sdk
 	rm -rf $(XTDLP)/$(GCC_DIR)/build-1
 	rm -rf $(XTDLP)/$(GCC_DIR)/build-2
 	rm -rf $(XTDLP)/$(NEWLIB_DIR)/build
-	rm -rf $(XTDLP)/$(ESPTOOL2_DIR)/esptool2	
+	rm -rf $(XTDLP)/$(ESPTOOL2_DIR)/esptool2
 	rm -rf $(UTILS_DIR)/*
 
 clean-sdk:
@@ -664,6 +707,7 @@ clean-sdk:
 	rm -rf lx106-hal
 	rm -rf build
 	rm -rf bin
+	rm -f .toolchain
 
 
 purge: clean
