@@ -2,6 +2,7 @@ os: Windows Server 2012 R2
 init: 
   - git config --global core.autocrlf false
 environment:
+  PATH: C:\MinGW\msys\1.0\bin;C:\MinGW\bin;C:\Program Files (x86)\Mono-3.2.3\bin;C:\Python27\scripts;%PATH%
   matrix:
     - build_platform: "x86"
       build_compiler: "mingw"
@@ -15,27 +16,19 @@ environment:
       build_compiler: "mingw"
       build_bindings: 1
       VERSION: 1.4.0
-
-    - build_platform: "x64"
-      build_compiler: "mingw"
-      build_bindings: 1
-      VERSION: 1.2.0
-    - build_platform: "x64"
-      build_compiler: "mingw"
-      build_bindings: 1
-      VERSION: 1.3.0
-    - build_platform: "x64"
-      build_compiler: "mingw"
-      build_bindings: 1
-      VERSION: 1.4.0
-cache:
-  - src  # preserve "packages" directory in the root of build folder but will reset it if packages.config is modified
+# cache:
+#   - src/  # preserve "packages" directory in the root of build folder but will reset it if packages.config is modified
 install:
-  - echo %VERSION%
-  - dir C:\MinGW\msys\1.0\bin\
+  - echo %PATH%
+  - choco sources add -name kireevco -source 'https://www.myget.org/F/kireevco-chocolatey/'
+  - choco install python2-x86_32 wget curl -y
+  - choco install mono  -version 3.2.3 -y  
+  - pip install pyinstaller
+  - easy_install --always-unzip pyserial
+  # - echo %VERSION%
+  # - dir C:\MinGW\msys\1.0\bin\
   # - C:\MinGW\msys\1.0\bin\bash.exe -i -l -c 'ls -la /'
-  - C:\MinGW\bin\mingw-get install mingw32-base mingw32-mgwport mingw32-pdcurses mingw32-make mingw-developer-toolkit mingw32-gdb gcc gcc-c++ libz bzip2
-  - C:\MinGW\bin\mingw-get install msys-patch msys-zip
+  - C:\MinGW\bin\mingw-get install libz bzip2 bsdtar
 
 build_script:
   - C:\MinGW\msys\1.0\bin\bash.exe -i -l -c "cd /c/projects/%APPVEYOR_PROJECT_NAME%; make clean"
