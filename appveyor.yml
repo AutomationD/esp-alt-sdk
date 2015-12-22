@@ -16,6 +16,10 @@ environment:
       build_compiler: "mingw"
       build_bindings: 1
       VERSION: 1.4.0
+    - build_platform: "x86"
+      build_compiler: "mingw"
+      build_bindings: 1
+      VERSION: 1.5.0
 # cache:
 #   - src/  # preserve "packages" directory in the root of build folder but will reset it if packages.config is modified
 install:
