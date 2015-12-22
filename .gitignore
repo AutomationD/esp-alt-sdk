@@ -1,6 +1,7 @@
 src/gmp*
 src/mpc*
 src/mpfr*
+src/gdb*
 build
 xtensa-lx106-elf
 sdk
@@ -8,3 +9,5 @@ esp_iot_sdk_*
 xtensa-lx106-elf
 release_note.txt
 .sdk*
+ESP8266_SDK
+.toolchain

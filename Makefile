@@ -25,7 +25,7 @@ MINGW_DIR := c:\tools\mingw64
 XTBP = $(TOP)/build
 XTDLP = $(TOP)/src
 UTILS_DIR = $(TOP)/utils
-PATCH_DIR = $(TOP)/local_patches
+PATCH_DIR = $(XTDLP)/patches
 
 GMP_TAR = gmp-$(GMP_VERSION).tar.bz2
 MPFR_TAR = mpfr-$(MPFR_VERSION).tar.bz2
