@@ -2,7 +2,7 @@ os: Windows Server 2012 R2
 init: 
   - git config --global core.autocrlf false
 environment:
-  # PATH: C:\MinGW\msys\1.0\bin;C:\MinGW\bin;C:\Program Files (x86)\Mono-3.2.3\bin;C:\Python27\scripts;%PATH%
+  PATH: C:\MinGW\msys\1.0\bin;C:\MinGW\bin;C:\Program Files (x86)\Mono-3.2.3\bin;C:\Python27\scripts;%PATH%
   matrix:
     - build_platform: "x86"
       build_compiler: "mingw"
@@ -16,9 +16,8 @@ environment:
       build_compiler: "mingw"
       build_bindings: 1
       VERSION: 1.4.0
-cache:
-  - src/  # preserve "packages" directory in the root of build folder but will reset it if packages.config is modified
-  - src/xtensa-lx106-elf-*windows*
+# cache:
+#   - src/  # preserve "packages" directory in the root of build folder but will reset it if packages.config is modified
 install:
   - echo %PATH%
   - choco sources add -name kireevco -source 'https://www.myget.org/F/kireevco-chocolatey/'
