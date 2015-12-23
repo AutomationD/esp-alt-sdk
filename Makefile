@@ -1,5 +1,7 @@
 # Author: Dmitry Kireev (@kireevco)
-# 
+#
+# Contrubutions: (@Juppit) - patches for gcc-4.9.2 & Cygwin
+#
 # Credits to Paul Sokolovsky (@pfalcon) for esp-open-sdk
 # Credits to Fabien Poussin (@fpoussin) for xtensa-lx106-elf build script
 #
@@ -21,6 +23,7 @@ XTTC = $(TOOLCHAIN)
 XTBP = $(TOP)/build
 XTDLP = $(TOP)/src
 UTILS_DIR = $(TOP)/utils
+PATCHES_DIR = $(XTDLP)/patches
 
 GMP_TAR = gmp-$(GMP_VERSION).tar.bz2
 MPFR_TAR = mpfr-$(MPFR_VERSION).tar.bz2
@@ -177,15 +180,15 @@ sdk_patch: .sdk_patch_$(VENDOR_SDK_VERSION)
 
 
 .sdk_patch_1.5.0:
-	patch -N -d $(VENDOR_SDK_DIR_1.5.0) -p1 < $(XTDLP)/c_types-c99.patch
+	patch -N -d $(VENDOR_SDK_DIR_1.5.0) -p1 < $(PATCHES_DIR)/c_types-c99.patch
 	@touch $@
 
 .sdk_patch_1.4.0:
-	patch -N -d $(VENDOR_SDK_DIR_1.4.0) -p1 < $(XTDLP)/c_types-c99.patch
+	patch -N -d $(VENDOR_SDK_DIR_1.4.0) -p1 < $(PATCHES_DIR)/c_types-c99.patch
 	@touch $@
 
 .sdk_patch_1.3.0:
-	patch -N -d $(VENDOR_SDK_DIR_1.3.0) -p1 < $(XTDLP)/c_types-c99.patch
+	patch -N -d $(VENDOR_SDK_DIR_1.3.0) -p1 < $(PATCHES_DIR)/c_types-c99.patch
 	@touch $@
 
 .sdk_patch_1.2.0: lib_mem_optimize_150714.zip libssl_patch_1.2.0-2.zip empty_user_rf_pre_init.o
@@ -194,7 +197,7 @@ sdk_patch: .sdk_patch_$(VENDOR_SDK_VERSION)
 	$(UNTAR) lib_mem_optimize_150714.zip
 	#mv libsmartconfig_2.4.2.a $(VENDOR_SDK_DIR_1.2.0)/lib/libsmartconfig.a
 	mv libssl.a libnet80211.a libpp.a libsmartconfig.a $(VENDOR_SDK_DIR_1.2.0)/lib/
-	patch -N -f -d $(VENDOR_SDK_DIR_1.2.0) -p1 < $(XTDLP)/c_types-c99.patch
+	patch -N -f -d $(VENDOR_SDK_DIR_1.2.0) -p1 < $(PATCHES_DIR)/c_types-c99.patch
 	$(TOOLCHAIN)/bin/xtensa-lx106-elf-ar r $(VENDOR_SDK_DIR_1.2.0)/lib/libmain.a empty_user_rf_pre_init.o
 	@touch $@
 
@@ -202,12 +205,12 @@ sdk_patch: .sdk_patch_$(VENDOR_SDK_VERSION)
 	$(UNTAR) scan_issue_test.zip
 	$(UNTAR) 1.1.2_patch_02.zip
 	mv libmain.a libnet80211.a libpp.a $(VENDOR_SDK_DIR_1.1.2)/lib/
-	patch -N -f -d $(VENDOR_SDK_DIR_1.1.2) -p1 < $(XTDLP)/c_types-c99.patch
+	patch -N -f -d $(VENDOR_SDK_DIR_1.1.2) -p1 < $(PATCHES_DIR)/c_types-c99.patch
 	$(TOOLCHAIN)/bin/xtensa-lx106-elf-ar r $(VENDOR_SDK_DIR_1.1.2)/lib/libmain.a empty_user_rf_pre_init.o
 	@touch $@
 
 .sdk_patch_1.1.1: empty_user_rf_pre_init.o
-	patch -N -f -d $(VENDOR_SDK_DIR_1.1.1) -p1 < $(XTDLP)/c_types-c99.patch
+	patch -N -f -d $(VENDOR_SDK_DIR_1.1.1) -p1 < $(PATCHES_DIR)/c_types-c99.patch
 	$(TOOLCHAIN)/bin/xtensa-lx106-elf-ar r $(VENDOR_SDK_DIR_1.1.1)/lib/libmain.a empty_user_rf_pre_init.o
 	@touch $@
 
@@ -216,46 +219,46 @@ sdk_patch: .sdk_patch_$(VENDOR_SDK_VERSION)
 	mv libsmartconfig_patch_01.a $(VENDOR_SDK_DIR_1.1.0)/lib/libsmartconfig.a
 	mv libmain_patch_01.a $(VENDOR_SDK_DIR_1.1.0)/lib/libmain.a
 	mv libssl_patch_01.a $(VENDOR_SDK_DIR_1.1.0)/lib/libssl.a
-	patch -N -f -d $(VENDOR_SDK_DIR_1.1.0) -p1 < $(XTDLP)/c_types-c99.patch
+	patch -N -f -d $(VENDOR_SDK_DIR_1.1.0) -p1 < $(PATCHES_DIR)/c_types-c99.patch
 	$(TOOLCHAIN)/bin/xtensa-lx106-elf-ar r $(VENDOR_SDK_DIR_1.1.0)/lib/libmain.a empty_user_rf_pre_init.o
 	@touch $@
 
-empty_user_rf_pre_init.o: $(XTDLP)/empty_user_rf_pre_init.c
+empty_user_rf_pre_init.o: $(PATCHES_DIR)/empty_user_rf_pre_init.c
 	$(TOOLCHAIN)/bin/xtensa-lx106-elf-gcc -O2 -c $<
 
 .sdk_patch_1.0.1: libnet80211.zip esp_iot_sdk_v1.0.1/.dir
 	$(UNTAR) $<
 	mv libnet80211.a $(VENDOR_SDK_DIR_1.0.1)/lib/
-	patch -N -f -d $(VENDOR_SDK_DIR_1.0.1) -p1 < $(XTDLP)/c_types-c99.patch
+	patch -N -f -d $(VENDOR_SDK_DIR_1.0.1) -p1 < $(PATCHES_DIR)/c_types-c99.patch
 	@touch $@
 
 .sdk_patch_1.0.1b2: libssl.zip esp_iot_sdk_v1.0.1_b2/.dir
 	$(UNTAR) $<
 	mv libssl/libssl.a $(VENDOR_SDK_DIR_1.0.1b2)/lib/
-	patch -N -d $(VENDOR_SDK_DIR_1.0.1b2) -p1 < $(XTDLP)/c_types-c99.patch
+	patch -N -d $(VENDOR_SDK_DIR_1.0.1b2) -p1 < $(PATCHES_DIR)/c_types-c99.patch
 	@touch $@
 
 .sdk_patch_1.0.1b1:
-	patch -N -d $(VENDOR_SDK_DIR_1.0.1b1) -p1 < $(XTDLP)/c_types-c99.patch
+	patch -N -d $(VENDOR_SDK_DIR_1.0.1b1) -p1 < $(PATCHES_DIR)/c_types-c99.patch
 	@touch $@
 
 .sdk_patch_1.0.0:
-	patch -N -d $(VENDOR_SDK_DIR_1.0.0) -p1 < $(XTDLP)/c_types-c99.patch
+	patch -N -d $(VENDOR_SDK_DIR_1.0.0) -p1 < $(PATCHES_DIR)/c_types-c99.patch
 	@touch $@
 
 .sdk_patch_0.9.6b1:
-	patch -N -d $(VENDOR_SDK_DIR_0.9.6b1) -p1 < $(XTDLP)/c_types-c99.patch
+	patch -N -d $(VENDOR_SDK_DIR_0.9.6b1) -p1 < $(PATCHES_DIR)/c_types-c99.patch
 	@touch $@
 
 .sdk_patch_0.9.5: sdk095_patch1.zip esp_iot_sdk_v0.9.5/.dir
 	$(UNTAR) $<
 	mv libmain_fix_0.9.5.a $(VENDOR_SDK_DIR)/lib/libmain.a
 	mv user_interface.h $(VENDOR_SDK_DIR)/include/
-	patch -N -d $(VENDOR_SDK_DIR_0.9.5) -p1 < $(XTDLP)/c_types-c99.patch
+	patch -N -d $(VENDOR_SDK_DIR_0.9.5) -p1 < $(PATCHES_DIR)/c_types-c99.patch
 	@touch $@
 
 .sdk_patch_0.9.4:
-	patch -N -d $(VENDOR_SDK_DIR_0.9.4) -p1 < $(XTDLP)/c_types-c99.patch
+	patch -N -d $(VENDOR_SDK_DIR_0.9.4) -p1 < $(PATCHES_DIR)/c_types-c99.patch
 	@touch $@
 
 .sdk_patch_0.9.3: esp_iot_sdk_v0.9.3_14_11_21_patch1.zip esp_iot_sdk_v0.9.3/.dir
@@ -266,6 +269,14 @@ empty_user_rf_pre_init.o: $(XTDLP)/empty_user_rf_pre_init.c
 	unrar x -o+ $<
 	cp FRM_ERR_PATCH/*.a $(VENDOR_SDK_DIR)/lib/
 	@touch $@
+
+.sdk_patch_0.9.4:
+	patch -N -d $(VENDOR_SDK_DIR_0.9.4) -p1 < $(PATCHES_DIR)/c_types-c99.patch
+	@touch $@
+
+.u-int_least32_t-into-std:
+	cd $(XTDLP)/$(GCC_DIR);
+	patch -p1 < $(PATCHES_DIR)/0001-WIP-don-t-bring-extra-u-int_least32_t-into-std.patch
 
 standalone: sdk sdk_patch
 ifeq ($(STANDALONE),y)
@@ -461,7 +472,7 @@ build-gmp: get-src $(XTDLP)/$(GMP_DIR)/build $(XTBP)/gmp
 build-mpfr: get-src build-gmp $(XTDLP)/$(MPFR_DIR)/build $(XTBP)/mpfr
 build-mpc: get-src build-gmp build-mpfr $(XTDLP)/$(MPC_DIR)/build $(XTBP)/mpc
 build-binutils: get-src build-gmp build-mpfr build-mpc $(XTDLP)/$(BINUTILS_DIR)/build $(XTBP)/$(BINUTILS_DIR)
-build-first-stage-gcc: get-src build-gmp build-mpfr build-mpc build-binutils $(XTDLP)/$(GCC_DIR)/build-1
+build-first-stage-gcc: get-src build-gmp build-mpfr build-mpc build-binutils $(XTDLP)/$(GCC_DIR)/build-1 u-int_least32_t-into-std
 build-second-stage-gcc: get-src build-gmp build-mpfr build-mpc build-binutils build-first-stage-gcc $(XTDLP)/$(GCC_DIR)/build-2
 build-newlib: get-src build-gmp build-mpfr build-mpc build-binutils $(XTDLP)/$(NEWLIB_DIR)/build $(XTBP)/$(NEWLIB_DIR) 
 build-gdb: get-src build-binutils $(XTDLP)/$(GDB_DIR)/build $(XTBP)/$(GDB_DIR)
