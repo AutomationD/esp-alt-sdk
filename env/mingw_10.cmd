@@ -26,8 +26,7 @@ echo [build] > c:\tools\python2-x86_32\Lib\distutils\distutils.cfg
 echo compiler = mingw32 >> c:\tools\python2-x86_32\Lib\distutils\distutils.cfg
 
 echo Installing MingGW-get (pulls down mingw too)
-choco install mingw -y
-choco install mingw --x86 -y
+choco install mingw --x86 -params "/threads:win32" -y
 choco install mingw-get -y
 
 
