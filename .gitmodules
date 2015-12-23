@@ -1,7 +1,3 @@
-[submodule "src/gcc-xtensa"]
-	path = src/gcc-xtensa
-	url = https://github.com/jcmvbkbc/gcc-xtensa.git
-	branch = call0-4.9.2
 [submodule "src/newlib-xtensa"]
 	path = src/newlib-xtensa
 	url = https://github.com/jcmvbkbc/newlib-xtensa.git
@@ -21,3 +17,7 @@
 [submodule "src/ESP8266_memory_analyzer"]
 	path = src/ESP8266_memory_analyzer
 	url = https://github.com/Sermus/ESP8266_memory_analyzer.git
+[submodule "src/gcc-xtensa"]
+	path = src/gcc-xtensa
+	url = https://github.com/jcmvbkbc/gcc-xtensa.git
+	branch = call0-4.9.2
