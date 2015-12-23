@@ -6,6 +6,11 @@
 # Credits to Fabien Poussin (@fpoussin) for xtensa-lx106-elf build script
 #
 
+STANDALONE = y
+PREBUILT_TOOLCHAIN = n
+DEBUG = n
+
+
 
 VENDOR_SDK_VERSION = 1.4.0
 GMP_VERSION = 6.0.0a
@@ -49,8 +54,12 @@ ESPTOOL2_SRCREPO = rabutron-esp8266
 MEMANALYZER_DIR = ESP8266_memory_analyzer
 
 
+ifeq ($(DEBUG),y)
+	UNTAR := bsdtar -vxf
+else
+	UNTAR := bsdtar -xf
+endif
 
-UNTAR = bsdtar -vxf
 
 PLATFORM := $(shell uname -s)
 
@@ -96,8 +105,7 @@ VENDOR_SDK_ZIP_0.9.3 = esp_iot_sdk_v0.9.3_14_11_21.zip
 VENDOR_SDK_DIR_0.9.3 = esp_iot_sdk_v0.9.3
 VENDOR_SDK_ZIP_0.9.2 = esp_iot_sdk_v0.9.2_14_10_24.zip
 VENDOR_SDK_DIR_0.9.2 = esp_iot_sdk_v0.9.2
-STANDALONE = y
-PREBUILT_TOOLCHAIN = n
+
 
 .PHONY: standalone sdk sdk_patch utils
 
@@ -455,11 +463,16 @@ _libhal: $(XTDLP)/$(LIBHAL_DIR)
 
 
 debug:
+  ifeq ($(DEBUG),y)
 	@echo "----------------------------------------------------"
 	@echo "Outputting debug info. Makefiles are so Makefiles..."	
 	@echo "PATH: $(PATH)"
 	@echo "TOOLCHAIN: $(TOOLCHAIN)"
 	@echo "----------------------------------------------------"
+
+  endif
+
+	
 
 
 toolchain: $(TOOLCHAIN)/bin/xtensa-lx106-elf-gcc
@@ -616,7 +629,7 @@ $(XTBP)/$(BINUTILS_DIR): $(XTDLP)/$(BINUTILS_DIR)/build
 # GDB
 $(XTDLP)/$(GDB_DIR)/configure.ac: $(XTDLP)/$(GDB_TAR)
 	mkdir -p $(XTDLP)/$(GDB_DIR)
-	$(UNTAR) $(XTDLP)/$(GDB_TAR) -C $(XTDLP)/$(GDB_DIR)
+	$(UNTAR) $(XTDLP)/$(GDB_TAR) -C $(XTDLP)
 
 $(XTDLP)/$(GDB_DIR)/build: $(XTDLP)/$(GDB_DIR)/configure.ac
 	mkdir -p $(XTDLP)/$(GDB_DIR)/build
