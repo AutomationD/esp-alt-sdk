@@ -1,6 +1,7 @@
 [submodule "src/gcc-xtensa"]
 	path = src/gcc-xtensa
 	url = https://github.com/jcmvbkbc/gcc-xtensa.git
+	branch = call0-4.9.2
 [submodule "src/newlib-xtensa"]
 	path = src/newlib-xtensa
 	url = https://github.com/jcmvbkbc/newlib-xtensa.git
