@@ -6,8 +6,8 @@
 | [![Build Status](https://jenkins.dandle.co/buildStatus/icon?job=xtensa-lx106-elf/label=build-win2012r2x64-01)](https://jenkins.dandle.co/job/xtensa-lx106-elf/label=build-win2012r2x64-01/)| [![Build Status](https://jenkins.dandle.co/buildStatus/icon?job=xtensa-lx106-elf/label=build-osx-01)](https://jenkins.dandle.co/job/xtensa-lx106-elf/label=build-osx-01/) | [![Build Status](https://jenkins.dandle.co/buildStatus/icon?job=xtensa-lx106-elf/label=build-ubuntu14-01)](https://jenkins.dandle.co/job/xtensa-lx106-elf/label=build-ubuntu14-01/) |
 
 ##### esp-alt-sdk
-| | Windows | MacOS | Linux |
-|--| ------------- | ------------- | ------------- |
+| SDK | Windows | MacOS | Linux |
+| ------------- | ------------- | ------------- | ------------- |
 | 1.4.0 | [![Build Status](https://jenkins.dandle.co/buildStatus/icon?job=esp-alt-sdk/VERSION=1.4.0,label=build-win2012r2x64-01)](https://jenkins.dandle.co/job/esp-alt-sdk/VERSION=1.4.0,label=build-win2012r2x64-01/) | [![Build Status](https://jenkins.dandle.co/buildStatus/icon?job=esp-alt-sdk/VERSION=1.4.0,label=build-osx-01)](https://jenkins.dandle.co/job/esp-alt-sdk/VERSION=1.4.0,label=build-osx-01/) | [![Build Status](https://jenkins.dandle.co/buildStatus/icon?job=esp-alt-sdk/VERSION=1.4.0,label=build-ubuntu14-01)](https://jenkins.dandle.co/job/esp-alt-sdk/VERSION=1.4.0,label=build-ubuntu14-01) |
 | 1.5.0 | [![Build Status](https://jenkins.dandle.co/buildStatus/icon?job=esp-alt-sdk/VERSION=1.5.0,label=build-win2012r2x64-01)](https://jenkins.dandle.co/job/esp-alt-sdk/VERSION=1.5.0,label=build-win2012r2x64-01/) | [![Build Status](https://jenkins.dandle.co/buildStatus/icon?job=esp-alt-sdk/VERSION=1.5.0,label=build-osx-01)](https://jenkins.dandle.co/job/esp-alt-sdk/VERSION=1.5.0,label=build-osx-01/) | [![Build Status](https://jenkins.dandle.co/buildStatus/icon?job=esp-alt-sdk/VERSION=1.5.0,label=build-ubuntu14-01)](https://jenkins.dandle.co/job/esp-alt-sdk/VERSION=1.5.0,label=build-ubuntu14-01) |
 
