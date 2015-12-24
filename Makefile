@@ -282,9 +282,8 @@ empty_user_rf_pre_init.o: $(PATCHES_DIR)/empty_user_rf_pre_init.c
 	patch -N -d $(VENDOR_SDK_DIR_0.9.4) -p1 < $(PATCHES_DIR)/c_types-c99.patch
 	@touch $@
 
-u-int_least32_t-into-std:
-	cd $(XTDLP)/$(GCC_DIR);
-	patch -N -d $(GCC_DIR) -p1 < $(PATCHES_DIR)/0001-WIP-don-t-bring-extra-u-int_least32_t-into-std.patch
+u-int_least32_t-into-std:	
+	patch -N -d $(XTDLP)/$(GCC_DIR) -p1 < $(PATCHES_DIR)/0001-WIP-don-t-bring-extra-u-int_least32_t-into-std.patch
 
 standalone: sdk sdk_patch
 ifeq ($(STANDALONE),y)
