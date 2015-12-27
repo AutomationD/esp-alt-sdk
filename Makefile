@@ -476,7 +476,7 @@ debug:
 
 toolchain: $(TOOLCHAIN)/bin/xtensa-lx106-elf-gcc
 
-$(TOOLCHAIN)/bin/xtensa-lx106-elf-gcc: $(TOOLCHAIN) $(XTDLP) $(XTBP) build-gmp build-mpfr build-mpc build-binutils build-gdb build-first-stage-gcc build-newlib build-second-stage-gcc
+$(TOOLCHAIN)/bin/xtensa-lx106-elf-gcc: $(TOOLCHAIN) $(XTDLP) $(XTBP) build-gmp build-mpfr build-mpc build-binutils build-gdb build-first-stage-gcc build-newlib build-second-stage-gcc compress-upx
 # $(TOOLCHAIN)/bin/xtensa-lx106-elf-gcc: $(XTDLP) $(XTBP) build-gmp build-mpfr build-mpc build-binutils build-first-stage-gcc 
 
 get-src: $(XTDLP)/$(GMP_DIR) $(XTDLP)/$(MPFR_DIR) $(XTDLP)/$(MPC_DIR) $(XTDLP)/$(BINUTILS_DIR)/configure.ac $(XTDLP)/$(GCC_DIR)/configure.ac $(XTDLP)/$(NEWLIB_DIR)/configure.ac $(XTDLP)/$(GDB_DIR)/configure.ac
@@ -488,7 +488,7 @@ build-first-stage-gcc: get-src build-gmp build-mpfr build-mpc build-binutils $(X
 build-second-stage-gcc: get-src build-gmp build-mpfr build-mpc build-binutils build-first-stage-gcc $(XTDLP)/$(GCC_DIR)/build-2
 build-newlib: get-src build-gmp build-mpfr build-mpc build-binutils $(XTDLP)/$(NEWLIB_DIR)/build $(XTBP)/$(NEWLIB_DIR) 
 build-gdb: get-src build-binutils $(XTDLP)/$(GDB_DIR)/build $(XTBP)/$(GDB_DIR)
-
+compress-upx: $(TOOLCHAIN)/bin/.upx
 
 prebuilt-toolchain-windows: $(XTDLP)/$(XTENSA_TOOLCHAIN_WINDOWS_TAR)	
 	$(UNTAR) $(XTDLP)/$(XTENSA_TOOLCHAIN_WINDOWS_TAR) -C $(TOP)
@@ -664,6 +664,11 @@ $(XTDLP)/$(NEWLIB_DIR)/build: $(XTDLP)/$(NEWLIB_DIR)/configure.ac
 	
 $(XTBP)/$(NEWLIB_DIR): $(XTDLP)/$(NEWLIB_DIR)/build
 	make install -C $(XTDLP)/$(NEWLIB_DIR)/build/
+
+# Compress via UPX
+$(TOOLCHAIN)/bin/.upx:
+	cd $(TOOLCHAIN)/bin/ && (find . -exec upx --best "{}" +) && touch $(TOOLCHAIN)/bin/.upx
+
 
 
 clean: clean-sdk
