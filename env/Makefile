@@ -7,7 +7,7 @@ PLATFORM := $(shell uname -s)
 
 PREFIX := ""
 
-SAFEPATH := $(PATH):$(TOOLCHAIN)/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/mingw/bin/:/c/tools/mingw64/bin:
+SAFEPATH := $(TOOLCHAIN)/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/mingw/bin/:/c/tools/mingw64/bin:
 
 all: debug platform-specific
 	
