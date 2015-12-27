@@ -17,6 +17,7 @@ GMP_VERSION = 6.0.0a
 MPFR_VERSION = 3.1.2
 MPC_VERSION = 1.0.2
 GDB_VERSION = 7.10
+GCC_VERSION = 4.9.2
 
 
 TOP = $(PWD)
@@ -476,7 +477,7 @@ debug:
 
 toolchain: $(TOOLCHAIN)/bin/xtensa-lx106-elf-gcc
 
-$(TOOLCHAIN)/bin/xtensa-lx106-elf-gcc: $(TOOLCHAIN) $(XTDLP) $(XTBP) build-gmp build-mpfr build-mpc build-binutils build-gdb build-first-stage-gcc build-newlib build-second-stage-gcc compress-upx
+$(TOOLCHAIN)/bin/xtensa-lx106-elf-gcc: $(TOOLCHAIN) $(XTDLP) $(XTBP) build-gmp build-mpfr build-mpc build-binutils build-gdb build-first-stage-gcc build-newlib build-second-stage-gcc strip compress-upx
 # $(TOOLCHAIN)/bin/xtensa-lx106-elf-gcc: $(XTDLP) $(XTBP) build-gmp build-mpfr build-mpc build-binutils build-first-stage-gcc 
 
 get-src: $(XTDLP)/$(GMP_DIR) $(XTDLP)/$(MPFR_DIR) $(XTDLP)/$(MPC_DIR) $(XTDLP)/$(BINUTILS_DIR)/configure.ac $(XTDLP)/$(GCC_DIR)/configure.ac $(XTDLP)/$(NEWLIB_DIR)/configure.ac $(XTDLP)/$(GDB_DIR)/configure.ac
@@ -488,7 +489,8 @@ build-first-stage-gcc: get-src build-gmp build-mpfr build-mpc build-binutils $(X
 build-second-stage-gcc: get-src build-gmp build-mpfr build-mpc build-binutils build-first-stage-gcc $(XTDLP)/$(GCC_DIR)/build-2
 build-newlib: get-src build-gmp build-mpfr build-mpc build-binutils $(XTDLP)/$(NEWLIB_DIR)/build $(XTBP)/$(NEWLIB_DIR) 
 build-gdb: get-src build-binutils $(XTDLP)/$(GDB_DIR)/build $(XTBP)/$(GDB_DIR)
-compress-upx: $(TOOLCHAIN)/bin/.upx
+compress-upx: $(TOOLCHAIN)/bin/.upx $(TOOLCHAIN)/xtensa-lx106-elf/bin/.upx $(TOOLCHAIN)/libexec/gcc/xtensa-lx106-elf/.upx
+strip: $(TOOLCHAIN)/bin/.strip $(TOOLCHAIN)/xtensa-lx106-elf/bin/.strip $(TOOLCHAIN)/libexec/gcc/xtensa-lx106-elf/.strip
 
 prebuilt-toolchain-windows: $(XTDLP)/$(XTENSA_TOOLCHAIN_WINDOWS_TAR)	
 	$(UNTAR) $(XTDLP)/$(XTENSA_TOOLCHAIN_WINDOWS_TAR) -C $(TOP)
@@ -665,9 +667,34 @@ $(XTDLP)/$(NEWLIB_DIR)/build: $(XTDLP)/$(NEWLIB_DIR)/configure.ac
 $(XTBP)/$(NEWLIB_DIR): $(XTDLP)/$(NEWLIB_DIR)/build
 	make install -C $(XTDLP)/$(NEWLIB_DIR)/build/
 
+
+# Srip Debug
+$(TOOLCHAIN)/bin/.strip:
+	@echo "Stripping debug symbols from executables in $(TOOLCHAIN)/bin/"
+	cd $(TOOLCHAIN)/bin/ && (find . -type f -executable -exec strip -s "{}" +) & touch $(TOOLCHAIN)/bin/.strip
+
+$(TOOLCHAIN)/xtensa-lx106-elf/bin/.strip:
+	@echo "Stripping debug symbols from executables in (TOOLCHAIN)/xtensa-lx106-elf/bin/"
+	cd $(TOOLCHAIN)/xtensa-lx106-elf/bin && (find . -type f -executable -exec strip -s "{}" +) & $(TOOLCHAIN)/xtensa-lx106-elf/bin/.strip
+
+$(TOOLCHAIN)/libexec/gcc/xtensa-lx106-elf/$(GCC_VERSION)/.strip:
+	@echo "Stripping debug symbols from executables in $(TOOLCHAIN)/libexec/gcc/xtensa-lx106-elf/$(GCC_VERSION)/"
+	cd $(TOOLCHAIN)/libexec/gcc/xtensa-lx106-elf/$(GCC_VERSION)/* && (find . -type f -executable -exec strip -s "{}" +) & touch $(TOOLCHAIN)/libexec/gcc/xtensa-lx106-elf/$(GCC_VERSION)/.strip
+
+
 # Compress via UPX
 $(TOOLCHAIN)/bin/.upx:
-	cd $(TOOLCHAIN)/bin/ && (find . -exec upx --best "{}" +) & touch $(TOOLCHAIN)/bin/.upx
+	@echo "Compressing executables in $(TOOLCHAIN)/bin/"
+	cd $(TOOLCHAIN)/bin/ && (find . -type f -executable -exec upx --best "{}" +) & touch $(TOOLCHAIN)/bin/.upx
+
+$(TOOLCHAIN)/xtensa-lx106-elf/bin/.upx:
+	@echo "Compressing executables in (TOOLCHAIN)/xtensa-lx106-elf/bin/"
+	cd $(TOOLCHAIN)/xtensa-lx106-elf/bin && (find . -type f -executable -exec upx --best "{}" +) & $(TOOLCHAIN)/xtensa-lx106-elf/bin/.upx
+
+$(TOOLCHAIN)/libexec/gcc/xtensa-lx106-elf/$(GCC_VERSION)/.upx:
+	@echo "Compressing executables in $(TOOLCHAIN)/libexec/gcc/xtensa-lx106-elf/$(GCC_VERSION)/"
+	cd $(TOOLCHAIN)/libexec/gcc/xtensa-lx106-elf/$(GCC_VERSION)/* && (find . -type f -executable -exec upx --best "{}" +) & touch $(TOOLCHAIN)/libexec/gcc/xtensa-lx106-elf/$(GCC_VERSION)/.upx
+
 
 
 
