@@ -103,6 +103,10 @@ debug:
 
 platform-specific:
 	@echo "Performing platform-specific actions"
+
+clean:
+	rm -rf $(ENV_DIR)/automake*
+	rm -rf $(ENV_DIR)/autoconf*
 	
 ifeq ($(OS),Windows_NT)
   ifneq (,$(findstring MINGW32,$(PLATFORM)))    
