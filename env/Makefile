@@ -1,4 +1,5 @@
-ENV_DIR := $(PWD)
+
+
 
 AUTOCONF_VERSION = 2.69
 AUTOMAKE_VERSION = 1.11.6
@@ -6,6 +7,12 @@ AUTOMAKE_VERSION = 1.11.6
 PLATFORM := $(shell uname -s)
 
 PREFIX := ""
+
+ifneq "$(wildcard env/ )" ""  
+  ENV_DIR = $(PWD)/env
+else
+  ENV_DIR = $(PWD)
+endif
 
 SAFEPATH := $(TOOLCHAIN)/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/mingw/bin/:/c/tools/mingw64/bin:
 
