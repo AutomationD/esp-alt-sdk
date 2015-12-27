@@ -98,6 +98,7 @@ debug:
 	@echo "----------------------------------------------------"
 	@echo "Outputting debug info. Makefiles are so Makefiles..."	
 	@echo "PATH: $(PATH)"
+	@echo "ENV_DIR: $(ENV_DIR)"
 	@echo "----------------------------------------------------"
 
 platform-specific:
