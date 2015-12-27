@@ -8,7 +8,7 @@ PLATFORM := $(shell uname -s)
 
 PREFIX := ""
 
-ifneq "$(wildcard env/ )" ""  
+ifneq "$(wildcard ./env/ )" ""  
   ENV_DIR = $(PWD)/env
 else
   ENV_DIR = $(PWD)
