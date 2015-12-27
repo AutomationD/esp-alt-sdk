@@ -667,7 +667,7 @@ $(XTBP)/$(NEWLIB_DIR): $(XTDLP)/$(NEWLIB_DIR)/build
 
 # Compress via UPX
 $(TOOLCHAIN)/bin/.upx:
-	cd $(TOOLCHAIN)/bin/ && (find . -exec upx --best "{}" +) && touch $(TOOLCHAIN)/bin/.upx
+	cd $(TOOLCHAIN)/bin/ && (find . -exec upx --best "{}" +) & touch $(TOOLCHAIN)/bin/.upx
 
 
 
