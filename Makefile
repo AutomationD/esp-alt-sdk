@@ -685,7 +685,7 @@ $(TOOLCHAIN)/libexec/gcc/xtensa-lx106-elf/$(GCC_VERSION)/.strip:
 # Compress via UPX
 $(TOOLCHAIN)/bin/.upx:
 	@echo "Compressing executables in $(TOOLCHAIN)/bin/"
-	cd $(TOOLCHAIN)/bin/ && (find . -type f -executable -exec upx --best "{}" +) & touch $(TOOLCHAIN)/bin/.upx
+	cd $(TOOLCHAIN)/bin/ && (find . -type f -perm +0111 -exec upx --best "{}" +) & touch $(TOOLCHAIN)/bin/.upx
 
 $(TOOLCHAIN)/xtensa-lx106-elf/bin/.upx:
 	@echo "Compressing executables in (TOOLCHAIN)/xtensa-lx106-elf/bin/"
