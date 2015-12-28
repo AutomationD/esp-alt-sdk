@@ -675,7 +675,7 @@ $(TOOLCHAIN)/bin/.strip:
 
 $(TOOLCHAIN)/xtensa-lx106-elf/bin/.strip:
 	@echo "Stripping debug symbols from executables in (TOOLCHAIN)/xtensa-lx106-elf/bin/"
-	cd $(TOOLCHAIN)/xtensa-lx106-elf/bin && (find . -type f -perm +0111 -exec strip -S "{}" +) & $(TOOLCHAIN)/xtensa-lx106-elf/bin/.strip
+	cd $(TOOLCHAIN)/xtensa-lx106-elf/bin && (find . -type f -perm +0111 -exec strip -S "{}" +) & touch $(TOOLCHAIN)/xtensa-lx106-elf/bin/.strip
 
 $(TOOLCHAIN)/libexec/gcc/xtensa-lx106-elf/$(GCC_VERSION)/.strip:
 	@echo "Stripping debug symbols from executables in $(TOOLCHAIN)/libexec/gcc/xtensa-lx106-elf/$(GCC_VERSION)/"
@@ -689,7 +689,7 @@ $(TOOLCHAIN)/bin/.upx:
 
 $(TOOLCHAIN)/xtensa-lx106-elf/bin/.upx:
 	@echo "Compressing executables in (TOOLCHAIN)/xtensa-lx106-elf/bin/"
-	cd $(TOOLCHAIN)/xtensa-lx106-elf/bin && (find . -type f -perm +0111 -exec upx --best "{}" +) & $(TOOLCHAIN)/xtensa-lx106-elf/bin/.upx
+	cd $(TOOLCHAIN)/xtensa-lx106-elf/bin && (find . -type f -perm +0111 -exec upx --best "{}" +) & touch $(TOOLCHAIN)/xtensa-lx106-elf/bin/.upx
 
 $(TOOLCHAIN)/libexec/gcc/xtensa-lx106-elf/$(GCC_VERSION)/.upx:
 	@echo "Compressing executables in $(TOOLCHAIN)/libexec/gcc/xtensa-lx106-elf/$(GCC_VERSION)/"
