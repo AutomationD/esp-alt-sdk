@@ -671,29 +671,29 @@ $(XTBP)/$(NEWLIB_DIR): $(XTDLP)/$(NEWLIB_DIR)/build
 # Srip Debug
 $(TOOLCHAIN)/bin/.strip:
 	@echo "Stripping debug symbols from executables in $(TOOLCHAIN)/bin/"
-	cd $(TOOLCHAIN)/bin/ && (find . -type f -perm +0111 -exec strip -s "{}" +) & touch $(TOOLCHAIN)/bin/.strip
+	cd $(TOOLCHAIN)/bin/ && (find . -type f -executable -exec strip -S "{}" +) & touch $(TOOLCHAIN)/bin/.strip
 
 $(TOOLCHAIN)/xtensa-lx106-elf/bin/.strip:
 	@echo "Stripping debug symbols from executables in (TOOLCHAIN)/xtensa-lx106-elf/bin/"
-	cd $(TOOLCHAIN)/xtensa-lx106-elf/bin && (find . -type f -perm +0111 -exec strip -s "{}" +) & $(TOOLCHAIN)/xtensa-lx106-elf/bin/.strip
+	cd $(TOOLCHAIN)/xtensa-lx106-elf/bin && (find . -type f -executable -exec strip -S "{}" +) & $(TOOLCHAIN)/xtensa-lx106-elf/bin/.strip
 
 $(TOOLCHAIN)/libexec/gcc/xtensa-lx106-elf/$(GCC_VERSION)/.strip:
 	@echo "Stripping debug symbols from executables in $(TOOLCHAIN)/libexec/gcc/xtensa-lx106-elf/$(GCC_VERSION)/"
-	cd $(TOOLCHAIN)/libexec/gcc/xtensa-lx106-elf/$(GCC_VERSION)/* && (find . -type f -perm +0111 -exec strip -s "{}" +) & touch $(TOOLCHAIN)/libexec/gcc/xtensa-lx106-elf/$(GCC_VERSION)/.strip
+	cd $(TOOLCHAIN)/libexec/gcc/xtensa-lx106-elf/$(GCC_VERSION)/* && (find . -type f -executable -exec strip -S "{}" +) & touch $(TOOLCHAIN)/libexec/gcc/xtensa-lx106-elf/$(GCC_VERSION)/.strip
 
 
 # Compress via UPX
 $(TOOLCHAIN)/bin/.upx:
 	@echo "Compressing executables in $(TOOLCHAIN)/bin/"
-	cd $(TOOLCHAIN)/bin/ && (find . -type f -perm +0111 -exec upx --best "{}" +) & touch $(TOOLCHAIN)/bin/.upx
+	cd $(TOOLCHAIN)/bin/ && (find . -type f -executable -exec upx --best "{}" +) & touch $(TOOLCHAIN)/bin/.upx
 
 $(TOOLCHAIN)/xtensa-lx106-elf/bin/.upx:
 	@echo "Compressing executables in (TOOLCHAIN)/xtensa-lx106-elf/bin/"
-	cd $(TOOLCHAIN)/xtensa-lx106-elf/bin && (find . -type f -perm +0111 -exec upx --best "{}" +) & $(TOOLCHAIN)/xtensa-lx106-elf/bin/.upx
+	cd $(TOOLCHAIN)/xtensa-lx106-elf/bin && (find . -type f -executable -exec upx --best "{}" +) & $(TOOLCHAIN)/xtensa-lx106-elf/bin/.upx
 
 $(TOOLCHAIN)/libexec/gcc/xtensa-lx106-elf/$(GCC_VERSION)/.upx:
 	@echo "Compressing executables in $(TOOLCHAIN)/libexec/gcc/xtensa-lx106-elf/$(GCC_VERSION)/"
-	cd $(TOOLCHAIN)/libexec/gcc/xtensa-lx106-elf/$(GCC_VERSION)/* && (find . -type f -perm +0111 -exec upx --best "{}" +) & touch $(TOOLCHAIN)/libexec/gcc/xtensa-lx106-elf/$(GCC_VERSION)/.upx
+	cd $(TOOLCHAIN)/libexec/gcc/xtensa-lx106-elf/$(GCC_VERSION)/* && (find . -type f -executable -exec upx --best "{}" +) & touch $(TOOLCHAIN)/libexec/gcc/xtensa-lx106-elf/$(GCC_VERSION)/.upx
 
 
 
