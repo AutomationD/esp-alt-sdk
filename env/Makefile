@@ -3,6 +3,7 @@
 
 AUTOCONF_VERSION = 2.69
 AUTOMAKE_VERSION = 1.11.6
+MINGW_DIR := c:\tools\mingw32
 
 PLATFORM := $(shell uname -s)
 
