@@ -21,6 +21,11 @@ _Please don't report bugs (yet)_
     + MacOS
 - Up-to-date binary builds
 - Open build process 
+- Gcc 4.9.2
+- Gdb on all platforms
+- Small size
+    + Stripped out debug symbols
+    + UPX compressed
 
 ## Contents
 - [Xtensa Toolchain](https://github.com/jcmvbkbc/gcc-xtensa/)
