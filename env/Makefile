@@ -1,13 +1,21 @@
-ENV_DIR := $(PWD)
+
+
 
 AUTOCONF_VERSION = 2.69
 AUTOMAKE_VERSION = 1.11.6
+MINGW_DIR := c:\tools\mingw32
 
 PLATFORM := $(shell uname -s)
 
 PREFIX := ""
 
-SAFEPATH := $(PATH):$(TOOLCHAIN)/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/mingw/bin/:/c/tools/mingw64/bin:
+ifneq "$(wildcard $(PWD)/env )" ""  
+  ENV_DIR = $(PWD)/env
+else
+  ENV_DIR = $(PWD)
+endif
+
+SAFEPATH := $(TOOLCHAIN)/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/mingw/bin/:/c/tools/mingw64/bin:
 
 all: debug platform-specific
 	
@@ -42,13 +50,13 @@ $(PREFIX)/bin/autoconf: $(ENV_DIR)/autoconf-$(AUTOCONF_VERSION).tar.xz
 	PATH=$(SAFEPATH) cd $(ENV_DIR)/autoconf-$(AUTOCONF_VERSION); make
 	PATH=$(SAFEPATH) cd $(ENV_DIR)/autoconf-$(AUTOCONF_VERSION); make install
 
-$(PREFIX)/bin/automake: $(PREFIX)/bin/autoconf $(ENV_DIR)/automake-$(AUTOMAKE_VERSION).tar.xz	
+$(PREFIX)/bin/automake: $(PREFIX)/bin/autoconf $(ENV_DIR)/automake-$(AUTOMAKE_VERSION).tar.xz	/mingw
 	tar -xf $(ENV_DIR)/automake-$(AUTOMAKE_VERSION).tar.xz
 	PATH=$(SAFEPATH) cd $(ENV_DIR)/automake-$(AUTOMAKE_VERSION); ./configure --prefix=$(PREFIX)
 	PATH=$(SAFEPATH) cd $(ENV_DIR)/automake-$(AUTOMAKE_VERSION); make
 	PATH=$(SAFEPATH) cd $(ENV_DIR)/automake-$(AUTOMAKE_VERSION); make install
-	PATH=$(SAFEPATH) cd $(PREFIX)/share/; ln -s aclocal-1.11 aclocal
-	PATH=$(SAFEPATH) cd $(PREFIX)/share/; ln -s automake-1.11 automake
+	PATH=$(SAFEPATH) cd $(PREFIX)/share/; ln -sf aclocal-1.11 aclocal
+	PATH=$(SAFEPATH) cd $(PREFIX)/share/; ln -sf automake-1.11 automake
 
 /mingw/bin/autoconf: $(ENV_DIR)/autoconf-$(AUTOCONF_VERSION).tar.xz
 	echo Installing autoconf-$(AUTOCONF_VERSION)
@@ -57,13 +65,13 @@ $(PREFIX)/bin/automake: $(PREFIX)/bin/autoconf $(ENV_DIR)/automake-$(AUTOMAKE_VE
 	PATH=$(SAFEPATH) cd $(ENV_DIR)/autoconf-$(AUTOCONF_VERSION); make
 	PATH=$(SAFEPATH) cd $(ENV_DIR)/autoconf-$(AUTOCONF_VERSION); make install
 
-/mingw/bin/automake: /mingw/bin/autoconf $(ENV_DIR)/automake-$(AUTOMAKE_VERSION).tar.xz	
+/mingw/bin/automake: /mingw/bin/autoconf $(ENV_DIR)/automake-$(AUTOMAKE_VERSION).tar.xz	/mingw/bin/autoconf /mingw
 	tar -xf $(ENV_DIR)/automake-$(AUTOMAKE_VERSION).tar.xz
 	PATH=$(SAFEPATH) cd $(ENV_DIR)/automake-$(AUTOMAKE_VERSION); ./configure --prefix=/mingw
 	PATH=$(SAFEPATH) cd $(ENV_DIR)/automake-$(AUTOMAKE_VERSION); make
 	PATH=$(SAFEPATH) cd $(ENV_DIR)/automake-$(AUTOMAKE_VERSION); make install
-	PATH=$(SAFEPATH) cd /mingw/share/; ln -s aclocal-1.11 aclocal
-	PATH=$(SAFEPATH) cd /mingw/share/; ln -s automake-1.11 automake
+#	PATH=$(SAFEPATH) cd /mingw/share/; ln -sf aclocal-1.11 aclocal
+#	PATH=$(SAFEPATH) cd /mingw/share/; ln -sf automake-1.11 automake
 
 /usr/bin/autoconf: $(ENV_DIR)/autoconf-$(AUTOCONF_VERSION).tar.xz
 	echo Installing autoconf-$(AUTOCONF_VERSION)
@@ -72,7 +80,7 @@ $(PREFIX)/bin/automake: $(PREFIX)/bin/autoconf $(ENV_DIR)/automake-$(AUTOMAKE_VE
 	PATH=$(SAFEPATH) cd $(ENV_DIR)/autoconf-$(AUTOCONF_VERSION); make
 	PATH=$(SAFEPATH) cd $(ENV_DIR)/autoconf-$(AUTOCONF_VERSION); make install
 
-/usr/bin/automake: /usr/bin/autoconf $(ENV_DIR)/automake-$(AUTOMAKE_VERSION).tar.xz	
+/usr/bin/automake: /usr/bin/autoconf $(ENV_DIR)/automake-$(AUTOMAKE_VERSION).tar.xz	/mingw
 	tar -xf $(ENV_DIR)/automake-$(AUTOMAKE_VERSION).tar.xz
 	PATH=$(SAFEPATH) cd $(ENV_DIR)/automake-$(AUTOMAKE_VERSION); ./configure --prefix=/usr
 	PATH=$(SAFEPATH) cd $(ENV_DIR)/automake-$(AUTOMAKE_VERSION); make
@@ -91,10 +99,15 @@ debug:
 	@echo "----------------------------------------------------"
 	@echo "Outputting debug info. Makefiles are so Makefiles..."	
 	@echo "PATH: $(PATH)"
+	@echo "ENV_DIR: $(ENV_DIR)"
 	@echo "----------------------------------------------------"
 
 platform-specific:
 	@echo "Performing platform-specific actions"
+
+clean:
+	rm -rf $(ENV_DIR)/automake*
+	rm -rf $(ENV_DIR)/autoconf*
 	
 ifeq ($(OS),Windows_NT)
   ifneq (,$(findstring MINGW32,$(PLATFORM)))    

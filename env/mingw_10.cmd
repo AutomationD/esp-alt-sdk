@@ -11,6 +11,7 @@ choco sources add -name kireevco -source 'https://www.myget.org/F/kireevco-choco
 echo Installing wget & curl
 choco install wget curl -y
 
+echo Installing upx
 choco install upx -version 3.08
 
 echo Install python
