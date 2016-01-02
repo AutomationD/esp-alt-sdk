@@ -191,7 +191,7 @@ libcirom: $(TOOLCHAIN)/xtensa-lx106-elf/lib/libcirom.a
 sdk_patch: .sdk_patch_$(VENDOR_SDK_VERSION)
 
 
-.sdk_patch_1.5.0-rtos:
+.sdk_patch_1.3.0-rtos:
 	@touch $@
 
 .sdk_patch_1.5.0:
