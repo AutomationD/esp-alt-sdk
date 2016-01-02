@@ -151,7 +151,7 @@ $(UTILS_DIR)/esptool: $(XTDLP)/$(ESPTOOL_DIR)/esptool.py
 		cp $(XTDLP)/$(ESPTOOL_DIR)/esptool.py $(UTILS_DIR)/
   endif
 
-$(UTILS_DIR)/memanalyzer:
+$(UTILS_DIR)/memanalyzer: $(XTDLP)/$(MEMANALYZER_DIR)/MemAnalyzer.sln
 	mkdir -p $(UTILS_DIR)/	  
 	
 	cd $(XTDLP)/$(MEMANALYZER_DIR)/MemAnalyzer/; mcs Program.cs
