@@ -71,6 +71,9 @@ SAFEPATH := $(TOOLCHAIN)/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/
 VENDOR_SDK_ZIP = $(VENDOR_SDK_ZIP_$(VENDOR_SDK_VERSION))
 VENDOR_SDK_DIR = $(VENDOR_SDK_DIR_$(VENDOR_SDK_VERSION))
 
+VENDOR_SDK_ZIP_1.3.0-rtos = ESP8266_RTOS_SDK-v1.3.0.10.zip
+VENDOR_SDK_DIR_1.3.0-rtos = ESP8266_RTOS_SDK-v1.3.0
+
 VENDOR_SDK_ZIP_1.5.0 = esp_iot_sdk_v1.5.0_15_11_27.zip
 VENDOR_SDK_DIR_1.5.0 = esp_iot_sdk_v1.5.0
 VENDOR_SDK_ZIP_1.4.0 = esp_iot_sdk_v1.4.0_15_09_18.zip
@@ -187,6 +190,9 @@ libcirom: $(TOOLCHAIN)/xtensa-lx106-elf/lib/libcirom.a
 
 sdk_patch: .sdk_patch_$(VENDOR_SDK_VERSION)
 
+
+.sdk_patch_1.3.0-rtos:
+	@touch $@
 
 .sdk_patch_1.5.0:
 	patch -N -d $(VENDOR_SDK_DIR_1.5.0) -p1 < $(PATCHES_DIR)/c_types-c99.patch
@@ -337,6 +343,7 @@ sdk: $(TOP)/sdk
 $(VENDOR_SDK_DIR)/.dir: $(VENDOR_SDK_ZIP)
 	$(UNTAR) $^
 	-mv License $(VENDOR_SDK_DIR)
+	-mv LICENSE $(VENDOR_SDK_DIR)
 	touch $@
 
 
@@ -391,6 +398,9 @@ esp_iot_sdk_v0.9.3_14_11_21.zip:
 esp_iot_sdk_v0.9.2_14_10_24.zip:
 	wget --content-disposition "http://bbs.espressif.com/download/file.php?id=9" --output-document $@
 
+$(VENDOR_SDK_ZIP_1.3.0-rtos):
+	wget --no-check-certificate  --content-disposition "https://dl.bintray.com/kireevco/generic/$(VENDOR_SDK_ZIP_1.3.0-rtos)" --output-document $@
+
 $(XTDLP)/$(GMP_TAR):
 	wget -c http://ftp.gnu.org/gnu/gmp/$(GMP_TAR) --output-document $(XTDLP)/$(GMP_TAR)	
 
@@ -417,36 +427,36 @@ $(XTDLP)/$(XTENSA_TOOLCHAIN_LINUX_TAR):
 
 $(XTDLP)/$(BINUTILS_DIR)/configure.ac:
 	@echo "You cloned without --recursive, fetching $(BINUTILS_DIR) for you."
-	git submodule update --init --recursive
+	git submodule update --init $(XTDLP)/$(BINUTILS_DIR)
 
 
 
 $(XTDLP)/$(NEWLIB_DIR)/configure.ac:
 #	git clone -b xtensa https://github.com/jcmvbkbc/newlib-xtensa.git $(XTDLP)/$(NEWLIB_DIR)
 	@echo "You cloned without --recursive, fetching jcmvbkbc/newlib-xtensa for you."
-	git submodule update --init --recursive
+	git submodule update --init $(XTDLP)/$(NEWLIB_DIR)
 
 $(XTDLP)/$(GCC_DIR)/configure.ac:
 #	git clone https://github.com/jcmvbkbc/gcc-xtensa.git $(XTDLP)/$(GCC_DIR)
 	@echo "You cloned without --recursive, fetching jcmvbkbc/gcc-xtensa for you."
-	git submodule update --init --recursive
+	git submodule update --init $(XTDLP)/$(GCC_DIR)
 
 $(XTDLP)/$(LIBHAL_DIR)/configure.ac:
 	@echo "You cloned without --recursive, fetching submodules for you."
-	git submodule update --init --recursive
+	git submodule update --init $(XTDLP)/$(LIBHAL_DIR)
 
 
 $(XTDLP)/$(ESPTOOL_DIR)/esptool.py:
 	@echo "You cloned without --recursive, fetching esptool for you."
-	git submodule update --init --recursive
+	git submodule update --init $(XTDLP)/$(ESPTOOL_DIR)
 
 $(XTDLP)/$(ESPTOOL2_DIR)/esptool2.c:
 	@echo "You cloned without --recursive, fetching esptool2 for you."
-	git submodule update --init --recursive
+	git submodule update --init $(XTDLP)/$(ESPTOOL2_DIR)
 
 $(XTDLP)/$(MEMANALYZER_DIR)/MemAnalyzer.sln:
 	@echo "You cloned without --recursive, fetching MemAnalyzer for you."
-	git submodule update --init --recursive
+	git submodule update --init $(XTDLP)/$(MEMANALYZER_DIR)
 
 
 

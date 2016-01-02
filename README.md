@@ -23,6 +23,7 @@ _Please don't report bugs (yet)_
 - Open build process 
 - Gcc 5.1.0
 - Gdb on all platforms
+- Additional tools (also compiled from source)
 - Small size
     + Stripped out debug symbols
     + UPX compressed
@@ -32,9 +33,11 @@ _Please don't report bugs (yet)_
 - [Espressif NONOS SDK](http://bbs.espressif.com/viewforum.php?f=46) with official patches
 - [lx106-hal](https://github.com/tommie/lx106-hal)
 - [newlib-xtensa](https://github.com/jcmvbkbc/newlib-xtensa)
-- [binutils-gdb-xtensa](https://github.com/jcmvbkbc/binutils-gdb-xtensa) with GDB debugger
+- [esp-binutils](https://github.com/fpoussin/esp-binutils.git)
+- [gdb](http://www.gnu.org/software/gdb)
 - [esptool](https://github.com/themadinventor/esptool)
 - [esptool2](https://github.com/raburton/esptool2)
+- [memanalyzer](https://github.com/Sermus/ESP8266_memory_analyzer)
 
 ## Download
 __Download links are still unstable, please check__ [bintray](https://bintray.com/kireevco/generic/esp-alt-sdk/view#files)
