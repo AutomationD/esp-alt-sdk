@@ -71,6 +71,9 @@ SAFEPATH := $(TOOLCHAIN)/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/
 VENDOR_SDK_ZIP = $(VENDOR_SDK_ZIP_$(VENDOR_SDK_VERSION))
 VENDOR_SDK_DIR = $(VENDOR_SDK_DIR_$(VENDOR_SDK_VERSION))
 
+VENDOR_SDK_ZIP_1.3.0_RTOS = ESP8266_RTOS_SDK-v1.3.0.8.zip
+VENDOR_SDK_DIR_1.3.0_RTOS = ESP8266_RTOS_SDK-v1.3.0.8
+
 VENDOR_SDK_ZIP_1.5.0 = esp_iot_sdk_v1.5.0_15_11_27.zip
 VENDOR_SDK_DIR_1.5.0 = esp_iot_sdk_v1.5.0
 VENDOR_SDK_ZIP_1.4.0 = esp_iot_sdk_v1.4.0_15_09_18.zip
@@ -390,6 +393,9 @@ esp_iot_sdk_v0.9.3_14_11_21.zip:
 
 esp_iot_sdk_v0.9.2_14_10_24.zip:
 	wget --content-disposition "http://bbs.espressif.com/download/file.php?id=9" --output-document $@
+
+ESP8266_RTOS_SDK-v1.3.0.8.zip:
+	wget --content-disposition "https://dl.bintray.com/kireevco/generic/$(VENDOR_SDK_ZIP_1.3.0_RTOS)" --output-document $@
 
 $(XTDLP)/$(GMP_TAR):
 	wget -c http://ftp.gnu.org/gnu/gmp/$(GMP_TAR) --output-document $(XTDLP)/$(GMP_TAR)	
