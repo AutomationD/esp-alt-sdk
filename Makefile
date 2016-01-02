@@ -398,7 +398,7 @@ esp_iot_sdk_v0.9.2_14_10_24.zip:
 	wget --content-disposition "http://bbs.espressif.com/download/file.php?id=9" --output-document $@
 
 ESP8266_RTOS_SDK-v1.3.0.8.zip:
-	wget --content-disposition "https://dl.bintray.com/kireevco/generic/$(VENDOR_SDK_ZIP_1.3.0-rtos)" --output-document $@
+	wget --no-check-certificate  --content-disposition "https://dl.bintray.com/kireevco/generic/$(VENDOR_SDK_ZIP_1.3.0-rtos)" --output-document $@
 
 $(XTDLP)/$(GMP_TAR):
 	wget -c http://ftp.gnu.org/gnu/gmp/$(GMP_TAR) --output-document $(XTDLP)/$(GMP_TAR)	
