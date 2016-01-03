@@ -44,8 +44,9 @@ __Download links are still unstable, please check__ [bintray](https://bintray.co
 
 | Windows | MacOS | Linux |
 | ------------- | ------------- | ------------- |
-| [1.4.0](https://bintray.com/artifact/download/kireevco/generic/esp-alt-sdk-v1.4.0.235-windows-x86.zip) | [1.4.0](https://bintray.com/artifact/download/kireevco/generic/esp-alt-sdk-v1.4.0.235-macos-x86_64.zip) | [1.4.0](https://bintray.com/artifact/download/kireevco/generic/esp-alt-sdk-v1.4.0.235-linux-x86_64.tar.gz) |
-| [1.5.0](https://bintray.com/artifact/download/kireevco/generic/esp-alt-sdk-v1.5.0.235-windows-x86.zip) | [1.5.0](https://bintray.com/artifact/download/kireevco/generic/esp-alt-sdk-v1.5.0.235-macos-x86_64.zip) | [1.5.0](https://bintray.com/artifact/download/kireevco/generic/esp-alt-sdk-v1.5.0.235-linux-x86_64.tar.gz) |
+| [1.4.0](https://bintray.com/kireevco/generic/esp-alt-sdk/1.4.0/view#files) | [1.4.0](https://bintray.com/kireevco/generic/esp-alt-sdk/1.4.0/view#files) | [1.4.0](https://bintray.com/kireevco/generic/esp-alt-sdk/1.4.0/view#files) |
+| [1.5.0](https://bintray.com/kireevco/generic/esp-alt-sdk/1.5.0/view#files) | [1.5.0](https://bintray.com/kireevco/generic/esp-alt-sdk/1.5.0/view#files) | [1.5.0](https://bintray.com/kireevco/generic/esp-alt-sdk/1.5.0/view#files) |
+| [1.3.0-rtos](https://bintray.com/kireevco/generic/esp-alt-sdk/1.3.0-rtos/view#files) | [1.3.0-rtos](https://bintray.com/kireevco/generic/esp-alt-sdk/1.3.0-rtos/view#files) | [1.3.0-rtos](https://bintray.com/kireevco/generic/esp-alt-sdk/1.3.0-rtos/view#files) |
 
 ## Build yourself
 ### Windows
