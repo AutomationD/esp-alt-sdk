@@ -1,6 +1,6 @@
 # Author: Dmitry Kireev (@kireevco)
 #
-# Contrubutions: (@Juppit) - patches for gcc-4.9.2 & Cygwin
+# Contrubutions: (@Juppit) - patches for gcc-4.9.2 & reviews to Makefile
 #
 # Credits to Paul Sokolovsky (@pfalcon) for esp-open-sdk
 # Credits to Fabien Poussin (@fpoussin) for xtensa-lx106-elf build script
