@@ -1,6 +1,7 @@
 src/gmp*
 src/mpc*
 src/mpfr*
+src/gdb*
 build
 xtensa-lx106-elf
 sdk
