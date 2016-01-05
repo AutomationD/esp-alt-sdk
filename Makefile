@@ -40,13 +40,12 @@ GDB_TAR = gdb-$(GDB_VERSION).tar.xz
 GMP_DIR = gmp-$(GMP_VERSION)
 MPFR_DIR = mpfr-$(MPFR_VERSION)
 MPC_DIR = mpc-$(MPC_VERSION)
-GCC_DIR = gcc-$(GCC_VERSION)
 GDB_DIR = gdb-$(GDB_VERSION)
 XTENSA_TOOLCHAIN_WINDOWS_TAR := xtensa-lx106-elf-v5.1.0.64-windows-x86.zip
 XTENSA_TOOLCHAIN_MAC_TAR := xtensa-lx106-elf-v5.1.0.64-macos-x86_64.zip
 XTENSA_TOOLCHAIN_LINUX_TAR := xtensa-lx106-elf-v5.1.0.64-linux-x86_64.tar.gz
 
-#GCC_DIR = gcc-xtensa
+GCC_DIR = gcc-xtensa
 NEWLIB_DIR = newlib-xtensa
 BINUTILS_DIR = esp-binutils
 LIBHAL_DIR = lx106-hal
@@ -137,8 +136,7 @@ build: toolchain standalone $(TOP)/sdk sdk_patch $(TOOLCHAIN)/xtensa-lx106-elf/l
 build-prebuilt-toolchain: standalone $(TOP)/sdk sdk_patch utils
 
 
-utils:
-#utils: esptool esptool2 memanalyzer
+utils: esptool esptool2 memanalyzer
 esptool: $(UTILS_DIR)/esptool
 esptool2: $(UTILS_DIR)/esptool2
 memanalyzer: $(UTILS_DIR)/memanalyzer
@@ -286,6 +284,10 @@ empty_user_rf_pre_init.o: $(PATCHES_DIR)/empty_user_rf_pre_init.c
 .sdk_patch_0.9.2: FRM_ERR_PATCH.rar esp_iot_sdk_v0.9.2/.dir 
 	unrar x -o+ $<
 	cp FRM_ERR_PATCH/*.a $(VENDOR_SDK_DIR)/lib/
+	@touch $@
+
+.sdk_patch_0.9.1:
+	patch -N -d $(VENDOR_SDK_DIR_0.9.1) -p1 < $(PATCHES_DIR)/c_types-c99.patch
 	@touch $@
 
 .u-int_least32_t-into-std:
