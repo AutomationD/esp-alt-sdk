@@ -465,7 +465,7 @@ libhal: $(TOOLCHAIN)/xtensa-lx106-elf/lib/libhal.a
 $(TOOLCHAIN)/xtensa-lx106-elf/lib/libhal.a: toolchain $(XTDLP)/$(LIBHAL_DIR)
 	make -C $(XTDLP)/$(LIBHAL_DIR) -f ../../Makefile _libhal
 
-_libhal: $(XTDLP)/$(LIBHAL_DIR)
+_libhal: $(XTDLP)/$(LIBHAL_DIR) $(XTDLP)/$(LIBHAL_DIR)/configure.ac
 	autoreconf -i
 	PATH=$(SAFEPATH) ./configure --host=$(TARGET) --prefix=$(TOOLCHAIN)/xtensa-lx106-elf/
 	PATH=$(SAFEPATH) make
