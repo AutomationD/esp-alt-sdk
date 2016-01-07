@@ -477,7 +477,7 @@ $(XTDLP)/$(MEMANALYZER_DIR)/MemAnalyzer.sln:
 build_libhal: $(TOOLCHAIN)/xtensa-lx106-elf/lib/libhal.a
 
 #$(TOOLCHAIN)/xtensa-lx106-elf/lib/libhal.a: toolchain $(XTDLP)/$(LIBHAL_DIR)/configure.ac
-$(TOOLCHAIN)/xtensa-lx106-elf/lib/libhal.a: $(XTDLP)/$(LIBHAL_DIR)/src/libhal.a
+$(TOOLCHAIN)/xtensa-lx106-elf/lib/libhal.a: $(XTDLP)/$(LIBHAL_DIR)/configure.ac
 	$(MAKE_OPT) -C $(XTDLP)/$(LIBHAL_DIR) -f ../../Makefile _libhal
 
 _libhal:
