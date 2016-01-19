@@ -453,36 +453,36 @@ $(XTDLP)/$(XTENSA_TOOLCHAIN_LINUX_TAR):
 
 $(XTDLP)/$(BINUTILS_DIR)/configure.ac:
 	@echo "You cloned without --recursive, fetching $(BINUTILS_DIR) for you."
-	git submodule update --init $(XTDLP)/$(BINUTILS_DIR)
+	git submodule update --init src/$(BINUTILS_DIR)
 
 
 
 $(XTDLP)/$(NEWLIB_DIR)/configure.ac:
 #	git clone -b xtensa https://github.com/jcmvbkbc/newlib-xtensa.git $(XTDLP)/$(NEWLIB_DIR)
 	@echo "You cloned without --recursive, fetching jcmvbkbc/newlib-xtensa for you."
-	git submodule update --init $(XTDLP)/$(NEWLIB_DIR)
+	git submodule update --init src/$(NEWLIB_DIR)
 
 $(XTDLP)/$(GCC_DIR)/configure.ac:
 #	git clone https://github.com/jcmvbkbc/gcc-xtensa.git $(XTDLP)/$(GCC_DIR)
 	@echo "You cloned without --recursive, fetching jcmvbkbc/gcc-xtensa for you."
-	git submodule update --init $(XTDLP)/$(GCC_DIR)
+	git submodule update --init src/$(GCC_DIR)
 
 $(XTDLP)/$(LIBHAL_DIR)/configure.ac:
 	@echo "You cloned without --recursive, fetching submodules for you."
-	git submodule update --init $(XTDLP)/$(LIBHAL_DIR)
+	git submodule update --init src/$(LIBHAL_DIR)
 
 
 $(XTDLP)/$(ESPTOOL_DIR)/esptool.py:
 	@echo "You cloned without --recursive, fetching esptool for you."
-	git submodule update --init $(XTDLP)/$(ESPTOOL_DIR)
+	git submodule update --init src/$(ESPTOOL_DIR)
 
 $(XTDLP)/$(ESPTOOL2_DIR)/esptool2.c:
 	@echo "You cloned without --recursive, fetching esptool2 for you."
-	git submodule update --init $(XTDLP)/$(ESPTOOL2_DIR)
+	git submodule update --init src/$(ESPTOOL2_DIR)
 
 $(XTDLP)/$(MEMANALYZER_DIR)/MemAnalyzer.sln:
 	@echo "You cloned without --recursive, fetching MemAnalyzer for you."
-	git submodule update --init $(XTDLP)/$(MEMANALYZER_DIR)
+	git submodule update --init src/$(MEMANALYZER_DIR)
 
 
 
