@@ -44,6 +44,7 @@ MPC_DIR = mpc-$(MPC_VERSION)
 GDB_DIR = gdb-$(GDB_VERSION)
 
 GCC_DIR = gcc-$(GCC_VERSION)
+
 ifneq "$(wildcard $(XTDLP)/gcc-xtensa)" ""
     GCC_DIR := gcc-xtensa
 endif
@@ -607,7 +608,7 @@ $(XTDLP)/$(GMP_DIR): $(XTDLP)/$(GMP_TAR)
 
 $(XTDLP)/$(GMP_DIR)/build: $(XTDLP)/$(GMP_DIR)
 	mkdir -p $(XTDLP)/$(GMP_DIR)/build/
-	cd $(XTDLP)/$(GMP_DIR)/build/; ../$(CONF_OPT) --prefix=$(XTBP)/gmp --disable-shared --enable-static --build=$(BUILD_TARGET) --host=$(BUILD_TARGET)
+	cd $(XTDLP)/$(GMP_DIR)/build/; PATH=$(SAFEPATH); ../$(CONF_OPT) --prefix=$(XTBP)/gmp --disable-shared --enable-static --build=$(BUILD_TARGET) --host=$(BUILD_TARGET)
 	$(MAKE_OPT) -C $(XTDLP)/$(GMP_DIR)/build/
 
 $(XTBP)/gmp: $(XTDLP)/$(GMP_DIR)/build
@@ -620,7 +621,7 @@ $(XTDLP)/$(MPFR_DIR): $(XTDLP)/$(MPFR_TAR)
 
 $(XTDLP)/$(MPFR_DIR)/build: $(XTDLP)/$(MPFR_DIR)
 	mkdir -p $(XTDLP)/$(MPFR_DIR)/build
-	cd $(XTDLP)/$(MPFR_DIR)/build/; ../$(CONF_OPT) --prefix=$(XTBP)/mpfr --with-gmp=$(XTBP)/gmp --disable-shared --enable-static --build=$(BUILD_TARGET) --host=$(BUILD_TARGET)
+	cd $(XTDLP)/$(MPFR_DIR)/build/; PATH=$(SAFEPATH); ../$(CONF_OPT) --prefix=$(XTBP)/mpfr --with-gmp=$(XTBP)/gmp --disable-shared --enable-static --build=$(BUILD_TARGET) --host=$(BUILD_TARGET)
 	$(MAKE_OPT) -C $(XTDLP)/$(MPFR_DIR)/build/
 
 $(XTBP)/mpfr: $(XTDLP)/$(MPFR_DIR)/build
