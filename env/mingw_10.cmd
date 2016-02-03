@@ -32,7 +32,7 @@ choco install mingw-get -y
 
 
 echo Installing Mono (for MemAnalyzer and others)
-choco install mono  -version 3.2.3 -y
+choco install mono -version 3.2.3 -y
 
 echo Adding ENV variables
 setx /M PATH "C:\Program Files (x86)\Mono-3.2.3\bin;%PATH%" && set PATH=C:\Program Files(x86)\Mono-3.2.3\bin;%PATH%

@@ -14,8 +14,8 @@ UTILS = n
 
 VENDOR_SDK_VERSION = 1.4.0
 GMP_VERSION = 6.0.0a
-MPFR_VERSION = 3.1.2
-MPC_VERSION = 1.0.2
+MPFR_VERSION = 3.1.3
+MPC_VERSION = 1.0.3
 GDB_VERSION = 7.10
 GCC_VERSION = 5.1.0
 
@@ -554,7 +554,7 @@ ifneq (,$(findstring CYGWIN,$(PLATFORM)))
 		$(MAKE) prebuilt-toolchain-windows
 		$(MAKE) build-prebuilt-toolchain
   else
-		$(MAKE) build
+		$(MAKE) build BUILD_TARGET=i686-w64-mingw32
   endif  
 endif
 
