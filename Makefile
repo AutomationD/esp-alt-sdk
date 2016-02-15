@@ -162,7 +162,7 @@ esptool2: $(UTILS_DIR)/esptool2
 memanalyzer: $(UTILS_DIR)/memanalyzer
 
 
-$(UTILS_DIR)/esptool: $(XTDLP)/$(ESPTOOL_DIR)/esptool.py
+$(UTILS_DIR)/esptool: $(XTDLP)/$(ESPTOOL_DIR)/esptool.py	
 	mkdir -p $(UTILS_DIR)/
 #	cd $(XTDLP)/$(ESPTOOL_DIR); python setup.py install
   ifeq ($(OS),Windows_NT)
@@ -602,6 +602,7 @@ $(TOOLCHAIN):
 
 # GMP
 $(XTDLP)/$(GMP_DIR): $(XTDLP)/$(GMP_TAR)
+	@echo "################## GMP ##################"
 	mkdir -p $(XTDLP)/$(GMP_DIR)
 	$(UNTAR) $(XTDLP)/$(GMP_TAR) -C $(XTDLP)/$(GMP_DIR)
 	mv $(XTDLP)/$(GMP_DIR)/gmp-*/* $(XTDLP)/$(GMP_DIR)
@@ -616,6 +617,7 @@ $(XTBP)/gmp: $(XTDLP)/$(GMP_DIR)/build
 
 # MPFR	
 $(XTDLP)/$(MPFR_DIR): $(XTDLP)/$(MPFR_TAR)
+	@echo "################## MPFR ##################"
 	mkdir -p $(XTDLP)/$(MPFR_DIR)
 	$(UNTAR) $(XTDLP)/$(MPFR_TAR) -C $(XTDLP)/
 
@@ -629,6 +631,7 @@ $(XTBP)/mpfr: $(XTDLP)/$(MPFR_DIR)/build
 
 # MPC	
 $(XTDLP)/$(MPC_DIR): $(XTDLP)/$(MPC_TAR)
+	@echo "################## MPC ##################"
 	mkdir -p $(XTDLP)/$(MPC_DIR)
 	$(UNTAR) $(XTDLP)/$(MPC_TAR) -C $(XTDLP)/
 
@@ -644,6 +647,7 @@ $(XTBP)/mpc: $(XTDLP)/$(MPC_DIR)/build
 
 # Binutils
 $(XTDLP)/$(BINUTILS_DIR)/build: $(XTDLP)/$(BINUTILS_DIR)/configure.ac
+	@echo "################## BINUTILS ##################"
 	mkdir -p $(XTDLP)/$(BINUTILS_DIR)/build
 	cd $(XTDLP)/$(BINUTILS_DIR)/build/; chmod -R 777 $(XTDLP)/$(BINUTILS_DIR); ../$(CONF_OPT) --prefix=$(TOOLCHAIN) --target=$(TARGET) --enable-werror=no  --enable-multilib --disable-nls --disable-shared --disable-threads --with-gcc --with-gnu-as --with-gnu-ld --build=$(BUILD_TARGET) --host=$(HOST_TARGET)
 	$(MAKE_OPT) -C $(XTDLP)/$(BINUTILS_DIR)/build/
@@ -655,6 +659,7 @@ $(XTDLP)/$(BINUTILS_DIR): $(XTDLP)/$(BINUTILS_DIR)/build
 
 # GDB
 $(XTDLP)/$(GDB_DIR)/configure.ac: $(XTDLP)/$(GDB_TAR)
+	@echo "################## GDB ##################"
   ifeq "$(wildcard $(XTDLP)/$(GDB_DIR) )" ""
 	mkdir -p $(XTDLP)/$(GDB_DIR)
 	$(UNTAR) $(XTDLP)/$(GDB_TAR) -C $(XTDLP)
@@ -672,6 +677,7 @@ $(XTDLP)/$(GDB_DIR): $(XTDLP)/$(GDB_DIR)/build
 
 # GCC Step 1
 $(XTDLP)/$(GCC_DIR)/build-1: $(XTDLP)/$(GCC_DIR)/configure.ac
+	@echo "################## GCC PASS 1 ##################"
 	mkdir -p $(XTDLP)/$(GCC_DIR)/build-1
 	cd $(XTDLP)/$(GCC_DIR)/build-1/; ../$(CONF_OPT) --prefix=$(TOOLCHAIN) --target=$(TARGET) --enable-multilib --enable-languages=c --with-newlib --disable-nls --disable-shared --disable-threads --with-gnu-as --with-gnu-ld --with-gmp=$(XTBP)/gmp --with-mpfr=$(XTBP)/mpfr --with-mpc=$(XTBP)/mpc  --disable-libssp --without-headers --disable-__cxa_atexit --build=$(BUILD_TARGET) --host=$(HOST_TARGET)
 	$(MAKE_OPT) all-gcc -C $(XTDLP)/$(GCC_DIR)/build-1/
@@ -681,6 +687,7 @@ $(XTDLP)/$(GCC_DIR)/build-1: $(XTDLP)/$(GCC_DIR)/configure.ac
 
 # GCC Step 2
 $(XTDLP)/$(GCC_DIR)/build-2: $(XTDLP)/$(GCC_DIR)/configure.ac $(XTDLP)/$(NEWLIB_DIR)
+	@echo "################## GCC PASS 2 ##################"
 	make $(PATCHES_DIR)/.gcc_patch
 	mkdir -p $(XTDLP)/$(GCC_DIR)/build-2
 	cd $(XTDLP)/$(GCC_DIR)/build-2/; ../$(CONF_OPT) --prefix=$(TOOLCHAIN) --target=$(TARGET) --enable-multilib --disable-nls --disable-shared --disable-threads --with-gnu-as --with-gnu-ld --with-gmp=$(XTBP)/gmp --with-mpfr=$(XTBP)/mpfr --with-mpc=$(XTBP)/mpc --enable-languages=c,c++ --with-newlib --disable-libssp --disable-__cxa_atexit --build=$(BUILD_TARGET) --host=$(HOST_TARGET)
@@ -693,6 +700,7 @@ $(XTDLP)/$(GCC_DIR): $(XTDLP)/$(GCC_DIR)/build-1 $(XTDLP)/$(GCC_DIR)/build-2
 
 # Newlib
 $(XTDLP)/$(NEWLIB_DIR)/build: $(XTDLP)/$(NEWLIB_DIR)/configure.ac
+	@echo "################## NEWLIB ##################"
 	mkdir $(XTDLP)/$(NEWLIB_DIR)/build
 	cd $(XTDLP)/$(NEWLIB_DIR)/build/; ../$(CONF_OPT) --prefix=$(TOOLCHAIN) --target=$(TARGET) --enable-multilib --with-gnu-as --with-gnu-ld --disable-nls --build=$(BUILD_TARGET) --host=$(HOST_TARGET)
 	$(MAKE_OPT) -C $(XTDLP)/$(NEWLIB_DIR)/build/
@@ -704,6 +712,7 @@ $(XTDLP)/$(NEWLIB_DIR): $(XTDLP)/$(NEWLIB_DIR)/build
 
 # Libhal
 $(XTDLP)/$(LIBHAL_DIR)/build: $(XTDLP)/$(LIBHAL_DIR)/configure.ac
+	@echo "################## LIBHAL ##################"
 	cd $(XTDLP)/$(LIBHAL_DIR); autoreconf -i
 	mkdir -p $(XTDLP)/$(LIBHAL_DIR)/build/
 	cd $(XTDLP)/$(LIBHAL_DIR)/build/; PATH=$(SAFEPATH) ../$(CONF_OPT) --host=$(TARGET) --prefix=$(TOOLCHAIN)/xtensa-lx106-elf/
@@ -715,7 +724,7 @@ $(XTDLP)/$(LIBHAL_DIR): $(XTDLP)/$(LIBHAL_DIR)/build
 	@touch $@
 
 # Srip Debug
-$(TOOLCHAIN)/bin/.strip:
+$(TOOLCHAIN)/bin/.strip:	
 	@echo "Stripping debug symbols from executables in ${TOOLCHAIN}/bin/"
 	cd $(TOOLCHAIN)/bin/ && (find . -type f -perm 0111 -exec strip -S "{}" +) & touch $(TOOLCHAIN)/bin/.strip
 
