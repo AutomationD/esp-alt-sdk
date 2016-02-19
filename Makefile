@@ -9,7 +9,7 @@
 STANDALONE = y
 PREBUILT_TOOLCHAIN = n
 DEBUG = n
-UTILS = n
+UTILS = y
 
 
 VENDOR_SDK_VERSION = 1.4.0
@@ -81,6 +81,9 @@ PLATFORM := $(shell uname -s)
 PATH := $(TOOLCHAIN)/bin:$(PATH)
 SAFEPATH := $(TOOLCHAIN)/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/mingw/bin/:/c/tools/mingw32/bin:/c/tools/mingw64/bin
 
+ifneq (,$(findstring CYGWIN,$(PLATFORM)))
+	SAFEPATH := $(TOOLCHAIN)/bin:/usr/bin:/bin:/usr/local/bin
+endif
 
 VENDOR_SDK_ZIP = $(VENDOR_SDK_ZIP_$(VENDOR_SDK_VERSION))
 VENDOR_SDK_DIR = $(VENDOR_SDK_DIR_$(VENDOR_SDK_VERSION))
