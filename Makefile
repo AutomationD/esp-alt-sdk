@@ -468,10 +468,10 @@ $(XTDLP)/$(MPFR_TAR):
 	wget -c http://ftp.gnu.org/gnu/mpfr/$(MPFR_TAR) --output-document $(XTDLP)/$(MPFR_TAR)
 
 $(XTDLP)/$(GDB_TAR):
-	wget http://ftp.gnu.org/gnu/gdb/$(GDB_TAR) --output-document $(XTDLP)/$(GDB_TAR)
+	wget -c http://ftp.gnu.org/gnu/gdb/$(GDB_TAR) --output-document $(XTDLP)/$(GDB_TAR)
 
 $(XTDLP)/$(GCC_TAR):
-	wget http://ftp.gnu.org/gnu/gcc/$(GCC_TAR) --output-document $(XTDLP)/$(GCC_TAR)
+	wget -c http://ftp.gnu.org/gnu/gcc/5.3.0/$(GCC_TAR) --output-document $(XTDLP)/$(GCC_TAR)
 
 
 $(XTDLP)/$(XTENSA_TOOLCHAIN_WINDOWS_TAR):
