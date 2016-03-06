@@ -40,7 +40,7 @@ PATCHES_DIR = $(XTDLP)/patches
 GMP_TAR = gmp-$(GMP_VERSION).tar.bz2
 MPFR_TAR = mpfr-$(MPFR_VERSION).tar.bz2
 MPC_TAR = mpc-$(MPC_VERSION).tar.gz
-GCC_TAR = gdb-$(GCC_VERSION).tar.gz
+GCC_TAR = gcc-$(GCC_VERSION).tar.gz
 GDB_TAR = gdb-$(GDB_VERSION).tar.gz
 
 
