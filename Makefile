@@ -59,7 +59,8 @@ XTENSA_TOOLCHAIN_WINDOWS_TAR := xtensa-lx106-elf-v5.1.0.64-windows-x86.zip
 XTENSA_TOOLCHAIN_MAC_TAR := xtensa-lx106-elf-v5.1.0.64-macos-x86_64.zip
 XTENSA_TOOLCHAIN_LINUX_TAR := xtensa-lx106-elf-v5.1.0.64-linux-x86_64.tar.gz
 
-NEWLIB_DIR = newlib-$(NEWLIB_VERSION)
+#NEWLIB_DIR = newlib-$(NEWLIB_VERSION)
+NEWLIB_DIR = newlib-xtensa
 
 LIBHAL_DIR = lx106-hal
 ESPTOOL_DIR = esptool
@@ -543,6 +544,9 @@ $(XTDLP)/$(LIBHAL_DIR)/configure.ac:
 	@echo "You cloned without --recursive, fetching submodules for you."
 	git submodule update --init src/$(LIBHAL_DIR)
 
+$(XTDLP)/$(NEWLIB_DIR)/configure.ac:
+	@echo "You cloned without --recursive, fetching submodules for you."
+	git submodule update --init src/$(NEWLIB_DIR)
 
 $(XTDLP)/$(ESPTOOL_DIR)/esptool.py:
 	@echo "You cloned without --recursive, fetching esptool for you."
@@ -818,9 +822,9 @@ $(XTDLP)/$(GCC_DIR): $(XTDLP)/$(GCC_DIR)/build-1 $(XTDLP)/$(GCC_DIR)/build-2
 	@touch $@
 
 # Newlib
-$(XTDLP)/$(NEWLIB_DIR)/configure.ac: $(XTDLP)/$(NEWLIB_TAR)
-	$(UNTAR) $(XTDLP)/$(NEWLIB_TAR) -C $(XTDLP)/
-	@touch $@
+#$(XTDLP)/$(NEWLIB_DIR)/configure.ac: $(XTDLP)/$(NEWLIB_TAR)
+#	$(UNTAR) $(XTDLP)/$(NEWLIB_TAR) -C $(XTDLP)/
+#	@touch $@
 
 $(XTDLP)/$(NEWLIB_DIR)/build: $(XTDLP)/$(NEWLIB_DIR)/configure.ac
 	@echo "################## NEWLIB ##################"

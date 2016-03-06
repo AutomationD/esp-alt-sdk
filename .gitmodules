@@ -10,3 +10,7 @@
 [submodule "src/ESP8266_memory_analyzer"]
 	path = src/ESP8266_memory_analyzer
 	url = https://github.com/Sermus/ESP8266_memory_analyzer.git
+[submodule "src/newlib-xtensa"]
+	path = src/newlib-xtensa
+	url = https://github.com/jcmvbkbc/newlib-xtensa
+	branch = xtensa
