@@ -20,7 +20,7 @@ MPC_VERSION = 1.0.3
 GDB_VERSION = 7.10.1
 GCC_VERSION = 5.3.0
 BINUTILS_VERSION = 2.26
-
+NEWLIB_VERSION = 2.1.0
 TOP = $(PWD)
 TARGET = xtensa-lx106-elf
 
@@ -44,6 +44,7 @@ MPC_TAR = mpc-$(MPC_VERSION).tar.gz
 GCC_TAR = gcc-$(GCC_VERSION).tar.bz2
 GDB_TAR = gdb-$(GDB_VERSION).tar.gz
 BINUTILS_TAR = binutils-$(BINUTILS_VERSION).tar.gz
+NEWLIB_TAR = newlib-$(NEWLIB_VERSION).tar.gz
 
 
 GMP_DIR = gmp-$(GMP_VERSION)
@@ -488,6 +489,10 @@ $(XTDLP)/$(GCC_TAR):
 $(XTDLP)/$(BINUTILS_TAR):
 	wget -c http://ftp.gnu.org/gnu/binutils/$(BINUTILS_TAR) --output-document $(XTDLP)/$(BINUTILS_TAR)
 
+$(XTDLP)/$(NEWLIB_TAR):
+	wget -c ftp://sources.redhat.com/pub/newlib/$(NEWLIB_TAR) --output-document $(XTDLP)/$(NEWLIB_TAR)
+
+
 $(XTDLP)/$(XTENSA_TOOLCHAIN_WINDOWS_TAR):
 	wget --no-check-certificate https://dl.bintray.com/kireevco/generic/$(XTENSA_TOOLCHAIN_WINDOWS_TAR) --output-document $(XTDLP)/$(XTENSA_TOOLCHAIN_WINDOWS_TAR)
 
@@ -500,10 +505,6 @@ $(XTDLP)/$(XTENSA_TOOLCHAIN_LINUX_TAR):
 $(XTDLP)/$(XTENSA_TOOLCHAIN_LINUX_TAR):
 	wget --no-check-certificate https://dl.bintray.com/kireevco/generic/$(XTENSA_TOOLCHAIN_LINUX_TAR) --output-document $(XTDLP)/$(XTENSA_TOOLCHAIN_LINUX_TAR)
 
-$(XTDLP)/$(NEWLIB_DIR)/configure.ac:
-#	git clone -b xtensa https://github.com/jcmvbkbc/newlib-xtensa.git $(XTDLP)/$(NEWLIB_DIR)
-	@echo "You cloned without --recursive, fetching $(NEWLIB_DIR) for you."
-	git submodule update --init src/$(NEWLIB_DIR)
 
 $(XTDLP)/$(LIBHAL_DIR)/configure.ac:
 	@echo "You cloned without --recursive, fetching submodules for you."
@@ -759,7 +760,6 @@ $(XTDLP)/$(GCC_DIR)/build-1: $(XTDLP)/$(GCC_DIR)/configure.ac
 	@echo "################## GCC PASS 1 ##################"
 	mkdir -p $(XTDLP)/$(GCC_DIR)/build-1
 	cd $(XTDLP)/$(GCC_DIR)/build-1/; PATH=$(SAFEPATH) ../$(CONF_OPT) --prefix=$(TOOLCHAIN) --target=$(TARGET) --enable-multilib --enable-languages=c --with-newlib --disable-nls --disable-shared --disable-threads --with-gnu-as --with-gnu-ld --with-gmp=$(XTBP)/gmp --with-mpfr=$(XTBP)/mpfr --with-mpc=$(XTBP)/mpc  --disable-libssp --without-headers --disable-__cxa_atexit --build=$(BUILD_TARGET) --host=$(HOST_TARGET)
-	#                                                   ../configure --prefix=$TOOLCHAIN --target=$TARGET --enable-multilib --enable-languages=c --with-newlib --disable-nls --disable-shared --disable-threads --with-gnu-as --with-gnu-ld --with-gmp=$XTBP/gmp --with-mpfr=$XTBP/mpfr --with-mpc=$XTBP/mpc  --disable-libssp --without-headers --disable-__cxa_atexit --build=$BUILD_TARGET --host=$BUILD_TARGET
 #		make configure-build-libiberty
 #		make all-build-libiberty
 #		make all-gcc
@@ -783,6 +783,9 @@ $(XTDLP)/$(GCC_DIR): $(XTDLP)/$(GCC_DIR)/build-1 $(XTDLP)/$(GCC_DIR)/build-2
 	@touch $@
 
 # Newlib
+$(XTDLP)/$(NEWLIB_DIR)/configure.ac: $(XTDLP)/$(NEWLIB_TAR)
+	$(UNTAR) $(XTDLP)/$(NEWLIB_TAR) -C $(XTDLP)
+
 $(XTDLP)/$(NEWLIB_DIR)/build: $(XTDLP)/$(NEWLIB_DIR)/configure.ac
 	@echo "################## NEWLIB ##################"
 	mkdir $(XTDLP)/$(NEWLIB_DIR)/build
