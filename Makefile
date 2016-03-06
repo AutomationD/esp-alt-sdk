@@ -68,7 +68,7 @@ MEMANALYZER_DIR = ESP8266_memory_analyzer
 
 
 ifeq ($(DEBUG),y)
-	UNTAR := bsdtar -vxf
+	UNTAR := bsdtar xf
 	MAKE_OPT := make -s
 	CONF_OPT := configure
 	INST_OPT := install
