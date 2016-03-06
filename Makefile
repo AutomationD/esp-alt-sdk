@@ -471,7 +471,7 @@ $(XTDLP)/$(GDB_TAR):
 	wget -c http://ftp.gnu.org/gnu/gdb/$(GDB_TAR) --output-document $(XTDLP)/$(GDB_TAR)
 
 $(XTDLP)/$(GCC_TAR):
-	wget -c http://ftp.gnu.org/gnu/gcc/5.3.0/$(GCC_TAR) --output-document $(XTDLP)/$(GCC_TAR)
+	wget -c http://ftp.gnu.org/gnu/gcc/${GCC_DIR}/$(GCC_TAR) --output-document $(XTDLP)/$(GCC_TAR)
 
 
 $(XTDLP)/$(XTENSA_TOOLCHAIN_WINDOWS_TAR):
