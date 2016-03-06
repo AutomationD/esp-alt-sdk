@@ -523,7 +523,7 @@ $(XTDLP)/$(BINUTILS_TAR):
 	wget -c http://ftp.gnu.org/gnu/binutils/$(BINUTILS_TAR) --output-document $(XTDLP)/$(BINUTILS_TAR)
 
 $(XTDLP)/$(NEWLIB_TAR):
-	wget -c c$(NEWLIB_TAR) --output-document $(XTDLP)/$(NEWLIB_TAR)
+	wget -c ftp://sources.redhat.com/pub/newlib/$(NEWLIB_TAR) --output-document $(XTDLP)/$(NEWLIB_TAR)
 
 
 $(XTDLP)/$(XTENSA_TOOLCHAIN_WINDOWS_TAR):
