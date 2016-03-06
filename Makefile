@@ -19,6 +19,7 @@ MPFR_VERSION = 3.1.3
 MPC_VERSION = 1.0.3
 GDB_VERSION = 7.10.1
 GCC_VERSION = 5.3.0
+BINUTILS_VERSION = 2.26
 
 TOP = $(PWD)
 TARGET = xtensa-lx106-elf
@@ -42,6 +43,7 @@ MPFR_TAR = mpfr-$(MPFR_VERSION).tar.bz2
 MPC_TAR = mpc-$(MPC_VERSION).tar.gz
 GCC_TAR = gcc-$(GCC_VERSION).tar.bz2
 GDB_TAR = gdb-$(GDB_VERSION).tar.gz
+BINUTILS_TAR = binutils-$(BINUTILS_VERSION).tar.gz
 
 
 GMP_DIR = gmp-$(GMP_VERSION)
@@ -213,6 +215,7 @@ $(TOOLCHAIN)/xtensa-lx106-elf/lib/libcirom.a: $(TOOLCHAIN)/xtensa-lx106-elf/lib/
 	$(TOOLCHAIN)/bin/xtensa-lx106-elf-objcopy --rename-section .text=.irom0.text \
 		--rename-section .literal=.irom0.literal $(<) $(@);
 
+
 libcirom: $(TOOLCHAIN)/xtensa-lx106-elf/lib/libcirom.a
 
 sdk_patch: .sdk_patch_$(VENDOR_SDK_VERSION)
@@ -316,8 +319,14 @@ empty_user_rf_pre_init.o: $(PATCHES_DIR)/empty_user_rf_pre_init.c
 	patch -N -d $(VENDOR_SDK_DIR_0.9.1) -p1 < $(PATCHES_DIR)/c_types-c99.patch
 	@touch $@
 
+
+GDB_PATCHES := $(wildcard (PATCHES_DIR)/gdb/$(GDB_VERSION)/*.patch)
+GCC_PATCHES := $(wildcard (PATCHES_DIR)/gcc/$(GCC_VERSION)/*.patch)
+BINUTILS_PATCHES := $(wildcard (PATCHES_DIR)/binutils/$(BINUTILS_VERSION)/*.patch)
+
 $(PATCHES_DIR)/.gcc_patch: gcc_patch_$(GCC_VERSION)
 $(PATCHES_DIR)/.gdb_patch: gdb_patch_$(GDB_VERSION)
+$(PATCHES_DIR)/.binutils_patch: binutils_patch_$(BINUTILS_VERSION)
 
 gcc_patch_4.9.2:
 	-patch -N -d $(XTDLP)/$(GCC_DIR) -p1 < $(PATCHES_DIR)/0001-WIP-don-t-bring-extra-u-int_least32_t-into-std.patch
@@ -327,11 +336,12 @@ gcc_patch_5.1.0:
 	-patch -N -d $(XTDLP)/$(GCC_DIR) -p1 < $(PATCHES_DIR)/0001-WIP-don-t-bring-extra-u-int_least32_t-into-std.patch
 
 gcc_patch_5.3.0:
-	-patch -N -d $(XTDLP)/$(GCC_DIR) -p1 < $(PATCHES_DIR)/gcc/$(GCC_VERSION)/110-xtensa-implement-trap-pattern.patch
-	-patch -N -d $(XTDLP)/$(GCC_DIR) -p1 < $(PATCHES_DIR)/gcc/$(GCC_VERSION)/870-xtensa-add-mauto-litpools-option.patch
-	-patch -N -d $(XTDLP)/$(GCC_DIR) -p1 < $(PATCHES_DIR)/gcc/$(GCC_VERSION)/871-xtensa-reimplement-register-spilling.patch
-	-patch -N -d $(XTDLP)/$(GCC_DIR) -p1 < $(PATCHES_DIR)/gcc/$(GCC_VERSION)/872-xtensa-use-unwind-dw2-fde-dip-instead-of-unwind-dw2-.patch
-	-patch -N -d $(XTDLP)/$(GCC_DIR) -p1 < $(PATCHES_DIR)/gcc/$(GCC_VERSION)/873-xtensa-fix-_Unwind_GetCFA.patch
+	-patch -N -d $(XTDLP)/$(GCC_DIR) -p1 < $(PATCHES_DIR)/gcc/$(GCC_VERSION)/*.patch
+#	-patch -N -d $(XTDLP)/$(GCC_DIR) -p1 < $(PATCHES_DIR)/gcc/$(GCC_VERSION)/110-xtensa-implement-trap-pattern.patch
+#	-patch -N -d $(XTDLP)/$(GCC_DIR) -p1 < $(PATCHES_DIR)/gcc/$(GCC_VERSION)/870-xtensa-add-mauto-litpools-option.patch
+#	-patch -N -d $(XTDLP)/$(GCC_DIR) -p1 < $(PATCHES_DIR)/gcc/$(GCC_VERSION)/871-xtensa-reimplement-register-spilling.patch
+#	-patch -N -d $(XTDLP)/$(GCC_DIR) -p1 < $(PATCHES_DIR)/gcc/$(GCC_VERSION)/872-xtensa-use-unwind-dw2-fde-dip-instead-of-unwind-dw2-.patch
+#	-patch -N -d $(XTDLP)/$(GCC_DIR) -p1 < $(PATCHES_DIR)/gcc/$(GCC_VERSION)/873-xtensa-fix-_Unwind_GetCFA.patch
 
 gdb_patch_7.5.1:
 	@echo "Applying patches to gdb"
@@ -339,10 +349,17 @@ gdb_patch_7.5.1:
 
 gdb_patch_7.10.1:
 	@echo "Applying patches to gdb"
-	-patch -N -d $(XTDLP)/$(GDB_DIR) -p1 < $(PATCHES_DIR)/gdb/$(GDB_VERSION)/100-musl_fix.patch
-	-patch -N -d $(XTDLP)/$(GDB_DIR) -p1 < $(PATCHES_DIR)/gdb/$(GDB_VERSION)/110-xtensa-initialize-call_abi-in-xtensa_tdep.patch
-	-patch -N -d $(XTDLP)/$(GDB_DIR) -p1 < $(PATCHES_DIR)/gdb/$(GDB_VERSION)/111-xtensa-make-sure-ar_base-is-initialized.patch
-	-patch -N -d $(XTDLP)/$(GDB_DIR) -p1 < $(PATCHES_DIR)/gdb/$(GDB_VERSION)/112-WIP-end-of-prologue-detection-hack.patch
+	-patch -N -d $(XTDLP)/$(GDB_DIR) -p1 < $(PATCHES_DIR)/gdb/$(GDB_VERSION)/*.patch
+#	-patch -N -d $(XTDLP)/$(GDB_DIR) -p1 < $(PATCHES_DIR)/gdb/$(GDB_VERSION)/100-musl_fix.patch
+#	-patch -N -d $(XTDLP)/$(GDB_DIR) -p1 < $(PATCHES_DIR)/gdb/$(GDB_VERSION)/110-xtensa-initialize-call_abi-in-xtensa_tdep.patch
+#	-patch -N -d $(XTDLP)/$(GDB_DIR) -p1 < $(PATCHES_DIR)/gdb/$(GDB_VERSION)/111-xtensa-make-sure-ar_base-is-initialized.patch
+#	-patch -N -d $(XTDLP)/$(GDB_DIR) -p1 < $(PATCHES_DIR)/gdb/$(GDB_VERSION)/112-WIP-end-of-prologue-detection-hack.patch
+
+
+binutils_patch_2.26:
+	@echo "Applying patches to binutils"
+	-patch -N -d $(XTDLP)/$(BINUTILS_DIR) -p1 < $(PATCHES_DIR)/binutils/$(BINUTILS_VERSION)/*.patch
+
 
 standalone: sdk sdk_patch
 ifeq ($(STANDALONE),y)
@@ -468,6 +485,8 @@ $(XTDLP)/$(GDB_TAR):
 $(XTDLP)/$(GCC_TAR):
 	wget -c http://ftp.gnu.org/gnu/gcc/${GCC_DIR}/$(GCC_TAR) --output-document $(XTDLP)/$(GCC_TAR)
 
+$(XTDLP)/$(BINUTILS_TAR)
+	wget -c http://ftp.gnu.org/gnu/binutils/$(BINUTILS_TAR) --output-document $(XTDLP)/$(BINUTILS_TAR)
 
 $(XTDLP)/$(XTENSA_TOOLCHAIN_WINDOWS_TAR):
 	wget --no-check-certificate https://dl.bintray.com/kireevco/generic/$(XTENSA_TOOLCHAIN_WINDOWS_TAR) --output-document $(XTDLP)/$(XTENSA_TOOLCHAIN_WINDOWS_TAR)
@@ -480,12 +499,6 @@ $(XTDLP)/$(XTENSA_TOOLCHAIN_LINUX_TAR):
 
 $(XTDLP)/$(XTENSA_TOOLCHAIN_LINUX_TAR):
 	wget --no-check-certificate https://dl.bintray.com/kireevco/generic/$(XTENSA_TOOLCHAIN_LINUX_TAR) --output-document $(XTDLP)/$(XTENSA_TOOLCHAIN_LINUX_TAR)
-
-$(XTDLP)/$(BINUTILS_DIR)/configure.ac: $(XTDLP)/$(GCC_TAR)
-	@echo "You cloned without --recursive, fetching $(BINUTILS_DIR) for you."
-	git submodule update --init src/$(BINUTILS_DIR)
-
-
 
 $(XTDLP)/$(NEWLIB_DIR)/configure.ac:
 #	git clone -b xtensa https://github.com/jcmvbkbc/newlib-xtensa.git $(XTDLP)/$(NEWLIB_DIR)
@@ -700,6 +713,9 @@ $(XTBP)/mpc: $(XTDLP)/$(MPC_DIR)/build
 
 
 # Binutils
+$(XTDLP)/$(BINUTILS_DIR)/configure.ac: $(XTDLP)/$(BINUTILS_TAR)
+	$(UNTAR) $(XTDLP)/$(BINUTILS_TAR) -C $(XTDLP)
+
 $(XTDLP)/$(BINUTILS_DIR)/build: $(XTDLP)/$(BINUTILS_DIR)/configure.ac
 	@echo "Getting sources: Binutils"
 	mkdir -p $(XTDLP)/$(BINUTILS_DIR)/build
