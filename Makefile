@@ -327,9 +327,16 @@ GCC_PATCHES := $(wildcard (PATCHES_DIR)/gcc/$(GCC_VERSION)/*.patch)
 BINUTILS_PATCHES := $(wildcard (PATCHES_DIR)/binutils/$(BINUTILS_VERSION)/*.patch)
 
 $(PATCHES_DIR)/.gcc_patch: gcc_patch_$(GCC_VERSION)
+	@touch $@
+
 $(PATCHES_DIR)/.gdb_patch: gdb_patch_$(GDB_VERSION)
+	@touch $@
+
 $(PATCHES_DIR)/.binutils_patch: binutils_patch_$(BINUTILS_VERSION)
+	@touch $@
+
 $(PATCHES_DIR)/.newlib_patch: newlib_patch_$(NEWLIB_VERSION)
+	@touch $@
 
 gcc_patch_4.9.2:
 	-patch -N -d $(XTDLP)/$(GCC_DIR) -p1 < $(PATCHES_DIR)/0001-WIP-don-t-bring-extra-u-int_least32_t-into-std.patch
@@ -339,13 +346,13 @@ gcc_patch_5.1.0:
 	-patch -N -d $(XTDLP)/$(GCC_DIR) -p1 < $(PATCHES_DIR)/0001-WIP-don-t-bring-extra-u-int_least32_t-into-std.patch
 
 gcc_patch_5.3.0:
-	-patch -N -d $(XTDLP)/$(GCC_DIR) -p1 < $(PATCHES_DIR)/gcc/$(GCC_VERSION)/*.patch
+	@echo "Applying patches for gcc"
+	-patch -N -d $(XTDLP)/$(GCC_DIR) -p1 < $(PATCHES_DIR)/gcc/$(GCC_VERSION)/110-xtensa-implement-trap-pattern.patch
+	-patch -N -d $(XTDLP)/$(GCC_DIR) -p1 < $(PATCHES_DIR)/gcc/$(GCC_VERSION)/870-xtensa-add-mauto-litpools-option.patch
+	-patch -N -d $(XTDLP)/$(GCC_DIR) -p1 < $(PATCHES_DIR)/gcc/$(GCC_VERSION)/871-xtensa-reimplement-register-spilling.patch
+	-patch -N -d $(XTDLP)/$(GCC_DIR) -p1 < $(PATCHES_DIR)/gcc/$(GCC_VERSION)/872-xtensa-use-unwind-dw2-fde-dip-instead-of-unwind-dw2-.patch
+	-patch -N -d $(XTDLP)/$(GCC_DIR) -p1 < $(PATCHES_DIR)/gcc/$(GCC_VERSION)/873-xtensa-fix-_Unwind_GetCFA.patch
 	@touch $@
-#	-patch -N -d $(XTDLP)/$(GCC_DIR) -p1 < $(PATCHES_DIR)/gcc/$(GCC_VERSION)/110-xtensa-implement-trap-pattern.patch
-#	-patch -N -d $(XTDLP)/$(GCC_DIR) -p1 < $(PATCHES_DIR)/gcc/$(GCC_VERSION)/870-xtensa-add-mauto-litpools-option.patch
-#	-patch -N -d $(XTDLP)/$(GCC_DIR) -p1 < $(PATCHES_DIR)/gcc/$(GCC_VERSION)/871-xtensa-reimplement-register-spilling.patch
-#	-patch -N -d $(XTDLP)/$(GCC_DIR) -p1 < $(PATCHES_DIR)/gcc/$(GCC_VERSION)/872-xtensa-use-unwind-dw2-fde-dip-instead-of-unwind-dw2-.patch
-#	-patch -N -d $(XTDLP)/$(GCC_DIR) -p1 < $(PATCHES_DIR)/gcc/$(GCC_VERSION)/873-xtensa-fix-_Unwind_GetCFA.patch
 
 
 gdb_patch_7.5.1:
@@ -355,23 +362,32 @@ gdb_patch_7.5.1:
 
 gdb_patch_7.10.1:
 	@echo "Applying patches to gdb"
+	-patch -N -d $(XTDLP)/$(GDB_DIR) -p1 < $(PATCHES_DIR)/gdb/$(GDB_VERSION)/100-musl_fix.patch
+	-patch -N -d $(XTDLP)/$(GDB_DIR) -p1 < $(PATCHES_DIR)/gdb/$(GDB_VERSION)/110-xtensa-initialize-call_abi-in-xtensa_tdep.patch
+	-patch -N -d $(XTDLP)/$(GDB_DIR) -p1 < $(PATCHES_DIR)/gdb/$(GDB_VERSION)/111-xtensa-make-sure-ar_base-is-initialized.patch
+	-patch -N -d $(XTDLP)/$(GDB_DIR) -p1 < $(PATCHES_DIR)/gdb/$(GDB_VERSION)/112-WIP-end-of-prologue-detection-hack.patch
 	@touch $@
-	-patch -N -d $(XTDLP)/$(GDB_DIR) -p1 < $(PATCHES_DIR)/gdb/$(GDB_VERSION)/*.patch
-#	-patch -N -d $(XTDLP)/$(GDB_DIR) -p1 < $(PATCHES_DIR)/gdb/$(GDB_VERSION)/100-musl_fix.patch
-#	-patch -N -d $(XTDLP)/$(GDB_DIR) -p1 < $(PATCHES_DIR)/gdb/$(GDB_VERSION)/110-xtensa-initialize-call_abi-in-xtensa_tdep.patch
-#	-patch -N -d $(XTDLP)/$(GDB_DIR) -p1 < $(PATCHES_DIR)/gdb/$(GDB_VERSION)/111-xtensa-make-sure-ar_base-is-initialized.patch
-#	-patch -N -d $(XTDLP)/$(GDB_DIR) -p1 < $(PATCHES_DIR)/gdb/$(GDB_VERSION)/112-WIP-end-of-prologue-detection-hack.patch
 
 
 binutils_patch_2.26:
 	@echo "Applying patches to binutils"
 	-patch -N -d $(XTDLP)/$(BINUTILS_DIR) -p1 < $(PATCHES_DIR)/binutils/$(BINUTILS_VERSION)/*.patch
+	-patch -N -d $(XTDLP)/$(BINUTILS_DIR) -p1 < $(PATCHES_DIR)/binutils/$(BINUTILS_VERSION)/120-sh-conf.patch
+	-patch -N -d $(XTDLP)/$(BINUTILS_DIR) -p1 < $(PATCHES_DIR)/binutils/$(BINUTILS_VERSION)/300-012_check_ldrunpath_length.patch
+	-patch -N -d $(XTDLP)/$(BINUTILS_DIR) -p1 < $(PATCHES_DIR)/binutils/$(BINUTILS_VERSION)/310-fix-gold-pthreads-typo.patch
+	-patch -N -d $(XTDLP)/$(BINUTILS_DIR) -p1 < $(PATCHES_DIR)/binutils/$(BINUTILS_VERSION)/320-MinGW-w64-winpthreads-doesnt-have-pthread_mutexattr_settype.patch
+	-patch -N -d $(XTDLP)/$(BINUTILS_DIR) -p1 < $(PATCHES_DIR)/binutils/$(BINUTILS_VERSION)/330-Dont-link-to-libfl-as-its-unnecessary.patch
+	-patch -N -d $(XTDLP)/$(BINUTILS_DIR) -p1 < $(PATCHES_DIR)/binutils/$(BINUTILS_VERSION)/340-Darwin-gold-binary-cc-include-string-not-cstring.patch
+	-patch -N -d $(XTDLP)/$(BINUTILS_DIR) -p1 < $(PATCHES_DIR)/binutils/$(BINUTILS_VERSION)/350-Darwin-Two-fixes-from-Android-NDK-PTHREAD_ONCE_INIT-wcsncasecmp.patch
+	-patch -N -d $(XTDLP)/$(BINUTILS_DIR) -p1 < $(PATCHES_DIR)/binutils/$(BINUTILS_VERSION)/500-sysroot.patch
+	-patch -N -d $(XTDLP)/$(BINUTILS_DIR) -p1 < $(PATCHES_DIR)/binutils/$(BINUTILS_VERSION)/600-poison-system-directories.patch
+	-patch -N -d $(XTDLP)/$(BINUTILS_DIR) -p1 < $(PATCHES_DIR)/binutils/$(BINUTILS_VERSION)/914-xtensa-fix-signedness-of-gas-relocations.patch
+	-patch -N -d $(XTDLP)/$(BINUTILS_DIR) -p1 < $(PATCHES_DIR)/binutils/$(BINUTILS_VERSION)/915-xtensa-fix-.init-.fini-literals-moving.patch
 	@touch $@
 
 newlib_patch_2.1.0:
-	@echo "Applying patches to binutils"
-	-patch -N -d $(XTDLP)/$(NEWLIB_DIR) -p1 < $(PATCHES_DIR)/newlib/$(NEWLIB_VERSION)/*.patch
-	@touch $@
+	@echo "Applying patches to newlib"
+	-patch -N -d $(XTDLP)/$(NEWLIB_DIR) -p1 < $(PATCHES_DIR)/newlib/$(NEWLIB_VERSION)/100-fix-optimising-for-space.patch
 
 
 standalone: sdk sdk_patch
@@ -727,10 +743,11 @@ $(XTBP)/mpc: $(XTDLP)/$(MPC_DIR)/build
 
 # Binutils
 $(XTDLP)/$(BINUTILS_DIR)/configure.ac: $(XTDLP)/$(BINUTILS_TAR)
-	$(UNTAR) $(XTDLP)/$(BINUTILS_TAR) -C $(XTDLP)
+	$(UNTAR) $(XTDLP)/$(BINUTILS_TAR) -C $(XTDLP)/
 
 $(XTDLP)/$(BINUTILS_DIR)/build: $(XTDLP)/$(BINUTILS_DIR)/configure.ac
 	@echo "Getting sources: Binutils"
+	$(MAKE_OPT) $(PATCHES_DIR)/.binutils_patch
 	mkdir -p $(XTDLP)/$(BINUTILS_DIR)/build
 	cd $(XTDLP)/$(BINUTILS_DIR)/build/; chmod -R 777 $(XTDLP)/$(BINUTILS_DIR); ../$(CONF_OPT) --prefix=$(TOOLCHAIN) --target=$(TARGET) --enable-werror=no  --enable-multilib --disable-nls --disable-shared --disable-threads --with-gcc --with-gnu-as --with-gnu-ld --build=$(BUILD_TARGET) --host=$(HOST_TARGET)
 	$(MAKE_OPT) -C $(XTDLP)/$(BINUTILS_DIR)/build/
@@ -746,7 +763,7 @@ $(XTDLP)/$(GDB_DIR)/configure.ac: $(XTDLP)/$(GDB_TAR)
   ifeq "$(wildcard $(XTDLP)/$(GDB_DIR) )" ""
 	@echo "Getting sources: GDB"
 	mkdir -p $(XTDLP)/$(GDB_DIR)
-	$(UNTAR) $(XTDLP)/$(GDB_TAR) -C $(XTDLP)
+	$(UNTAR) $(XTDLP)/$(GDB_TAR) -C $(XTDLP)/
   endif
 
 $(XTDLP)/$(GDB_DIR)/build: $(XTDLP)/$(GDB_DIR)/configure.ac
@@ -764,11 +781,13 @@ $(XTDLP)/$(GDB_DIR): $(XTDLP)/$(GDB_DIR)/build
 # GCC
 $(XTDLP)/$(GCC_DIR)/configure.ac: $(XTDLP)/$(GCC_TAR)
 	@echo "Getting sources: GCC"
-	$(UNTAR) $(XTDLP)/$(GCC_TAR) -C $(XTDLP)
+	$(UNTAR) $(XTDLP)/$(GCC_TAR) -C $(XTDLP)/
+	@touch $@
 
 # GCC Step 1
 $(XTDLP)/$(GCC_DIR)/build-1: $(XTDLP)/$(GCC_DIR)/configure.ac
 	@echo "################## GCC PASS 1 ##################"
+	$(MAKE_OPT) $(PATCHES_DIR)/.gcc_patch
 	mkdir -p $(XTDLP)/$(GCC_DIR)/build-1
 	cd $(XTDLP)/$(GCC_DIR)/build-1/; PATH=$(SAFEPATH) ../$(CONF_OPT) --prefix=$(TOOLCHAIN) --target=$(TARGET) --enable-multilib --enable-languages=c --with-newlib --disable-nls --disable-shared --disable-threads --with-gnu-as --with-gnu-ld --with-gmp=$(XTBP)/gmp --with-mpfr=$(XTBP)/mpfr --with-mpc=$(XTBP)/mpc  --disable-libssp --without-headers --disable-__cxa_atexit --build=$(BUILD_TARGET) --host=$(HOST_TARGET)
 #		make configure-build-libiberty
@@ -783,7 +802,7 @@ $(XTDLP)/$(GCC_DIR)/build-1: $(XTDLP)/$(GCC_DIR)/configure.ac
 # GCC Step 2
 $(XTDLP)/$(GCC_DIR)/build-2: $(XTDLP)/$(GCC_DIR)/configure.ac $(TOOLCHAIN)/xtensa-lx106-elf/lib/libc.a
 	@echo "################## GCC PASS 2 ##################"
-	make $(PATCHES_DIR)/.gcc_patch
+
 	mkdir -p $(XTDLP)/$(GCC_DIR)/build-2
 	cd $(XTDLP)/$(GCC_DIR)/build-2/; PATH=$(SAFEPATH) ../$(CONF_OPT) --prefix=$(TOOLCHAIN) --target=$(TARGET) --enable-multilib --disable-nls --disable-shared --disable-threads --with-gnu-as --with-gnu-ld --with-gmp=$(XTBP)/gmp --with-mpfr=$(XTBP)/mpfr --with-mpc=$(XTBP)/mpc --enable-languages=c,c++ --with-newlib --disable-libssp --disable-__cxa_atexit --build=$(BUILD_TARGET) --host=$(HOST_TARGET)
 	$(MAKE_OPT) -C $(XTDLP)/$(GCC_DIR)/build-2/
@@ -795,13 +814,15 @@ $(XTDLP)/$(GCC_DIR): $(XTDLP)/$(GCC_DIR)/build-1 $(XTDLP)/$(GCC_DIR)/build-2
 
 # Newlib
 $(XTDLP)/$(NEWLIB_DIR)/configure.ac: $(XTDLP)/$(NEWLIB_TAR)
-	$(UNTAR) $(XTDLP)/$(NEWLIB_TAR) -C $(XTDLP)
+	$(UNTAR) $(XTDLP)/$(NEWLIB_TAR) -C $(XTDLP)/
+	@touch $@
 
 $(XTDLP)/$(NEWLIB_DIR)/build: $(XTDLP)/$(NEWLIB_DIR)/configure.ac
 	@echo "################## NEWLIB ##################"
+	$(MAKE_OPT) $(PATCHES_DIR)/.newlib_patch
 	mkdir $(XTDLP)/$(NEWLIB_DIR)/build
 	cd $(XTDLP)/$(NEWLIB_DIR)/build/; PATH=$(SAFEPATH) ../$(CONF_OPT) --prefix=$(TOOLCHAIN) --target=$(TARGET) --enable-multilib --with-gnu-as --with-gnu-ld --disable-nls --build=$(BUILD_TARGET) --host=$(HOST_TARGET)
-	$(MAKE_OPT) -C $(XTDLP)/$(NEWLIB_DIR)/build/
+	$(MAKE_OPT) -C $(XTDLP)/$(NEWLIB_DIR)/build/ PATH=$(SAFEPATH)
 	@touch $@
 
 $(TOOLCHAIN)/xtensa-lx106-elf/lib/libc.a: $(XTDLP)/$(NEWLIB_DIR)/build
