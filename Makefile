@@ -40,6 +40,7 @@ PATCHES_DIR = $(XTDLP)/patches
 GMP_TAR = gmp-$(GMP_VERSION).tar.bz2
 MPFR_TAR = mpfr-$(MPFR_VERSION).tar.bz2
 MPC_TAR = mpc-$(MPC_VERSION).tar.gz
+GCC_TAR = gdb-$(GCC_VERSION).tar.gz
 GDB_TAR = gdb-$(GDB_VERSION).tar.gz
 
 
@@ -469,6 +470,8 @@ $(XTDLP)/$(MPFR_TAR):
 $(XTDLP)/$(GDB_TAR):
 	wget http://ftp.gnu.org/gnu/gdb/$(GDB_TAR) --output-document $(XTDLP)/$(GDB_TAR)
 
+$(XTDLP)/$(GCC_TAR):
+	wget http://ftp.gnu.org/gnu/gcc/$(GCC_TAR) --output-document $(XTDLP)/$(GCC_TAR)
 
 
 $(XTDLP)/$(XTENSA_TOOLCHAIN_WINDOWS_TAR):
@@ -480,8 +483,10 @@ $(XTDLP)/$(XTENSA_TOOLCHAIN_MAC_TAR):
 $(XTDLP)/$(XTENSA_TOOLCHAIN_LINUX_TAR):
 	wget --no-check-certificate https://dl.bintray.com/kireevco/generic/$(XTENSA_TOOLCHAIN_LINUX_TAR) --output-document $(XTDLP)/$(XTENSA_TOOLCHAIN_LINUX_TAR)
 
+$(XTDLP)/$(XTENSA_TOOLCHAIN_LINUX_TAR):
+	wget --no-check-certificate https://dl.bintray.com/kireevco/generic/$(XTENSA_TOOLCHAIN_LINUX_TAR) --output-document $(XTDLP)/$(XTENSA_TOOLCHAIN_LINUX_TAR)
 
-$(XTDLP)/$(BINUTILS_DIR)/configure.ac:
+$(XTDLP)/$(BINUTILS_DIR)/configure.ac: $(XTDLP)/$(GCC_TAR)
 	@echo "You cloned without --recursive, fetching $(BINUTILS_DIR) for you."
 	git submodule update --init src/$(BINUTILS_DIR)
 
@@ -489,13 +494,8 @@ $(XTDLP)/$(BINUTILS_DIR)/configure.ac:
 
 $(XTDLP)/$(NEWLIB_DIR)/configure.ac:
 #	git clone -b xtensa https://github.com/jcmvbkbc/newlib-xtensa.git $(XTDLP)/$(NEWLIB_DIR)
-	@echo "You cloned without --recursive, fetching jcmvbkbc/newlib-xtensa for you."
+	@echo "You cloned without --recursive, fetching $(NEWLIB_DIR) for you."
 	git submodule update --init src/$(NEWLIB_DIR)
-
-$(XTDLP)/$(GCC_DIR)/configure.ac:
-#	git clone https://github.com/jcmvbkbc/gcc-xtensa.git $(XTDLP)/$(GCC_DIR)
-	@echo "You cloned without --recursive, fetching jcmvbkbc/gcc-xtensa for you."
-	git submodule update --init src/$(GCC_DIR)
 
 $(XTDLP)/$(LIBHAL_DIR)/configure.ac:
 	@echo "You cloned without --recursive, fetching submodules for you."
@@ -542,7 +542,7 @@ toolchain: $(TOOLCHAIN)/bin/xtensa-lx106-elf-gcc
 #  $(TOOLCHAIN)/bin/xtensa-lx106-elf-gcc: $(TOOLCHAIN) $(XTDLP) $(XTBP) build-first-stage-gcc build-second-stage-gcc build-libhal build-gdb strip compress-upx
 #endif
 
-get-src: $(XTDLP)/$(GMP_DIR) $(XTDLP)/$(MPFR_DIR) $(XTDLP)/$(MPC_DIR) $(XTDLP)/$(BINUTILS_DIR)/configure.ac $(XTDLP)/$(GCC_DIR)/configure.ac $(XTDLP)/$(NEWLIB_DIR)/configure.ac $(XTDLP)/$(LIBHAL_DIR)/configure.ac $(XTDLP)/$(GDB_DIR)/configure.ac
+get-src: $(XTDLP)/$(GMP_DIR) $(XTDLP)/$(MPFR_DIR) $(XTDLP)/$(MPC_DIR) $(XTDLP)/$(BINUTILS_DIR)/configure.ac $(XTDLP)/$(GCC_DIR)/configure.ac $(XTDLP)/$(gccDIR)/configure.ac $(XTDLP)/$(LIBHAL_DIR)/configure.ac $(XTDLP)/$(GDB_DIR)/configure.ac
 build-gmp: get-src $(XTDLP)/$(GMP_DIR)/build $(XTBP)/gmp
 build-mpfr: get-src build-gmp $(XTDLP)/$(MPFR_DIR)/build $(XTBP)/mpfr
 build-mpc: get-src build-gmp build-mpfr $(XTDLP)/$(MPC_DIR)/build $(XTBP)/mpc
@@ -736,6 +736,12 @@ $(XTDLP)/$(GDB_DIR)/build: $(XTDLP)/$(GDB_DIR)/configure.ac
 $(XTDLP)/$(GDB_DIR): $(XTDLP)/$(GDB_DIR)/build
 	make $(INST_OPT) -C $(XTDLP)/$(GDB_DIR)/build/
 	@touch $@
+
+# GCC
+$(XTDLP)/$(GCC_DIR)/configure.ac: $(XTDLP)/$(GCC_TAR)
+  @echo "Getting sources: GDB"
+	mkdir -p $(XTDLP)/$(GCC_DIR)
+	$(UNTAR) $(XTDLP)/$(GCC_TAR) -C $(XTDLP)
 
 # GCC Step 1
 $(XTDLP)/$(GCC_DIR)/build-1: $(XTDLP)/$(GCC_DIR)/configure.ac

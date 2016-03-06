@@ -12,4 +12,4 @@ bash update-core
 pacman -sU
 
 echo Install Packages
-pacman -S git autoconf automake bsdtar zip mingw-w64-i686-toolchain mingw-w64-i686-isl make gettext texinfo bison flex patch --noconfirm
+pacman -S git autoconf automake wget bsdtar zip mingw-w64-i686-toolchain mingw-w64-i686-isl make gettext texinfo bison flex patch --noconfirm

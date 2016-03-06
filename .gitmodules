@@ -17,7 +17,3 @@
 [submodule "src/ESP8266_memory_analyzer"]
 	path = src/ESP8266_memory_analyzer
 	url = https://github.com/Sermus/ESP8266_memory_analyzer.git
-[submodule "src/gcc-5.3.0"]
-	path = src/gcc-5.3.0
-	url = git://gcc.gnu.org/git/gcc.git
-	branch = tags/gcc_5_3_0_release
