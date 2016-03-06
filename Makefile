@@ -51,6 +51,7 @@ GMP_DIR = gmp-$(GMP_VERSION)
 MPFR_DIR = mpfr-$(MPFR_VERSION)
 MPC_DIR = mpc-$(MPC_VERSION)
 GDB_DIR = gdb-$(GDB_VERSION)
+BINUTILS_DIR = binutils-$(BINUTILS_VERSION)
 
 GCC_DIR = gcc-$(GCC_VERSION)
 
@@ -58,8 +59,8 @@ XTENSA_TOOLCHAIN_WINDOWS_TAR := xtensa-lx106-elf-v5.1.0.64-windows-x86.zip
 XTENSA_TOOLCHAIN_MAC_TAR := xtensa-lx106-elf-v5.1.0.64-macos-x86_64.zip
 XTENSA_TOOLCHAIN_LINUX_TAR := xtensa-lx106-elf-v5.1.0.64-linux-x86_64.tar.gz
 
-NEWLIB_DIR = newlib-xtensa
-BINUTILS_DIR = esp-binutils
+NEWLIB_DIR = newlib-$(NEWLIB_VERSION)
+
 LIBHAL_DIR = lx106-hal
 ESPTOOL_DIR = esptool
 ESPTOOL2_DIR = esptool2
@@ -83,7 +84,7 @@ endif
 PLATFORM := $(shell uname -s)
 
 
-SAFEPATH := $(TOOLCHAIN)/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/mingw/bin/:/c/tools/mingw32/bin:/c/tools/mingw64/bin:/mingw32:/mingw32/bin
+SAFEPATH := $(TOOLCHAIN)/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/mingw/bin/:/c/tools/mingw32/bin:/c/tools/mingw64/bin:/mingw32:/mingw32/bin:/c/windows/system32
 PATH := $(SAFEPATH)
 #PATH := $(TOOLCHAIN)/bin:$(PATH)
 
@@ -328,6 +329,7 @@ BINUTILS_PATCHES := $(wildcard (PATCHES_DIR)/binutils/$(BINUTILS_VERSION)/*.patc
 $(PATCHES_DIR)/.gcc_patch: gcc_patch_$(GCC_VERSION)
 $(PATCHES_DIR)/.gdb_patch: gdb_patch_$(GDB_VERSION)
 $(PATCHES_DIR)/.binutils_patch: binutils_patch_$(BINUTILS_VERSION)
+$(PATCHES_DIR)/.newlib_patch: newlib_patch_$(NEWLIB_VERSION)
 
 gcc_patch_4.9.2:
 	-patch -N -d $(XTDLP)/$(GCC_DIR) -p1 < $(PATCHES_DIR)/0001-WIP-don-t-bring-extra-u-int_least32_t-into-std.patch
@@ -338,18 +340,22 @@ gcc_patch_5.1.0:
 
 gcc_patch_5.3.0:
 	-patch -N -d $(XTDLP)/$(GCC_DIR) -p1 < $(PATCHES_DIR)/gcc/$(GCC_VERSION)/*.patch
+	@touch $@
 #	-patch -N -d $(XTDLP)/$(GCC_DIR) -p1 < $(PATCHES_DIR)/gcc/$(GCC_VERSION)/110-xtensa-implement-trap-pattern.patch
 #	-patch -N -d $(XTDLP)/$(GCC_DIR) -p1 < $(PATCHES_DIR)/gcc/$(GCC_VERSION)/870-xtensa-add-mauto-litpools-option.patch
 #	-patch -N -d $(XTDLP)/$(GCC_DIR) -p1 < $(PATCHES_DIR)/gcc/$(GCC_VERSION)/871-xtensa-reimplement-register-spilling.patch
 #	-patch -N -d $(XTDLP)/$(GCC_DIR) -p1 < $(PATCHES_DIR)/gcc/$(GCC_VERSION)/872-xtensa-use-unwind-dw2-fde-dip-instead-of-unwind-dw2-.patch
 #	-patch -N -d $(XTDLP)/$(GCC_DIR) -p1 < $(PATCHES_DIR)/gcc/$(GCC_VERSION)/873-xtensa-fix-_Unwind_GetCFA.patch
 
+
 gdb_patch_7.5.1:
 	@echo "Applying patches to gdb"
 	@echo "(none)"
+	@touch $@
 
 gdb_patch_7.10.1:
 	@echo "Applying patches to gdb"
+	@touch $@
 	-patch -N -d $(XTDLP)/$(GDB_DIR) -p1 < $(PATCHES_DIR)/gdb/$(GDB_VERSION)/*.patch
 #	-patch -N -d $(XTDLP)/$(GDB_DIR) -p1 < $(PATCHES_DIR)/gdb/$(GDB_VERSION)/100-musl_fix.patch
 #	-patch -N -d $(XTDLP)/$(GDB_DIR) -p1 < $(PATCHES_DIR)/gdb/$(GDB_VERSION)/110-xtensa-initialize-call_abi-in-xtensa_tdep.patch
@@ -360,6 +366,12 @@ gdb_patch_7.10.1:
 binutils_patch_2.26:
 	@echo "Applying patches to binutils"
 	-patch -N -d $(XTDLP)/$(BINUTILS_DIR) -p1 < $(PATCHES_DIR)/binutils/$(BINUTILS_VERSION)/*.patch
+	@touch $@
+
+newlib_patch_2.1.0:
+	@echo "Applying patches to binutils"
+	-patch -N -d $(XTDLP)/$(NEWLIB_DIR) -p1 < $(PATCHES_DIR)/newlib/$(NEWLIB_VERSION)/*.patch
+	@touch $@
 
 
 standalone: sdk sdk_patch
@@ -751,8 +763,7 @@ $(XTDLP)/$(GDB_DIR): $(XTDLP)/$(GDB_DIR)/build
 
 # GCC
 $(XTDLP)/$(GCC_DIR)/configure.ac: $(XTDLP)/$(GCC_TAR)
-  @echo "Getting sources: GDB"
-	mkdir -p $(XTDLP)/$(GCC_DIR)
+	@echo "Getting sources: GCC"
 	$(UNTAR) $(XTDLP)/$(GCC_TAR) -C $(XTDLP)
 
 # GCC Step 1
