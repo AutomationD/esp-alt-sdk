@@ -347,12 +347,13 @@ gcc_patch_5.1.0:
 
 gcc_patch_5.3.0:
 	@echo "Applying patches for gcc"
-	-patch -N -d $(XTDLP)/$(GCC_DIR) -p1 < $(PATCHES_DIR)/gcc/$(GCC_VERSION)/110-xtensa-implement-trap-pattern.patch
-	-patch -N -d $(XTDLP)/$(GCC_DIR) -p1 < $(PATCHES_DIR)/gcc/$(GCC_VERSION)/870-xtensa-add-mauto-litpools-option.patch
-	-patch -N -d $(XTDLP)/$(GCC_DIR) -p1 < $(PATCHES_DIR)/gcc/$(GCC_VERSION)/871-xtensa-reimplement-register-spilling.patch
-	-patch -N -d $(XTDLP)/$(GCC_DIR) -p1 < $(PATCHES_DIR)/gcc/$(GCC_VERSION)/872-xtensa-use-unwind-dw2-fde-dip-instead-of-unwind-dw2-.patch
-	-patch -N -d $(XTDLP)/$(GCC_DIR) -p1 < $(PATCHES_DIR)/gcc/$(GCC_VERSION)/873-xtensa-fix-_Unwind_GetCFA.patch
-	-patch -N -d $(XTDLP)/$(GCC_DIR) -p1 < $(PATCHES_DIR)/gcc/$(GCC_VERSION)/900-WIP-don-t-bring-extra-u-int_least32_t-into-std.patch
+	for i in $(PATCHES_DIR)/gcc/$(GCC_VERSION)/*.patch; do patch -N -d $(XTDLP)/$(GCC_DIR) -p1 < $i; done
+#	-patch -N -d $(XTDLP)/$(GCC_DIR) -p1 < $(PATCHES_DIR)/gcc/$(GCC_VERSION)/110-xtensa-implement-trap-pattern.patch
+#	-patch -N -d $(XTDLP)/$(GCC_DIR) -p1 < $(PATCHES_DIR)/gcc/$(GCC_VERSION)/870-xtensa-add-mauto-litpools-option.patch
+#	-patch -N -d $(XTDLP)/$(GCC_DIR) -p1 < $(PATCHES_DIR)/gcc/$(GCC_VERSION)/871-xtensa-reimplement-register-spilling.patch
+#	-patch -N -d $(XTDLP)/$(GCC_DIR) -p1 < $(PATCHES_DIR)/gcc/$(GCC_VERSION)/872-xtensa-use-unwind-dw2-fde-dip-instead-of-unwind-dw2-.patch
+#	-patch -N -d $(XTDLP)/$(GCC_DIR) -p1 < $(PATCHES_DIR)/gcc/$(GCC_VERSION)/873-xtensa-fix-_Unwind_GetCFA.patch
+#	-patch -N -d $(XTDLP)/$(GCC_DIR) -p1 < $(PATCHES_DIR)/gcc/$(GCC_VERSION)/900-WIP-don-t-bring-extra-u-int_least32_t-into-std.patch
 	@touch $@
 
 
@@ -363,33 +364,36 @@ gdb_patch_7.5.1:
 
 gdb_patch_7.10.1:
 	@echo "Applying patches to gdb"
-	-patch -N -d $(XTDLP)/$(GDB_DIR) -p1 < $(PATCHES_DIR)/gdb/$(GDB_VERSION)/100-musl_fix.patch
-	-patch -N -d $(XTDLP)/$(GDB_DIR) -p1 < $(PATCHES_DIR)/gdb/$(GDB_VERSION)/110-xtensa-initialize-call_abi-in-xtensa_tdep.patch
-	-patch -N -d $(XTDLP)/$(GDB_DIR) -p1 < $(PATCHES_DIR)/gdb/$(GDB_VERSION)/111-xtensa-make-sure-ar_base-is-initialized.patch
-	-patch -N -d $(XTDLP)/$(GDB_DIR) -p1 < $(PATCHES_DIR)/gdb/$(GDB_VERSION)/112-WIP-end-of-prologue-detection-hack.patch
+	for i in $(PATCHES_DIR)/gdb/$(GDB_VERSION)/*.patch; do patch -N -d $(XTDLP)/$(GDB_DIR) -p1 < $i; done
+#	-patch -N -d $(XTDLP)/$(GDB_DIR) -p1 < $(PATCHES_DIR)/gdb/$(GDB_VERSION)/100-musl_fix.patch
+#	-patch -N -d $(XTDLP)/$(GDB_DIR) -p1 < $(PATCHES_DIR)/gdb/$(GDB_VERSION)/110-xtensa-initialize-call_abi-in-xtensa_tdep.patch
+#	-patch -N -d $(XTDLP)/$(GDB_DIR) -p1 < $(PATCHES_DIR)/gdb/$(GDB_VERSION)/111-xtensa-make-sure-ar_base-is-initialized.patch
+#	-patch -N -d $(XTDLP)/$(GDB_DIR) -p1 < $(PATCHES_DIR)/gdb/$(GDB_VERSION)/112-WIP-end-of-prologue-detection-hack.patch
 	@touch $@
 
 
 binutils_patch_2.26:
 	@echo "Applying patches to binutils"
-	-patch -N -d $(XTDLP)/$(BINUTILS_DIR) -p1 < $(PATCHES_DIR)/binutils/$(BINUTILS_VERSION)/*.patch
-	-patch -N -d $(XTDLP)/$(BINUTILS_DIR) -p1 < $(PATCHES_DIR)/binutils/$(BINUTILS_VERSION)/120-sh-conf.patch
-	-patch -N -d $(XTDLP)/$(BINUTILS_DIR) -p1 < $(PATCHES_DIR)/binutils/$(BINUTILS_VERSION)/300-012_check_ldrunpath_length.patch
-	-patch -N -d $(XTDLP)/$(BINUTILS_DIR) -p1 < $(PATCHES_DIR)/binutils/$(BINUTILS_VERSION)/310-fix-gold-pthreads-typo.patch
-	-patch -N -d $(XTDLP)/$(BINUTILS_DIR) -p1 < $(PATCHES_DIR)/binutils/$(BINUTILS_VERSION)/320-MinGW-w64-winpthreads-doesnt-have-pthread_mutexattr_settype.patch
-	-patch -N -d $(XTDLP)/$(BINUTILS_DIR) -p1 < $(PATCHES_DIR)/binutils/$(BINUTILS_VERSION)/330-Dont-link-to-libfl-as-its-unnecessary.patch
-	-patch -N -d $(XTDLP)/$(BINUTILS_DIR) -p1 < $(PATCHES_DIR)/binutils/$(BINUTILS_VERSION)/340-Darwin-gold-binary-cc-include-string-not-cstring.patch
-	-patch -N -d $(XTDLP)/$(BINUTILS_DIR) -p1 < $(PATCHES_DIR)/binutils/$(BINUTILS_VERSION)/350-Darwin-Two-fixes-from-Android-NDK-PTHREAD_ONCE_INIT-wcsncasecmp.patch
-	-patch -N -d $(XTDLP)/$(BINUTILS_DIR) -p1 < $(PATCHES_DIR)/binutils/$(BINUTILS_VERSION)/500-sysroot.patch
-	-patch -N -d $(XTDLP)/$(BINUTILS_DIR) -p1 < $(PATCHES_DIR)/binutils/$(BINUTILS_VERSION)/600-poison-system-directories.patch
-	-patch -N -d $(XTDLP)/$(BINUTILS_DIR) -p1 < $(PATCHES_DIR)/binutils/$(BINUTILS_VERSION)/914-xtensa-fix-signedness-of-gas-relocations.patch
-	-patch -N -d $(XTDLP)/$(BINUTILS_DIR) -p1 < $(PATCHES_DIR)/binutils/$(BINUTILS_VERSION)/915-xtensa-fix-.init-.fini-literals-moving.patch
+	for i in $(PATCHES_DIR)/binutils/$(BINUTILS_VERSION)/*.patch; do patch -N -d $(XTDLP)/$(BINUTILS_DIR) -p1 < $i; done
+#	-patch -N -d $(XTDLP)/$(BINUTILS_DIR) -p1 < $(PATCHES_DIR)/binutils/$(BINUTILS_VERSION)/*.patch
+#	-patch -N -d $(XTDLP)/$(BINUTILS_DIR) -p1 < $(PATCHES_DIR)/binutils/$(BINUTILS_VERSION)/120-sh-conf.patch
+#	-patch -N -d $(XTDLP)/$(BINUTILS_DIR) -p1 < $(PATCHES_DIR)/binutils/$(BINUTILS_VERSION)/300-012_check_ldrunpath_length.patch
+#	-patch -N -d $(XTDLP)/$(BINUTILS_DIR) -p1 < $(PATCHES_DIR)/binutils/$(BINUTILS_VERSION)/310-fix-gold-pthreads-typo.patch
+#	-patch -N -d $(XTDLP)/$(BINUTILS_DIR) -p1 < $(PATCHES_DIR)/binutils/$(BINUTILS_VERSION)/320-MinGW-w64-winpthreads-doesnt-have-pthread_mutexattr_settype.patch
+#	-patch -N -d $(XTDLP)/$(BINUTILS_DIR) -p1 < $(PATCHES_DIR)/binutils/$(BINUTILS_VERSION)/330-Dont-link-to-libfl-as-its-unnecessary.patch
+#	-patch -N -d $(XTDLP)/$(BINUTILS_DIR) -p1 < $(PATCHES_DIR)/binutils/$(BINUTILS_VERSION)/340-Darwin-gold-binary-cc-include-string-not-cstring.patch
+#	-patch -N -d $(XTDLP)/$(BINUTILS_DIR) -p1 < $(PATCHES_DIR)/binutils/$(BINUTILS_VERSION)/350-Darwin-Two-fixes-from-Android-NDK-PTHREAD_ONCE_INIT-wcsncasecmp.patch
+#	-patch -N -d $(XTDLP)/$(BINUTILS_DIR) -p1 < $(PATCHES_DIR)/binutils/$(BINUTILS_VERSION)/500-sysroot.patch
+#	-patch -N -d $(XTDLP)/$(BINUTILS_DIR) -p1 < $(PATCHES_DIR)/binutils/$(BINUTILS_VERSION)/600-poison-system-directories.patch
+#	-patch -N -d $(XTDLP)/$(BINUTILS_DIR) -p1 < $(PATCHES_DIR)/binutils/$(BINUTILS_VERSION)/914-xtensa-fix-signedness-of-gas-relocations.patch
+#	-patch -N -d $(XTDLP)/$(BINUTILS_DIR) -p1 < $(PATCHES_DIR)/binutils/$(BINUTILS_VERSION)/915-xtensa-fix-.init-.fini-literals-moving.patch
 	@touch $@
 
 newlib_patch_2.1.0:
 	@echo "Applying patches to newlib"
-	-patch -N -d $(XTDLP)/$(NEWLIB_DIR) -p1 < $(PATCHES_DIR)/newlib/$(NEWLIB_VERSION)/100-fix-optimising-for-space.patch
-
+	for i in $(PATCHES_DIR)/newlib/$(BINUNEWLIB_VERSIONTILS_VERSION)/*.patch; do patch -N -d $(XTDLP)/$(NEWLIB_DIR) -p1 < $i; done
+#	-patch -N -d $(XTDLP)/$(NEWLIB_DIR) -p1 < $(PATCHES_DIR)/newlib/$(NEWLIB_VERSION)/100-fix-optimising-for-space.patch
+	@touch $@
 
 standalone: sdk sdk_patch
 ifeq ($(STANDALONE),y)
@@ -519,7 +523,7 @@ $(XTDLP)/$(BINUTILS_TAR):
 	wget -c http://ftp.gnu.org/gnu/binutils/$(BINUTILS_TAR) --output-document $(XTDLP)/$(BINUTILS_TAR)
 
 $(XTDLP)/$(NEWLIB_TAR):
-	wget -c ftp://sources.redhat.com/pub/newlib/$(NEWLIB_TAR) --output-document $(XTDLP)/$(NEWLIB_TAR)
+	wget -c c$(NEWLIB_TAR) --output-document $(XTDLP)/$(NEWLIB_TAR)
 
 
 $(XTDLP)/$(XTENSA_TOOLCHAIN_WINDOWS_TAR):
@@ -887,6 +891,7 @@ clean: clean-sdk
 	rm -rf $(XTDLP)/$(GDB_DIR)/build
 	rm -rf $(XTDLP)/$(ESPTOOL2_DIR)/esptool2
 	rm -rf $(UTILS_DIR)/*
+	rm -rf $(PATCHES_DIR)/.*_patch*
 
 clean-sdk:
 	rm -rf $(VENDOR_SDK_DIR)
@@ -895,7 +900,7 @@ clean-sdk:
 	rm -rf sdk
 	rm -rf ESP8266_SDK
 	rm -f .sdk_patch_*
-	rm -f $(PATCHES_DIR)/.gcc_patch*
+	rm -rf $(PATCHES_DIR)/.gcc_patch*
 	rm -rf build
 	rm -rf bin
 
