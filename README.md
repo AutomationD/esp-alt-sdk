@@ -21,20 +21,21 @@ _Please don't report bugs (yet)_
     + MacOS
 - Up-to-date binary builds
 - Open build process 
-- Gcc 5.1.0
-- Gdb on all platforms
+- Gcc 5.3.0
+- Gdb 7.10.1 on all platforms
+- Binutils 2.26
 - Additional tools (also compiled from source)
 - Small size
     + Stripped out debug symbols
     + UPX compressed
 
 ## Contents
-- [Xtensa Toolchain](https://github.com/jcmvbkbc/gcc-xtensa/)
-- [Espressif NONOS SDK](http://bbs.espressif.com/viewforum.php?f=46) with official patches
+- [GCC 5.3.0](http://ftp.gnu.org/gnu/gcc/gcc-5.3.0/gcc-5.3.0.tar.bz2) with jcmvbkbc patches
+- [Espressif NONOS SDK](http://bbs.espressif.com/viewforum.php?f=46) with Espressif patches
 - [lx106-hal](https://github.com/tommie/lx106-hal)
 - [newlib-xtensa](https://github.com/jcmvbkbc/newlib-xtensa)
-- [esp-binutils](https://github.com/fpoussin/esp-binutils.git)
-- [gdb](http://www.gnu.org/software/gdb)
+- [binutils 2.26](http://ftp.gnu.org/gnu/binutils/binutils-2.26.tar.bz2) with jcmvbkbc patches
+- [gdb 7.10.1](http://ftp.gnu.org/gnu/gdb/gdb-7.10.1.tar.gz) with jcmvbkbc patches
 - [esptool](https://github.com/themadinventor/esptool)
 - [esptool2](https://github.com/raburton/esptool2)
 - [memanalyzer](https://github.com/Sermus/ESP8266_memory_analyzer)
