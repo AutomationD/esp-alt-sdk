@@ -61,24 +61,17 @@ Install ConEmu (Optional)
 choco install conemu -y
 ```
 
-Install imdisk(Optional)
-```
-wget http://files1.majorgeeks.com/de670c6775d17d4f699e427ab9260fa3/drives/ImDiskTk.exe
-ImDiskTk.exe /fullsilent
-r:
-```
-
 Clone repo, configure environment
 ```cmd
 git clone https://github.com/kireevco/esp-alt-sdk.git
 cd esp-alt-sdk
-env\mingw_10.cmd
+env\msys2_10.cmd
 ```
 
-Restart cmd and run:
+Start Mingw32 Shell and run:
 ```cmd
-bash.exe -i -l -c "cd env; make"
-bash.exe -i -l -c "make"
+cd env; make
+make
 ```
 
 ### MacOS
