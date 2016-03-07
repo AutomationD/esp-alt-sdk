@@ -392,7 +392,7 @@ binutils_patch_2.26:
 
 newlib_patch_2.1.0:
 	@echo "Applying patches to newlib"
-	for i in $(PATCHES_DIR)/newlib/$(BINUNEWLIB_VERSIONTILS_VERSION)/*.patch; do patch -N -d $(XTDLP)/$(NEWLIB_DIR) -p1 < $$i; done
+#	for i in $(PATCHES_DIR)/newlib/$(BINUNEWLIB_VERSIONTILS_VERSION)/*.patch; do patch -N -d $(XTDLP)/$(NEWLIB_DIR) -p1 < $$i; done
 #	-patch -N -d $(XTDLP)/$(NEWLIB_DIR) -p1 < $(PATCHES_DIR)/newlib/$(NEWLIB_VERSION)/100-fix-optimising-for-space.patch
 	@touch $@
 
