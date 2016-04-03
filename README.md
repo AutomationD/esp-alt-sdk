@@ -11,9 +11,6 @@
 | 1.4.0 | [![Build Status](https://jenkins.dandle.co/buildStatus/icon?job=esp-alt-sdk/VERSION=1.4.0,label=build-win2012r2x64-01)](https://jenkins.dandle.co/job/esp-alt-sdk/VERSION=1.4.0,label=build-win2012r2x64-01/) | [![Build Status](https://jenkins.dandle.co/buildStatus/icon?job=esp-alt-sdk/VERSION=1.4.0,label=build-osx-01)](https://jenkins.dandle.co/job/esp-alt-sdk/VERSION=1.4.0,label=build-osx-01/) | [![Build Status](https://jenkins.dandle.co/buildStatus/icon?job=esp-alt-sdk/VERSION=1.4.0,label=build-ubuntu14-01)](https://jenkins.dandle.co/job/esp-alt-sdk/VERSION=1.4.0,label=build-ubuntu14-01) |
 | 1.5.0 | [![Build Status](https://jenkins.dandle.co/buildStatus/icon?job=esp-alt-sdk/VERSION=1.5.0,label=build-win2012r2x64-01)](https://jenkins.dandle.co/job/esp-alt-sdk/VERSION=1.5.0,label=build-win2012r2x64-01/) | [![Build Status](https://jenkins.dandle.co/buildStatus/icon?job=esp-alt-sdk/VERSION=1.5.0,label=build-osx-01)](https://jenkins.dandle.co/job/esp-alt-sdk/VERSION=1.5.0,label=build-osx-01/) | [![Build Status](https://jenkins.dandle.co/buildStatus/icon?job=esp-alt-sdk/VERSION=1.5.0,label=build-ubuntu14-01)](https://jenkins.dandle.co/job/esp-alt-sdk/VERSION=1.5.0,label=build-ubuntu14-01) |
 
-
-### Work in progress
-_Please don't report bugs (yet)_
 ## Why?
 - Cross platform
     + Windows
@@ -21,20 +18,21 @@ _Please don't report bugs (yet)_
     + MacOS
 - Up-to-date binary builds
 - Open build process 
-- Gcc 5.1.0
-- Gdb on all platforms
+- Gcc 5.3.0
+- Gdb 7.10.1 on all platforms
+- Binutils 2.26
 - Additional tools (also compiled from source)
 - Small size
     + Stripped out debug symbols
     + UPX compressed
 
 ## Contents
-- [Xtensa Toolchain](https://github.com/jcmvbkbc/gcc-xtensa/)
-- [Espressif NONOS SDK](http://bbs.espressif.com/viewforum.php?f=46) with official patches
+- [GCC 5.3.0](http://ftp.gnu.org/gnu/gcc/gcc-5.3.0/gcc-5.3.0.tar.bz2) with jcmvbkbc patches
+- [Espressif NONOS SDK](http://bbs.espressif.com/viewforum.php?f=46) with Espressif patches
 - [lx106-hal](https://github.com/tommie/lx106-hal)
 - [newlib-xtensa](https://github.com/jcmvbkbc/newlib-xtensa)
-- [esp-binutils](https://github.com/fpoussin/esp-binutils.git)
-- [gdb](http://www.gnu.org/software/gdb)
+- [binutils 2.26](http://ftp.gnu.org/gnu/binutils/binutils-2.26.tar.bz2) with jcmvbkbc patches
+- [gdb 7.10.1](http://ftp.gnu.org/gnu/gdb/gdb-7.10.1.tar.gz) with jcmvbkbc patches
 - [esptool](https://github.com/themadinventor/esptool)
 - [esptool2](https://github.com/raburton/esptool2)
 - [memanalyzer](https://github.com/Sermus/ESP8266_memory_analyzer)
@@ -60,24 +58,17 @@ Install ConEmu (Optional)
 choco install conemu -y
 ```
 
-Install imdisk(Optional)
-```
-wget http://files1.majorgeeks.com/de670c6775d17d4f699e427ab9260fa3/drives/ImDiskTk.exe
-ImDiskTk.exe /fullsilent
-r:
-```
-
 Clone repo, configure environment
 ```cmd
 git clone https://github.com/kireevco/esp-alt-sdk.git
 cd esp-alt-sdk
-env\mingw_10.cmd
+env\msys2_10.cmd
 ```
 
-Restart cmd and run:
+Start Mingw32 Shell and run:
 ```cmd
-bash.exe -i -l -c "cd env; make"
-bash.exe -i -l -c "make"
+cd env; make
+make
 ```
 
 ### MacOS

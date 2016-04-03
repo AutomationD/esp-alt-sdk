@@ -26,13 +26,13 @@ pip install pyinstaller
 echo [build] > c:\tools\python2-x86_32\Lib\distutils\distutils.cfg
 echo compiler = mingw32 >> c:\tools\python2-x86_32\Lib\distutils\distutils.cfg
 
-echo Installing MingGW-get (pulls down mingw too)
+echo Installing MingGW-get
 choco install mingw --x86 -params "/threads:win32" -y
 choco install mingw-get -y
 
 
 echo Installing Mono (for MemAnalyzer and others)
-choco install mono  -version 3.2.3 -y
+choco install mono -version 3.2.3 -y
 
 echo Adding ENV variables
 setx /M PATH "C:\Program Files (x86)\Mono-3.2.3\bin;%PATH%" && set PATH=C:\Program Files(x86)\Mono-3.2.3\bin;%PATH%
