@@ -85,7 +85,7 @@ endif
 PLATFORM := $(shell uname -s)
 
 
-SAFEPATH := $(TOOLCHAIN)/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/mingw/bin/:/c/tools/mingw32/bin:/c/tools/mingw64/bin:/mingw32:/mingw32/bin:/c/windows/system32
+SAFEPATH := $(TOOLCHAIN)/bin:/usr/local/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin::/mingw/bin/:/c/tools/mingw32/bin:/c/tools/mingw64/bin:/mingw32:/mingw32/bin:/c/windows/system32
 PATH := $(SAFEPATH)
 #PATH := $(TOOLCHAIN)/bin:$(PATH)
 
@@ -851,29 +851,28 @@ $(XTDLP)/$(LIBHAL_DIR): $(XTDLP)/$(LIBHAL_DIR)/build
 # Srip Debug
 $(TOOLCHAIN)/bin/.strip:
 	@echo "Stripping debug symbols from executables in ${TOOLCHAIN}/bin/"
-	cd $(TOOLCHAIN)/bin/ && (find . -type f -perm 0111 -exec strip -S "{}" +) & touch $(TOOLCHAIN)/bin/.strip
-
+	cd $(TOOLCHAIN)/bin/ && (find . -type f \( -iname "*" ! -iname "*lib*" ! -iname "*.so*" \) -perm /u=x -exec strip -S "{}" +) && touch $(TOOLCHAIN)/bin/.strip	
+	
 $(TOOLCHAIN)/xtensa-lx106-elf/bin/.strip:
 	@echo "Stripping debug symbols from executables in ${TOOLCHAIN}/xtensa-lx106-elf/bin/"
-	cd $(TOOLCHAIN)/xtensa-lx106-elf/bin && (find . -type f -perm 0111 -exec strip -S "{}" +) & touch $(TOOLCHAIN)/xtensa-lx106-elf/bin/.strip
+	cd $(TOOLCHAIN)/xtensa-lx106-elf/bin && (find . -type f \( -iname "*" ! -iname "*lib*" ! -iname "*.so*" \) -perm /u=x -exec strip -S "{}" +) && touch $(TOOLCHAIN)/xtensa-lx106-elf/bin/.strip
 
 $(TOOLCHAIN)/libexec/gcc/xtensa-lx106-elf/$(GCC_VERSION)/.strip:
 	@echo "Stripping debug symbols from executables in ${TOOLCHAIN}/libexec/gcc/xtensa-lx106-elf/$(GCC_VERSION)/"
-	cd $(TOOLCHAIN)/libexec/gcc/xtensa-lx106-elf/$(GCC_VERSION)/ && (find . -type f -perm 0111 -exec strip -S "{}" +) & touch $(TOOLCHAIN)/libexec/gcc/xtensa-lx106-elf/$(GCC_VERSION)/.strip
-
+	cd $(TOOLCHAIN)/libexec/gcc/xtensa-lx106-elf/$(GCC_VERSION)/ && (find . -type f \( -iname "*" ! -iname "*lib*" ! -iname "*.so*" ! -path "./install-tools/*" \) -perm /u=x -exec strip -S "{}" +) && touch $(TOOLCHAIN)/libexec/gcc/xtensa-lx106-elf/$(GCC_VERSION)/.strip
 
 # Compress via UPX
 $(TOOLCHAIN)/bin/.upx:
 	@echo "Compressing executables in ${TOOLCHAIN}/bin/"
-	cd $(TOOLCHAIN)/bin/ && (find . -type f -perm 0111 -exec upx --best "{}" +) & touch $(TOOLCHAIN)/bin/.upx
+	cd $(TOOLCHAIN)/bin/ && (find . -type f \( -iname "*" ! -iname "*lib*" ! -iname "*.so*" \) -perm /u=x -exec sh -c "grep UPX\! '{}' > /dev/null && echo 'Skipping {}, since it is already UPX-compressed.' || upx --best '{}'" \;) && touch $(TOOLCHAIN)/bin/.upx
 
 $(TOOLCHAIN)/xtensa-lx106-elf/bin/.upx:
 	@echo "Compressing executables in ${TOOLCHAIN}/xtensa-lx106-elf/bin/"
-	cd $(TOOLCHAIN)/xtensa-lx106-elf/bin && (find . -type f -perm 0111 -exec upx --best "{}" +) & touch $(TOOLCHAIN)/xtensa-lx106-elf/bin/.upx
+	cd $(TOOLCHAIN)/xtensa-lx106-elf/bin && (find . -type f \( -iname "*" ! -iname "*lib*" ! -iname "*.so*" \) -perm /u=x -exec sh -c "grep UPX\! '{}' > /dev/null && echo 'Skipping {}, since it is already UPX-compressed.' || upx --best '{}'" \;) && touch $(TOOLCHAIN)/xtensa-lx106-elf/bin/.upx
 
 $(TOOLCHAIN)/libexec/gcc/xtensa-lx106-elf/$(GCC_VERSION)/.upx:
 	@echo "Compressing executables in ${TOOLCHAIN}/libexec/gcc/xtensa-lx106-elf/$(GCC_VERSION)/"
-	cd $(TOOLCHAIN)/libexec/gcc/xtensa-lx106-elf/$(GCC_VERSION)/ && (find . -type f -perm 0111 -exec upx --best "{}" +) & touch $(TOOLCHAIN)/libexec/gcc/xtensa-lx106-elf/$(GCC_VERSION)/.upx
+	cd $(TOOLCHAIN)/libexec/gcc/xtensa-lx106-elf/$(GCC_VERSION)/ && (find . -type f \( -iname "*" ! -iname "*lib*" ! -iname "*.so*" \) -perm /u=x -exec sh -c "grep UPX\! '{}' > /dev/null && echo 'Skipping {}, since it is already UPX-compressed.' || upx --best '{}'" \;) && touch $(TOOLCHAIN)/libexec/gcc/xtensa-lx106-elf/$(GCC_VERSION)/.upx
 
 
 
