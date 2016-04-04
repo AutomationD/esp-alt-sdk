@@ -7,9 +7,9 @@
 #
 
 STANDALONE = y
-PREBUILT_TOOLCHAIN = n
+PREBUILT_TOOLCHAIN = y
 DEBUG = n
-UTILS = n
+UTILS = y
 CROSS_TARGET = n
 TOOLCHAIN_ONLY = n
 
@@ -55,9 +55,9 @@ BINUTILS_DIR = binutils-$(BINUTILS_VERSION)
 
 GCC_DIR = gcc-$(GCC_VERSION)
 
-XTENSA_TOOLCHAIN_WINDOWS_TAR := xtensa-lx106-elf-v5.1.0.64-windows-x86.zip
-XTENSA_TOOLCHAIN_MAC_TAR := xtensa-lx106-elf-v5.1.0.64-macos-x86_64.zip
-XTENSA_TOOLCHAIN_LINUX_TAR := xtensa-lx106-elf-v5.1.0.64-linux-x86_64.tar.gz
+XTENSA_TOOLCHAIN_WINDOWS_TAR := xtensa-lx106-elf-v5.3.0.83-windows-x86.zip
+XTENSA_TOOLCHAIN_MAC_TAR := xtensa-lx106-elf-v5.3.0.83-macos-x86_64.zip
+XTENSA_TOOLCHAIN_LINUX_TAR := xtensa-lx106-elf-v5.3.0.83-linux-x86_64.tar.gz
 
 #NEWLIB_DIR = newlib-$(NEWLIB_VERSION)
 NEWLIB_DIR = newlib-xtensa
@@ -85,7 +85,7 @@ endif
 PLATFORM := $(shell uname -s)
 
 
-SAFEPATH := $(TOOLCHAIN)/bin:/usr/local/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin::/mingw/bin/:/c/tools/mingw32/bin:/c/tools/mingw64/bin:/mingw32:/mingw32/bin:/c/windows/system32
+SAFEPATH := $(TOOLCHAIN)/bin:/usr/local/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin::/mingw/bin/:/c/tools/mingw32/bin:/c/tools/mingw64/bin:/mingw32:/mingw32/bin:/c/windows/system32:/c/tools/python2-x86_32/Scripts:/c/Program\ Files\ \(x86\)/Mono-3.2.3/bin
 PATH := $(SAFEPATH)
 #PATH := $(TOOLCHAIN)/bin:$(PATH)
 
@@ -186,7 +186,7 @@ $(UTILS_DIR)/esptool: $(XTDLP)/$(ESPTOOL_DIR)/esptool.py
 $(UTILS_DIR)/memanalyzer: $(XTDLP)/$(MEMANALYZER_DIR)/MemAnalyzer.sln
 	mkdir -p $(UTILS_DIR)/
 
-	cd $(XTDLP)/$(MEMANALYZER_DIR)/MemAnalyzer/; mcs Program.cs
+	cd $(XTDLP)/$(MEMANALYZER_DIR)/MemAnalyzer/; PATH=$(SAFEPATH) mcs Program.cs
 
   ifeq ($(OS),Windows_NT)
 		cd $(XTDLP)/$(MEMANALYZER_DIR)/MemAnalyzer/; cp Program.exe $(UTILS_DIR)/memanalyzer.exe
@@ -628,15 +628,20 @@ platform-specific:
       endif
     else
       ifneq (,$(findstring MSYS,$(PLATFORM)))
-				@echo "Detected: MSYS."
+			@echo "Detected: MSYS."
+            ifeq ($(PREBUILT_TOOLCHAIN),y)
+				$(MAKE) prebuilt-toolchain-windows
+				$(MAKE) build-prebuilt-toolchain
+            else				
 				$(MAKE) build PATH="/c/msys32/bin:/c/tools/msys32/mingw32/bin:$(PATH)" BUILD_TARGET=i686-w64-mingw32 HOST_TARGET=i686-w64-mingw32
+            endif
       endif
     endif
   endif
 
   ifneq (,$(findstring CYGWIN,$(PLATFORM)))
 		@echo "Detected: CYGWIN"
-   ifeq ($(PREBUILT_TOOLCHAIN),y)
+    ifeq ($(PREBUILT_TOOLCHAIN),y)
 			$(MAKE) prebuilt-toolchain-windows
 			$(MAKE) build-prebuilt-toolchain
     else
