@@ -14,3 +14,7 @@
 	path = src/newlib-xtensa
 	url = https://github.com/jcmvbkbc/newlib-xtensa
 	branch = xtensa
+[submodule "src/binutils-gdb-xtensa"]
+	path = src/binutils-gdb-xtensa
+	url = https://github.com/jcmvbkbc/binutils-gdb-xtensa.git
+	branch = master

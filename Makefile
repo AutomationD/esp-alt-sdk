@@ -17,9 +17,7 @@ VENDOR_SDK_VERSION = 1.4.0
 GMP_VERSION = 6.0.0a
 MPFR_VERSION = 3.1.3
 MPC_VERSION = 1.0.3
-GDB_VERSION = 7.10.1
 GCC_VERSION = 5.3.0
-BINUTILS_VERSION = 2.26
 NEWLIB_VERSION = 2.1.0
 TOP = $(PWD)
 TARGET = xtensa-lx106-elf
@@ -42,16 +40,13 @@ GMP_TAR = gmp-$(GMP_VERSION).tar.bz2
 MPFR_TAR = mpfr-$(MPFR_VERSION).tar.bz2
 MPC_TAR = mpc-$(MPC_VERSION).tar.gz
 GCC_TAR = gcc-$(GCC_VERSION).tar.bz2
-GDB_TAR = gdb-$(GDB_VERSION).tar.gz
-BINUTILS_TAR = binutils-$(BINUTILS_VERSION).tar.gz
 NEWLIB_TAR = newlib-$(NEWLIB_VERSION).tar.gz
 
 
 GMP_DIR = gmp-$(GMP_VERSION)
 MPFR_DIR = mpfr-$(MPFR_VERSION)
 MPC_DIR = mpc-$(MPC_VERSION)
-GDB_DIR = gdb-$(GDB_VERSION)
-BINUTILS_DIR = binutils-$(BINUTILS_VERSION)
+BINUTILS_DIR = binutils-gdb-xtensa
 
 GCC_DIR = gcc-$(GCC_VERSION)
 
@@ -322,15 +317,10 @@ empty_user_rf_pre_init.o: $(PATCHES_DIR)/empty_user_rf_pre_init.c
 	patch -N -d $(VENDOR_SDK_DIR_0.9.1) -p1 < $(PATCHES_DIR)/c_types-c99.patch
 	@touch $@
 
-
-GDB_PATCHES := $(wildcard (PATCHES_DIR)/gdb/$(GDB_VERSION)/*.patch)
 GCC_PATCHES := $(wildcard (PATCHES_DIR)/gcc/$(GCC_VERSION)/*.patch)
 BINUTILS_PATCHES := $(wildcard (PATCHES_DIR)/binutils/$(BINUTILS_VERSION)/*.patch)
 
 $(PATCHES_DIR)/.gcc_patch: gcc_patch_$(GCC_VERSION)
-	@touch $@
-
-$(PATCHES_DIR)/.gdb_patch: gdb_patch_$(GDB_VERSION)
 	@touch $@
 
 $(PATCHES_DIR)/.binutils_patch: binutils_patch_$(BINUTILS_VERSION)
@@ -355,39 +345,6 @@ gcc_patch_5.3.0:
 #	-patch -N -d $(XTDLP)/$(GCC_DIR) -p1 < $(PATCHES_DIR)/gcc/$(GCC_VERSION)/872-xtensa-use-unwind-dw2-fde-dip-instead-of-unwind-dw2-.patch
 #	-patch -N -d $(XTDLP)/$(GCC_DIR) -p1 < $(PATCHES_DIR)/gcc/$(GCC_VERSION)/873-xtensa-fix-_Unwind_GetCFA.patch
 #	-patch -N -d $(XTDLP)/$(GCC_DIR) -p1 < $(PATCHES_DIR)/gcc/$(GCC_VERSION)/900-WIP-don-t-bring-extra-u-int_least32_t-into-std.patch
-	@touch $@
-
-
-gdb_patch_7.5.1:
-	@echo "Applying patches to gdb"
-	@echo "(none)"
-	@touch $@
-
-gdb_patch_7.10.1:
-	@echo "Applying patches to gdb"
-	for i in $(PATCHES_DIR)/gdb/$(GDB_VERSION)/*.patch; do patch -N -d $(XTDLP)/$(GDB_DIR) -p1 < $$i; done
-#	-patch -N -d $(XTDLP)/$(GDB_DIR) -p1 < $(PATCHES_DIR)/gdb/$(GDB_VERSION)/100-musl_fix.patch
-#	-patch -N -d $(XTDLP)/$(GDB_DIR) -p1 < $(PATCHES_DIR)/gdb/$(GDB_VERSION)/110-xtensa-initialize-call_abi-in-xtensa_tdep.patch
-#	-patch -N -d $(XTDLP)/$(GDB_DIR) -p1 < $(PATCHES_DIR)/gdb/$(GDB_VERSION)/111-xtensa-make-sure-ar_base-is-initialized.patch
-#	-patch -N -d $(XTDLP)/$(GDB_DIR) -p1 < $(PATCHES_DIR)/gdb/$(GDB_VERSION)/112-WIP-end-of-prologue-detection-hack.patch
-	@touch $@
-
-
-binutils_patch_2.26:
-	@echo "Applying patches to binutils"
-	for i in $(PATCHES_DIR)/binutils/$(BINUTILS_VERSION)/*.patch; do patch -N -d $(XTDLP)/$(BINUTILS_DIR) -p1 < $$i; done
-#	-patch -N -d $(XTDLP)/$(BINUTILS_DIR) -p1 < $(PATCHES_DIR)/binutils/$(BINUTILS_VERSION)/*.patch
-#	-patch -N -d $(XTDLP)/$(BINUTILS_DIR) -p1 < $(PATCHES_DIR)/binutils/$(BINUTILS_VERSION)/120-sh-conf.patch
-#	-patch -N -d $(XTDLP)/$(BINUTILS_DIR) -p1 < $(PATCHES_DIR)/binutils/$(BINUTILS_VERSION)/300-012_check_ldrunpath_length.patch
-#	-patch -N -d $(XTDLP)/$(BINUTILS_DIR) -p1 < $(PATCHES_DIR)/binutils/$(BINUTILS_VERSION)/310-fix-gold-pthreads-typo.patch
-#	-patch -N -d $(XTDLP)/$(BINUTILS_DIR) -p1 < $(PATCHES_DIR)/binutils/$(BINUTILS_VERSION)/320-MinGW-w64-winpthreads-doesnt-have-pthread_mutexattr_settype.patch
-#	-patch -N -d $(XTDLP)/$(BINUTILS_DIR) -p1 < $(PATCHES_DIR)/binutils/$(BINUTILS_VERSION)/330-Dont-link-to-libfl-as-its-unnecessary.patch
-#	-patch -N -d $(XTDLP)/$(BINUTILS_DIR) -p1 < $(PATCHES_DIR)/binutils/$(BINUTILS_VERSION)/340-Darwin-gold-binary-cc-include-string-not-cstring.patch
-#	-patch -N -d $(XTDLP)/$(BINUTILS_DIR) -p1 < $(PATCHES_DIR)/binutils/$(BINUTILS_VERSION)/350-Darwin-Two-fixes-from-Android-NDK-PTHREAD_ONCE_INIT-wcsncasecmp.patch
-#	-patch -N -d $(XTDLP)/$(BINUTILS_DIR) -p1 < $(PATCHES_DIR)/binutils/$(BINUTILS_VERSION)/500-sysroot.patch
-#	-patch -N -d $(XTDLP)/$(BINUTILS_DIR) -p1 < $(PATCHES_DIR)/binutils/$(BINUTILS_VERSION)/600-poison-system-directories.patch
-#	-patch -N -d $(XTDLP)/$(BINUTILS_DIR) -p1 < $(PATCHES_DIR)/binutils/$(BINUTILS_VERSION)/914-xtensa-fix-signedness-of-gas-relocations.patch
-#	-patch -N -d $(XTDLP)/$(BINUTILS_DIR) -p1 < $(PATCHES_DIR)/binutils/$(BINUTILS_VERSION)/915-xtensa-fix-.init-.fini-literals-moving.patch
 	@touch $@
 
 newlib_patch_2.1.0:
@@ -514,9 +471,6 @@ $(XTDLP)/$(MPC_TAR):
 $(XTDLP)/$(MPFR_TAR):
 	wget -c http://ftp.gnu.org/gnu/mpfr/$(MPFR_TAR) --output-document $(XTDLP)/$(MPFR_TAR)
 
-$(XTDLP)/$(GDB_TAR):
-	wget -c http://ftp.gnu.org/gnu/gdb/$(GDB_TAR) --output-document $(XTDLP)/$(GDB_TAR)
-
 $(XTDLP)/$(GCC_TAR):
 	wget -c http://ftp.gnu.org/gnu/gcc/${GCC_DIR}/$(GCC_TAR) --output-document $(XTDLP)/$(GCC_TAR)
 
@@ -560,6 +514,10 @@ $(XTDLP)/$(MEMANALYZER_DIR)/MemAnalyzer.sln:
 	@echo "You cloned without --recursive, fetching MemAnalyzer for you."
 	git submodule update --init src/$(MEMANALYZER_DIR)
 
+# Binutils
+$(XTDLP)/$(BINUTILS_DIR)/configure.ac:
+	@echo "You cloned without --recursive, fetching binutils for you."
+	git submodule update --init src/$(BINUTILS_DIR)
 
 
 
@@ -580,15 +538,10 @@ debug:
 
 toolchain: $(TOOLCHAIN)/bin/xtensa-lx106-elf-gcc
 
-#ifeq ($(TOOLCHAIN_ONLY),y)
-#  $(TOOLCHAIN)/bin/xtensa-lx106-elf-gcc: $(TOOLCHAIN) $(XTDLP) $(XTBP) build-gmp build-mpfr build-mpc build-binutils build-first-stage-gcc build-newlib build-second-stage-gcc
-#  $(TOOLCHAIN)/bin/xtensa-lx106-elf-gcc: $(TOOLCHAIN) $(XTDLP) $(XTBP) build-first-stage-gcc build-second-stage-gcc
-#else
-  $(TOOLCHAIN)/bin/xtensa-lx106-elf-gcc: $(TOOLCHAIN) $(XTDLP) $(XTBP) build-gmp build-mpfr build-mpc build-binutils build-first-stage-gcc build-newlib build-second-stage-gcc build-libhal build-gdb strip compress-upx
-#  $(TOOLCHAIN)/bin/xtensa-lx106-elf-gcc: $(TOOLCHAIN) $(XTDLP) $(XTBP) build-first-stage-gcc build-second-stage-gcc build-libhal build-gdb strip compress-upx
-#endif
 
-get-src: $(XTDLP)/$(GMP_DIR) $(XTDLP)/$(MPFR_DIR) $(XTDLP)/$(MPC_DIR) $(XTDLP)/$(BINUTILS_DIR)/configure.ac $(XTDLP)/$(NEWLIB_DIR)/configure.ac $(XTDLP)/$(GCC_DIR)/configure.ac $(XTDLP)/$(LIBHAL_DIR)/configure.ac $(XTDLP)/$(GDB_DIR)/configure.ac
+$(TOOLCHAIN)/bin/xtensa-lx106-elf-gcc: $(TOOLCHAIN) $(XTDLP) $(XTBP) build-gmp build-mpfr build-mpc build-binutils build-first-stage-gcc build-newlib build-second-stage-gcc build-libhal strip compress-upx
+
+get-src: $(XTDLP)/$(GMP_DIR) $(XTDLP)/$(MPFR_DIR) $(XTDLP)/$(MPC_DIR) $(XTDLP)/$(BINUTILS_DIR)/configure.ac $(XTDLP)/$(NEWLIB_DIR)/configure.ac $(XTDLP)/$(GCC_DIR)/configure.ac $(XTDLP)/$(LIBHAL_DIR)/configure.ac
 build-gmp: get-src $(XTDLP)/$(GMP_DIR)/build $(XTBP)/gmp
 build-mpfr: get-src build-gmp $(XTDLP)/$(MPFR_DIR)/build $(XTBP)/mpfr
 build-mpc: get-src build-gmp build-mpfr $(XTDLP)/$(MPC_DIR)/build $(XTBP)/mpc
@@ -597,7 +550,6 @@ build-first-stage-gcc: get-src build-gmp build-mpfr build-mpc build-binutils $(X
 build-second-stage-gcc: get-src build-gmp build-mpfr build-mpc build-binutils build-first-stage-gcc $(XTDLP)/$(GCC_DIR)/build-2
 build-newlib: get-src build-gmp build-mpfr build-mpc build-binutils $(XTDLP)/$(NEWLIB_DIR)/build $(TOOLCHAIN)/xtensa-lx106-elf/lib/libc.a
 build-libhal: get-src build-binutils $(XTDLP)/$(LIBHAL_DIR)/build $(XTDLP)/$(LIBHAL_DIR)
-build-gdb: get-src build-binutils $(XTDLP)/$(GDB_DIR)/build $(XTDLP)/$(GDB_DIR)
 compress-upx: $(TOOLCHAIN)/bin/.upx $(TOOLCHAIN)/xtensa-lx106-elf/bin/.upx $(TOOLCHAIN)/libexec/gcc/xtensa-lx106-elf/$(GCC_VERSION)/.upx
 strip: $(TOOLCHAIN)/bin/.strip $(TOOLCHAIN)/xtensa-lx106-elf/bin/.strip $(TOOLCHAIN)/libexec/gcc/xtensa-lx106-elf/$(GCC_VERSION)/.strip
 
@@ -769,11 +721,7 @@ $(XTDLP)/$(MPC_DIR)/build: $(XTDLP)/$(MPC_DIR)
 $(XTBP)/mpc: $(XTDLP)/$(MPC_DIR)/build
 	make $(INST_OPT) -C $(XTDLP)/$(MPC_DIR)/build/
 
-
 # Binutils
-$(XTDLP)/$(BINUTILS_DIR)/configure.ac: $(XTDLP)/$(BINUTILS_TAR)
-	$(UNTAR) $(XTDLP)/$(BINUTILS_TAR) -C $(XTDLP)/
-
 $(XTDLP)/$(BINUTILS_DIR)/build: $(XTDLP)/$(BINUTILS_DIR)/configure.ac
 	@echo "Getting sources: Binutils"
 	mkdir -p $(XTDLP)/$(BINUTILS_DIR)/build
@@ -784,26 +732,6 @@ $(XTDLP)/$(BINUTILS_DIR)/build: $(XTDLP)/$(BINUTILS_DIR)/configure.ac
 $(XTDLP)/$(BINUTILS_DIR): $(XTDLP)/$(BINUTILS_DIR)/build $(PATCHES_DIR)/.binutils_patch
 	@echo "################## BINUTILS ##################"
 	make $(INST_OPT) -C $(XTDLP)/$(BINUTILS_DIR)/build/
-	@touch $@
-
-# GDB
-$(XTDLP)/$(GDB_DIR)/configure.ac: $(XTDLP)/$(GDB_TAR)
-  ifeq "$(wildcard $(XTDLP)/$(GDB_DIR) )" ""
-	@echo "Getting sources: GDB"
-	mkdir -p $(XTDLP)/$(GDB_DIR)
-	$(UNTAR) $(XTDLP)/$(GDB_TAR) -C $(XTDLP)/
-  endif
-
-$(XTDLP)/$(GDB_DIR)/build: $(XTDLP)/$(GDB_DIR)/configure.ac $(PATCHES_DIR)/.gdb_patch
-	@echo "################## GDB ##################"
-	mkdir -p $(XTDLP)/$(GDB_DIR)/build
-	$(MAKE_OPT) $(PATCHES_DIR)/.gdb_patch
-	cd $(XTDLP)/$(GDB_DIR)/build/; chmod -R 777 $(XTDLP)/$(GDB_DIR); ../$(CONF_OPT) --prefix=$(TOOLCHAIN) --target=$(TARGET) --enable-werror=no  --enable-multilib --disable-nls --disable-shared --disable-threads --with-gcc --with-gnu-as --with-gnu-ld --build=$(BUILD_TARGET) --host=$(HOST_TARGET)
-	$(MAKE_OPT) -C $(XTDLP)/$(GDB_DIR)/build/
-	@touch $@
-
-$(XTDLP)/$(GDB_DIR): $(XTDLP)/$(GDB_DIR)/build
-	make $(INST_OPT) -C $(XTDLP)/$(GDB_DIR)/build/
 	@touch $@
 
 # GCC
@@ -907,7 +835,6 @@ clean: clean-sdk
 	rm -rf $(XTDLP)/$(GCC_DIR)/build-2
 	rm -rf $(XTDLP)/$(NEWLIB_DIR)/build
 	rm -rf $(XTDLP)/$(LIBHAL_DIR)/build
-	rm -rf $(XTDLP)/$(GDB_DIR)/build
 	rm -rf $(XTDLP)/$(ESPTOOL2_DIR)/esptool2
 	rm -rf $(UTILS_DIR)/*
 	rm -rf $(PATCHES_DIR)/.*_patch*
@@ -928,7 +855,6 @@ purge: clean
 	rm -rf $(XTDLP)/$(GMP_DIR)/
 	rm -rf $(XTDLP)/$(MPFR_DIR)/
 	rm -rf $(XTDLP)/$(MPC_DIR)/
-	rm -rf $(XTDLP)/$(GDB_DIR)/
 	rm -rf $(XTDLP)/$(UTILS_DIR)/
 	rm -rf $(XTDLP)/*.{zip,bz2,xz,gz}
 	cd $(XTDLP)/$(BINUTILS_DIR)/; git reset --hard
