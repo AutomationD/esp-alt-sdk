@@ -629,12 +629,13 @@ platform-specific:
     else
       ifneq (,$(findstring MSYS,$(PLATFORM)))
 			@echo "Detected: MSYS."
-            ifeq ($(PREBUILT_TOOLCHAIN),y)
+            ifeq ($(PREBUILT_TOOLCHAIN),y)				
 				$(MAKE) prebuilt-toolchain-windows
 				$(MAKE) build-prebuilt-toolchain
             else				
+				$(MAKE) copy-msys-deps
 				$(MAKE) build PATH="/c/msys32/bin:/c/tools/msys32/mingw32/bin:$(PATH)" BUILD_TARGET=i686-w64-mingw32 HOST_TARGET=i686-w64-mingw32
-            endif
+            endif			
       endif
     endif
   endif
@@ -706,6 +707,20 @@ $(XTBP):
 $(TOOLCHAIN):
 	git config --global core.autocrlf false
 	mkdir -p $(TOOLCHAIN)
+
+copy-msys-deps: $(TOOLCHAIN)/bin/libwinpthread-1.dll $(TOOLCHAIN)/bin/libiconv-2.dll	
+	
+
+# libwinpthread-1.dll
+$(TOOLCHAIN)/bin/libwinpthread-1.dll:
+	@echo "Copying libwinpthread-1.dll (MSYS2 Dependecny)"
+	@cp /mingw32/bin/libwinpthread-1.dll $(TOOLCHAIN)/bin/
+
+# libiconv-2.dll
+$(TOOLCHAIN)/bin/libiconv-2.dll:
+	@echo "Copying libiconv-2.dll (MSYS2 Dependecny)"
+	@cp /mingw32/bin/libiconv-2.dll $(TOOLCHAIN)/bin/
+
 
 # GMP
 $(XTDLP)/$(GMP_DIR): $(XTDLP)/$(GMP_TAR)
