@@ -323,9 +323,6 @@ BINUTILS_PATCHES := $(wildcard (PATCHES_DIR)/binutils/$(BINUTILS_VERSION)/*.patc
 $(PATCHES_DIR)/.gcc_patch: gcc_patch_$(GCC_VERSION)
 	@touch $@
 
-$(PATCHES_DIR)/.binutils_patch: binutils_patch_$(BINUTILS_VERSION)
-	@touch $@
-
 $(PATCHES_DIR)/.newlib_patch: newlib_patch_$(NEWLIB_VERSION)
 	@touch $@
 
@@ -729,7 +726,7 @@ $(XTDLP)/$(BINUTILS_DIR)/build: $(XTDLP)/$(BINUTILS_DIR)/configure.ac
 	$(MAKE_OPT) -C $(XTDLP)/$(BINUTILS_DIR)/build/
 	@touch $@
 
-$(XTDLP)/$(BINUTILS_DIR): $(XTDLP)/$(BINUTILS_DIR)/build $(PATCHES_DIR)/.binutils_patch
+$(XTDLP)/$(BINUTILS_DIR): $(XTDLP)/$(BINUTILS_DIR)/build
 	@echo "################## BINUTILS ##################"
 	make $(INST_OPT) -C $(XTDLP)/$(BINUTILS_DIR)/build/
 	@touch $@
