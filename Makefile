@@ -537,7 +537,7 @@ toolchain: $(TOOLCHAIN)/bin/xtensa-lx106-elf-gcc
 
 
 #$(TOOLCHAIN)/bin/xtensa-lx106-elf-gcc: $(TOOLCHAIN) $(XTDLP) $(XTBP) build-gmp build-mpfr build-mpc build-binutils build-first-stage-gcc build-newlib build-second-stage-gcc build-libhal strip compress-upx
-	$(TOOLCHAIN)/bin/xtensa-lx106-elf-gcc: $(TOOLCHAIN) $(XTDLP) $(XTBP) build-gmp build-mpfr build-mpc build-binutils build-first-stage-gcc build-newlib build-second-stage-gcc build-libhal
+$(TOOLCHAIN)/bin/xtensa-lx106-elf-gcc: $(TOOLCHAIN) $(XTDLP) $(XTBP) build-gmp build-mpfr build-mpc build-binutils build-first-stage-gcc build-newlib build-second-stage-gcc build-libhal
 
 get-src: $(XTDLP)/$(GMP_DIR) $(XTDLP)/$(MPFR_DIR) $(XTDLP)/$(MPC_DIR) $(XTDLP)/$(BINUTILS_DIR)/configure.ac $(XTDLP)/$(NEWLIB_DIR)/configure.ac $(XTDLP)/$(GCC_DIR)/configure.ac $(XTDLP)/$(LIBHAL_DIR)/configure.ac
 build-gmp: get-src $(XTDLP)/$(GMP_DIR)/build $(XTBP)/gmp
@@ -622,7 +622,7 @@ platform-specific:
 				$(MAKE) prebuilt-toolchain-mac
 				$(MAKE) build-prebuilt-toolchain
       else
-				$(MAKE) build
+				$(MAKE) build BUILD_TARGET=x86_64-build_apple-darwin14.0.0 HOST_TARGET=x86_64-build_apple-darwin14.0.0
       endif
   else
     ifeq ($(PLATFORM),Linux)
@@ -682,7 +682,7 @@ $(XTDLP)/$(GMP_DIR): $(XTDLP)/$(GMP_TAR)
 $(XTDLP)/$(GMP_DIR)/build: $(XTDLP)/$(GMP_DIR)
 	@echo "################## GMP ##################"
 	mkdir -p $(XTDLP)/$(GMP_DIR)/build/
-	cd $(XTDLP)/$(GMP_DIR)/build/; PATH=$(SAFEPATH); ../$(CONF_OPT) --prefix=$(XTBP)/gmp --disable-shared --enable-static --build=$(BUILD_TARGET) --host=$(HOST_TARGET)
+	cd $(XTDLP)/$(GMP_DIR)/build/; PATH=$(SAFEPATH); ../$(CONF_OPT) --prefix=$(XTBP)/gmp --disable-shared --enable-static
 	$(MAKE_OPT) -C $(XTDLP)/$(GMP_DIR)/build/
 
 $(XTBP)/gmp: $(XTDLP)/$(GMP_DIR)/build
@@ -697,7 +697,7 @@ $(XTDLP)/$(MPFR_DIR): $(XTDLP)/$(MPFR_TAR)
 $(XTDLP)/$(MPFR_DIR)/build: $(XTDLP)/$(MPFR_DIR)
 	@echo "################## MPFR ##################"
 	mkdir -p $(XTDLP)/$(MPFR_DIR)/build
-	cd $(XTDLP)/$(MPFR_DIR)/build/; PATH=$(SAFEPATH); ../$(CONF_OPT) --prefix=$(XTBP)/mpfr --with-gmp=$(XTBP)/gmp --disable-shared --enable-static --build=$(BUILD_TARGET) --host=$(HOST_TARGET)
+	cd $(XTDLP)/$(MPFR_DIR)/build/; PATH=$(SAFEPATH); ../$(CONF_OPT) --prefix=$(XTBP)/mpfr --with-gmp=$(XTBP)/gmp --disable-shared --enable-static
 	$(MAKE_OPT) -C $(XTDLP)/$(MPFR_DIR)/build/
 
 $(XTBP)/mpfr: $(XTDLP)/$(MPFR_DIR)/build
@@ -713,7 +713,7 @@ $(XTDLP)/$(MPC_DIR): $(XTDLP)/$(MPC_TAR)
 $(XTDLP)/$(MPC_DIR)/build: $(XTDLP)/$(MPC_DIR)
 	@echo "################## MPC ##################"
 	mkdir -p $(XTDLP)/$(MPC_DIR)/build
-	cd $(XTDLP)/$(MPC_DIR)/build/; ../$(CONF_OPT) --prefix=$(XTBP)/mpc --with-mpfr=$(XTBP)/mpfr --with-gmp=$(XTBP)/gmp --disable-shared --enable-static --build=$(BUILD_TARGET) --host=$(HOST_TARGET)
+	cd $(XTDLP)/$(MPC_DIR)/build/; ../$(CONF_OPT) --prefix=$(XTBP)/mpc --with-mpfr=$(XTBP)/mpfr --with-gmp=$(XTBP)/gmp --disable-shared --enable-static
 	$(MAKE_OPT) -C $(XTDLP)/$(MPC_DIR)/build/
 
 $(XTBP)/mpc: $(XTDLP)/$(MPC_DIR)/build
@@ -723,7 +723,7 @@ $(XTBP)/mpc: $(XTDLP)/$(MPC_DIR)/build
 $(XTDLP)/$(BINUTILS_DIR)/build: $(XTDLP)/$(BINUTILS_DIR)/configure.ac
 	@echo "Getting sources: Binutils"
 	mkdir -p $(XTDLP)/$(BINUTILS_DIR)/build
-	cd $(XTDLP)/$(BINUTILS_DIR)/build/; chmod -R 777 $(XTDLP)/$(BINUTILS_DIR); ../$(CONF_OPT) --prefix=$(TOOLCHAIN) --target=$(TARGET) --enable-werror=no  --enable-multilib --disable-nls --disable-shared --disable-threads --with-gcc --with-gnu-as --with-gnu-ld --build=$(BUILD_TARGET) --host=$(HOST_TARGET)
+	cd $(XTDLP)/$(BINUTILS_DIR)/build/; chmod -R 777 $(XTDLP)/$(BINUTILS_DIR); ../$(CONF_OPT) --prefix=$(TOOLCHAIN) --target=$(TARGET) --enable-werror=no  --enable-multilib --disable-nls --disable-shared --disable-threads --with-gcc --with-gnu-as --with-gnu-ld
 	$(MAKE_OPT) -C $(XTDLP)/$(BINUTILS_DIR)/build/
 	@touch $@
 
@@ -742,7 +742,7 @@ $(XTDLP)/$(GCC_DIR)/configure.ac: $(XTDLP)/$(GCC_TAR)
 $(XTDLP)/$(GCC_DIR)/build-1: $(XTDLP)/$(GCC_DIR)/configure.ac $(PATCHES_DIR)/.gcc_patch
 	@echo "################## GCC PASS 1 ##################"
 	mkdir -p $(XTDLP)/$(GCC_DIR)/build-1
-	cd $(XTDLP)/$(GCC_DIR)/build-1/; PATH=$(SAFEPATH) ../$(CONF_OPT) --prefix=$(TOOLCHAIN) --target=$(TARGET) --enable-multilib --enable-languages=c --with-newlib --disable-nls --disable-shared --disable-threads --with-gnu-as --with-gnu-ld --with-gmp=$(XTBP)/gmp --with-mpfr=$(XTBP)/mpfr --with-mpc=$(XTBP)/mpc  --disable-libssp --without-headers --disable-__cxa_atexit --build=$(BUILD_TARGET) --host=$(HOST_TARGET)
+	cd $(XTDLP)/$(GCC_DIR)/build-1/; PATH=$(SAFEPATH) ../$(CONF_OPT) --prefix=$(TOOLCHAIN) --target=$(TARGET) --enable-multilib --enable-languages=c --with-newlib --disable-nls --disable-shared --disable-threads --with-gnu-as --with-gnu-ld --with-gmp=$(XTBP)/gmp --with-mpfr=$(XTBP)/mpfr --with-mpc=$(XTBP)/mpc  --disable-libssp --without-headers --disable-__cxa_atexit
 #		make configure-build-libiberty
 #		make all-build-libiberty
 #		make all-gcc
@@ -756,7 +756,7 @@ $(XTDLP)/$(GCC_DIR)/build-1: $(XTDLP)/$(GCC_DIR)/configure.ac $(PATCHES_DIR)/.gc
 $(XTDLP)/$(GCC_DIR)/build-2: $(XTDLP)/$(GCC_DIR)/configure.ac $(TOOLCHAIN)/xtensa-lx106-elf/lib/libc.a
 	@echo "################## GCC PASS 2 ##################"
 	mkdir -p $(XTDLP)/$(GCC_DIR)/build-2
-	cd $(XTDLP)/$(GCC_DIR)/build-2/; PATH=$(SAFEPATH) ../$(CONF_OPT) --prefix=$(TOOLCHAIN) --target=$(TARGET) --enable-multilib --disable-nls --disable-shared --disable-threads --with-gnu-as --with-gnu-ld --with-gmp=$(XTBP)/gmp --with-mpfr=$(XTBP)/mpfr --with-mpc=$(XTBP)/mpc --enable-languages=c,c++ --with-newlib --disable-libssp --disable-__cxa_atexit --build=$(BUILD_TARGET) --host=$(HOST_TARGET)
+	cd $(XTDLP)/$(GCC_DIR)/build-2/; PATH=$(SAFEPATH) ../$(CONF_OPT) --prefix=$(TOOLCHAIN) --target=$(TARGET) --enable-multilib --disable-nls --disable-shared --disable-threads --with-gnu-as --with-gnu-ld --with-gmp=$(XTBP)/gmp --with-mpfr=$(XTBP)/mpfr --with-mpc=$(XTBP)/mpc --enable-languages=c,c++ --with-newlib --disable-libssp --disable-__cxa_atexit
 	$(MAKE_OPT) -C $(XTDLP)/$(GCC_DIR)/build-2/
 	make $(INST_OPT) -C $(XTDLP)/$(GCC_DIR)/build-2/
 	@touch $@
@@ -772,7 +772,7 @@ $(XTDLP)/$(GCC_DIR): $(XTDLP)/$(GCC_DIR)/build-1 $(XTDLP)/$(GCC_DIR)/build-2
 $(XTDLP)/$(NEWLIB_DIR)/build: $(XTDLP)/$(NEWLIB_DIR)/configure.ac $(PATCHES_DIR)/.newlib_patch
 	@echo "################## NEWLIB ##################"
 	mkdir $(XTDLP)/$(NEWLIB_DIR)/build
-	cd $(XTDLP)/$(NEWLIB_DIR)/build/; PATH=$(SAFEPATH) ../$(CONF_OPT) --prefix=$(TOOLCHAIN) --target=$(TARGET) --enable-multilib --with-gnu-as --with-gnu-ld --disable-nls --build=$(BUILD_TARGET) --host=$(HOST_TARGET)
+	cd $(XTDLP)/$(NEWLIB_DIR)/build/; PATH=$(SAFEPATH) ../$(CONF_OPT) --prefix=$(TOOLCHAIN) --target=$(TARGET) --enable-multilib --with-gnu-as --with-gnu-ld --disable-nls
 	$(MAKE_OPT) -C $(XTDLP)/$(NEWLIB_DIR)/build/ PATH=$(SAFEPATH)
 	@touch $@
 
