@@ -17,7 +17,7 @@ VENDOR_SDK_VERSION = 1.4.0
 GMP_VERSION = 6.0.0a
 MPFR_VERSION = 3.1.3
 MPC_VERSION = 1.0.3
-GCC_VERSION = 5.3.0
+GCC_VERSION = 4.8.2
 NEWLIB_VERSION = 2.1.0
 TOP = $(PWD)
 TARGET = xtensa-lx106-elf
@@ -516,6 +516,10 @@ $(XTDLP)/$(BINUTILS_DIR)/configure.ac:
 	@echo "You cloned without --recursive, fetching binutils for you."
 	git submodule update --init src/$(BINUTILS_DIR)
 
+# GCC
+$(XTDLP)/$(GCC_DIR)/configure.ac:
+	@echo "You cloned without --recursive, fetching gcc for you."
+  git submodule update --init src/$(GCC_DIR)
 
 
 debug:
@@ -730,12 +734,6 @@ $(XTDLP)/$(BINUTILS_DIR)/build: $(XTDLP)/$(BINUTILS_DIR)/configure.ac
 $(XTDLP)/$(BINUTILS_DIR): $(XTDLP)/$(BINUTILS_DIR)/build
 	@echo "################## BINUTILS ##################"
 	make $(INST_OPT) -C $(XTDLP)/$(BINUTILS_DIR)/build/
-	@touch $@
-
-# GCC
-$(XTDLP)/$(GCC_DIR)/configure.ac: $(XTDLP)/$(GCC_TAR)
-	@echo "Getting sources: GCC"
-	$(UNTAR) $(XTDLP)/$(GCC_TAR) -C $(XTDLP)/
 	@touch $@
 
 # GCC Step 1

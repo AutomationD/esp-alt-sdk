@@ -18,3 +18,7 @@
 	path = src/binutils-gdb-xtensa
 	url = https://github.com/jcmvbkbc/binutils-gdb-xtensa.git
 	branch = master
+[submodule "src/gcc-4.8.2"]
+	path = src/gcc-4.8.2
+	url = https://github.com/jcmvbkbc/gcc-xtensa
+	branch = call0-4.8.2
