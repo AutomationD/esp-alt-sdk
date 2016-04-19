@@ -326,6 +326,10 @@ $(PATCHES_DIR)/.gcc_patch: gcc_patch_$(GCC_VERSION)
 $(PATCHES_DIR)/.newlib_patch: newlib_patch_$(NEWLIB_VERSION)
 	@touch $@
 
+gcc_patch_4.8.2:
+	-patch -N -d $(XTDLP)/$(GCC_DIR) -p1 < $(PATCHES_DIR)/0001-WIP-don-t-bring-extra-u-int_least32_t-into-std.patch
+	@touch $@
+
 gcc_patch_4.9.2:
 	-patch -N -d $(XTDLP)/$(GCC_DIR) -p1 < $(PATCHES_DIR)/0001-WIP-don-t-bring-extra-u-int_least32_t-into-std.patch
 	@touch $@
