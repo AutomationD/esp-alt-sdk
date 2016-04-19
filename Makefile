@@ -519,7 +519,7 @@ $(XTDLP)/$(BINUTILS_DIR)/configure.ac:
 # GCC
 $(XTDLP)/$(GCC_DIR)/configure.ac:
 	@echo "You cloned without --recursive, fetching gcc for you."
-  git submodule update --init src/$(GCC_DIR)
+	git submodule update --init src/$(GCC_DIR)
 
 
 debug:
