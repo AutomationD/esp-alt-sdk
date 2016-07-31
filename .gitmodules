@@ -1,6 +1,3 @@
-[submodule "src/lx106-hal"]
-	path = src/lx106-hal
-	url = https://github.com/tommie/lx106-hal.git
 [submodule "src/esptool"]
 	path = src/esptool
 	url = https://github.com/themadinventor/esptool.git
@@ -10,15 +7,3 @@
 [submodule "src/ESP8266_memory_analyzer"]
 	path = src/ESP8266_memory_analyzer
 	url = https://github.com/Sermus/ESP8266_memory_analyzer.git
-[submodule "src/newlib-xtensa"]
-	path = src/newlib-xtensa
-	url = https://github.com/jcmvbkbc/newlib-xtensa
-	branch = xtensa
-[submodule "src/binutils-gdb-xtensa"]
-	path = src/binutils-gdb-xtensa
-	url = https://github.com/jcmvbkbc/binutils-gdb-xtensa.git
-	branch = master
-[submodule "src/gcc-4.8.2"]
-	path = src/gcc-4.8.2
-	url = https://github.com/jcmvbkbc/gcc-xtensa
-	branch = call0-4.8.2
