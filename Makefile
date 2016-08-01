@@ -122,21 +122,21 @@ $(UTILS_DIR)/esptool2: $(SRC_DIR)/$(ESPTOOL2_DIR)/esptool2.c
 
 
 
-$(SRC_DIR)/$(ESP_OPEN_SDK_DIR):
+$(SRC_DIR)/$(ESP_OPEN_SDK_DIR)/Makefile:
 	@echo "You cloned without --recursive, fetching esp-open-sdk for you."
-	git submodule update --init src/$(ESP_OPEN_SDK_DIR)
+	git submodule update --init $(SRC_DIR)/$(ESP_OPEN_SDK_DIR)
 
 $(SRC_DIR)/$(ESPTOOL_DIR)/esptool.py:
 	@echo "You cloned without --recursive, fetching esptool for you."
-	git submodule update --init src/$(ESPTOOL_DIR)
+	git submodule update --init $(SRC_DIR)/$(ESPTOOL_DIR)
 
 $(SRC_DIR)/$(ESPTOOL2_DIR)/esptool2.c:
 	@echo "You cloned without --recursive, fetching esptool2 for you."
-	git submodule update --init src/$(ESPTOOL2_DIR)
+	git submodule update --init $(SRC_DIR)/$(ESPTOOL2_DIR)
 
 $(SRC_DIR)/$(MEMANALYZER_DIR)/MemAnalyzer.sln:
 	@echo "You cloned without --recursive, fetching MemAnalyzer for you."
-	git submodule update --init src/$(MEMANALYZER_DIR)
+	git submodule update --init $(SRC_DIR)/$(MEMANALYZER_DIR)
 
 debug:
   ifeq ($(DEBUG),y)
@@ -150,7 +150,7 @@ debug:
 
   endif
 
-$(TOOLCHAIN)/bin/xtensa-lx106-elf-gcc: $(SRC_DIR)/$(ESP_OPEN_SDK_DIR)
+$(TOOLCHAIN)/bin/xtensa-lx106-elf-gcc: $(SRC_DIR)/$(ESP_OPEN_SDK_DIR)/Makefile
 	cd $(SRC_DIR)/$(ESP_OPEN_SDK_DIR); $(MAKE) STANDALONE=$(STANDALONE)
 
 
