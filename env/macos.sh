@@ -25,8 +25,14 @@ brew install binutils coreutils automake wget gawk libtool gperf grep python pyt
 brew install gnu-sed --with-default-names
 brew install findutils --with-default-names
 
+
+##### Create case-sensitive volume and mount it to esp-open-sdk directory
+sudo umount /src/esp-open-sdk
+sudo hdiutil create case-sensitive.dmg -volname "case-sensitive" -size 10g -fs "Case-sensitive HFS+"
+sudo hdiutil attach -mountpoint src/esp-open-sdk case-sensitive.dmg
+
 echo "Installing mono"
-brew install mono 
+brew install mono
 
 echo "Installing upx"
 brew install upx

@@ -8,3 +8,4 @@ esp_iot_sdk_*
 xtensa-lx106-elf
 release_note.txt
 .sdk*
+*.dmg
