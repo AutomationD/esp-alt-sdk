@@ -7,7 +7,7 @@
 # fi
 
 
-cd ~/
+
 if [ -d $(eval 'xcode-select -p') ]; then
   echo "Xcode is installed"
 else
@@ -27,7 +27,7 @@ brew install findutils --with-default-names
 
 
 ##### Create case-sensitive volume and mount it to esp-open-sdk directory
-sudo umount /src/esp-open-sdk
+sudo umount src/esp-open-sdk
 sudo hdiutil create case-sensitive.dmg -volname "case-sensitive" -size 10g -fs "Case-sensitive HFS+"
 sudo hdiutil attach -mountpoint src/esp-open-sdk case-sensitive.dmg
 
