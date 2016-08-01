@@ -7,3 +7,6 @@
 [submodule "src/ESP8266_memory_analyzer"]
 	path = src/ESP8266_memory_analyzer
 	url = https://github.com/Sermus/ESP8266_memory_analyzer.git
+[submodule "src/esp-open-sdk"]
+	path = src/esp-open-sdk
+	url = https://github.com/kireevco/esp-open-sdk.git
