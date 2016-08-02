@@ -233,18 +233,13 @@ platform-specific:
     endif
   endif
 
-copy-cygwin-deps: $(TOOLCHAIN)/bin/libwinpthread-1.dll $(TOOLCHAIN)/bin/libiconv-2.dll
+copy-cygwin-deps: $(TOOLCHAIN)/bin/cygwin1.dll
 	
 
-# libwinpthread-1.dll that is required for Cygwin
-$(TOOLCHAIN)/bin/libwinpthread-1.dll:
-	@echo "Copying libwinpthread-1.dll (Cygwin  Dependecny)"
-	@cp /mingw32/bin/libwinpthread-1.dll $(TOOLCHAIN)/bin/
-
-# libiconv-2.dll that is required for Cygwin
-$(TOOLCHAIN)/bin/libiconv-2.dll:
-	@echo "Copying libiconv-2.dll (Cygwin Dependecny)"
-	@cp /mingw32/bin/libiconv-2.dll $(TOOLCHAIN)/bin/
+# cygwin.dll that is required for Cygwin
+$(TOOLCHAIN)/bin/cygwin1.dll:
+	@echo "Copying cygwin1.dll (Cygwin Dependecny)"
+	@cp /bin/cygwin1.dll $(TOOLCHAIN)/bin/
 
 # Srip Debug
 $(TOOLCHAIN)/bin/.strip:
