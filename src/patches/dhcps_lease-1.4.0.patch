@@ -1,0 +1,12 @@
+--- esp_sdk.org/include/user_interface.h	2016-01-01 21:22:29.000000000 +0200
++++ esp_sdk/include/user_interface.h	2015-09-22 04:13:52.000000000 +0300
+@@ -275,6 +275,9 @@
+ };
+ 
+ struct dhcps_lease {
++#ifdef LWIP_OPEN_SRC
++	bool enable;
++#endif
+ 	struct ip_addr start_ip;
+ 	struct ip_addr end_ip;
+ };
